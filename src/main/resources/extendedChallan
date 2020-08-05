@@ -1,0 +1,128 @@
+<div class="subfooter">
+    <div class="container" style="max-width:800px;">
+      <div class="subfooter-inner">
+        <div class="row">
+          <div class="col-md-12 border border-dark" style="padding-left: 0%;padding-right: 0%;">
+            <table class="table table-colored table-bordered" style="margin-bottom:0rem;">
+              <thead>
+                <tr style="background-color: #c2cdd1;border-color:#c2cdd1;">
+                  <th style="width:10%;text-align:center;background-color: #c2cdd1;border-color:#c2cdd1;"><img src="./images/img/nineThousand.jpg"></th>
+                  <th style="width:10%;text-align:center;background-color: #c2cdd1;border-color:#c2cdd1;"><img src="./images/img/fourteenThousand.jpg"></th>
+                  <th style="width:60%;text-align:center;background-color: #c2cdd1;border-color:#c2cdd1;"></th>
+                  <th style="width:20%;text-align:center;background-color: #c2cdd1;border-color:#c2cdd1;"><img src="./images/img/Hamdule-Logo1.png"></th>
+                </tr>
+                <tr>
+                  <th colspan="4" style="background-color: #c2cdd1;border-color:#c2cdd1;"><b><h3 class="text-center text-light font-weight-bold" style="margin-top: 1%;">SALES CHALLAN</h3></b></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="font-weight-bold" style="width:30%;">Delivery Challan No:</td>
+                  <td style="width:5%;">challanNo</td>
+                  <td class="font-weight-bold" style="width:30%;">Purchase Order No:</td>
+                  <td style="width:5%;">poNo</td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold" style="width:30%;">Date:</td>
+                  <td style="width:5%;">date</td>
+                  <td class="font-weight-bold" style="width:30%;">Purchase Order Date:</td>
+                  <td style="width:5%;" >poDate</td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold bg-light" colspan="2">From</td>
+                  <td class="font-weight-bold bg-light" colspan="2">Consignee</td>
+                </tr>
+                <tr>
+                  <td class=" bg-light" colspan="2">
+                    <div style="width:50%;height:17px;">from1</div>
+                  </td>
+                  <td class=" bg-light" colspan="2">
+                    <div style="width:50%;height:17px;">consignee1</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class=" bg-light" colspan="2">
+                    <div style="height:17px;">from2</div>
+                  </td>
+                  <td class=" bg-light" colspan="2">consignee2</td>
+                </tr>
+                <tr>
+                  <td class=" bg-light" colspan="2">
+                    <div style="height:17px;">from3</div>
+                  </td>
+                  <td class=" bg-light" colspan="2">consignee3</td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table table-colored table-bordered" style="margin-bottom:0rem;margin-top:0rem;">
+              <tbody>
+                <tr>
+                  <td class="font-weight-bold" style="width:30%;text-align:center;">Transport Mode</td>
+                  <td class="font-weight-bold" style="width:40%;text-align:center;">LR# & Date</td>
+                  <td class="font-weight-bold" style="width:30%;text-align:center;" colspan="2">Vheicle Number</td>
+                </tr>
+                <tr>
+                  <td style="width:30%;text-align:center;">transportMode</td>
+                  <td style="width:30%;text-align:center;">lrNo</td>
+                  <td style="width:30%;text-align:center;" colspan="2">vheicleNumber</td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table table-colored table-bordered" style="margin-bottom:0rem;margin-top:0rem;">
+              <tbody>
+                <tr>
+                  <td class="font-weight-bold bg-light" style="width:10%;text-align:center;">&emsp;SrNO&emsp;&emsp;&emsp;&emsp;Size</td>
+                  <td class="font-weight-bold bg-light" style="width:25%;text-align:center;">Description</td>
+                  <td class="font-weight-bold bg-light" style="width:5%;text-align:center;">Qty.</td>
+                  <td class="font-weight-bold bg-light" style="width:5%;text-align:center;">Unit</td>
+                </tr>
+                itemList
+              </tbody>
+            </table>
+            <table class="table table-colored table-bordered" style="margin-bottom:0rem;margin-top:0rem;">
+              <tbody>
+                <tr>
+                  <td class="font-weight-bold" colspan="3" style="width:60%;">GST Number: gstNo</td>
+                  <td class="font-weight-bold text-center" colspan="1">For Hamdule Industries</td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold" colspan="2" style="width:60%;"></td>
+                  <td class="font-weight-bold text-right" colspan="1"><div style="height:17px;"></div></td>
+                  <td class="font-weight-bold text-right" colspan="1"><div style="height:17px;"></div></td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold" colspan="2" style="width:60%;"></td>
+                  <td class="font-weight-bold text-right" colspan="1"><div style="height:17px;"></div></td>
+                  <td class="font-weight-bold text-right" colspan="1"><div style="height:17px;"></div></td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold" colspan="2" style="width:60%;"></td>
+                  <td class="font-weight-bold text-right" colspan="1"><div style="height:17px;"></div></td>
+                  <td class="font-weight-bold text-right" colspan="1"><div style="height:17px;"></div></td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold" colspan="2" style="width:60%;"></td>
+                  <td class="font-weight-bold text-right" colspan="1"><div style="height:17px;"></div></td>
+                  <td class="font-weight-bold text-right" colspan="1"><div style="height:17px;"></div></td>
+                </tr>
+                <tr>
+                  <td style="width:30%;"></td>
+                  <td style="width:30%;"></td>
+                  <td class="font-weight-bold text-center">Receiver's Stamp & Sign</td>
+                  <td class="font-weight-bold text-center">Authorised Signatory</td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold text-center" style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Regd. Address : Shop # 3, Blgd C2,Manish Gardan, Udyam Nagar, Pimpri,Pune 411018</td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold text-center" style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Works: Plot No. 55,Gat 55 &amp; 57, Chakan, Askhed, Tal. Khed, Pune - 410501</td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold text-center" style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Cell: +91 20 2750 2200 | Email:business@hamduleindustries.com | www.hamduleindustries.com</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
