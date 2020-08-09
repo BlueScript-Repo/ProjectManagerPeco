@@ -53,7 +53,7 @@
 
                     <!-- logo -->
                     <div id="logo" class="logo">
-                      <img src="./images/img/Hamdule-Logo1.png" alt="" style="width: 250px;height: 55px;margin-top: 0px;margin-left: -100px;">
+                      <img src="./images/img/PECOLogo1.jpg" alt="" style="width: 250px;height: 55px;margin-top: 0px;margin-left: -100px;">
                     </div>
                   </div>
 
@@ -75,7 +75,7 @@
                     <nav class="navbar navbar-expand-lg navbar-light p-0">
                       <div class="navbar-brand clearfix hidden-lg-up">
                         <div id="logo-mobile" class="logo">
-                          <a href="#"><img id="logo-img-mobile" src="./images/img/Hamdule-Logo1.png" alt=""></a>
+                          <a href="#"><img id="logo-img-mobile" src="./images/img/PECOLogo1.jpg" alt=""></a>
                         </div>
                         <div class="site-slogan">
                         </div>

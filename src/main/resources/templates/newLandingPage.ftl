@@ -16,14 +16,14 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="./css/landing.css" />
-    <title>Hamdule Industries</title>
+    <title>PECO Industries</title>
   </head>
 
   <body data-spy="scroll" data-target="#main-nav" id="home">
 
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top" id="main-nav">
         <div class="container">
-            <img src="./images/img/Hamdule-Logo1.png" alt="" class="navbar-brand">
+            <img src="./images/img/PECOLogo1.jpg" alt="" class="navbar-brand">
         </div>
     </nav>
 

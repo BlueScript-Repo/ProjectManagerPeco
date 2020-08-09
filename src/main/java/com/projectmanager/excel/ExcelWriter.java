@@ -170,7 +170,7 @@ public class ExcelWriter {
 			int inventoryCount = Integer.parseInt(sheetDetailsMap.get(sheetNameList.get(s - 1)));
 
 			sheet.getRow(0).getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
-					.setCellValue("Hamdule Industries Pvt Ltd");
+					.setCellValue("PECO Projects Pvt Ltd");
 
 			sheet.addMergedRegion(new CellRangeAddress(0, 1, 0, 4));
 			/*sheet.addMergedRegion(new CellRangeAddress(2,2,5,7));*/

@@ -193,7 +193,7 @@ public class Principal {
 			table5.setWidths(table5Widths);
 
 			table5.addCell(createNewCell(new Paragraph("Company's Bank Details ", blackBGLB11)));
-			table5.addCell(createNewCell(new Paragraph("Hamdule Industries", boldBlackBGLB11)));
+			table5.addCell(createNewCell(new Paragraph("PECO", boldBlackBGLB11)));
 			table5.addCell(createNewCell(new Paragraph("Bank Name: HDFC Bank Ltd ", blackBGLB11)));
 
 			PdfPCell signCell = createNewCell(70);

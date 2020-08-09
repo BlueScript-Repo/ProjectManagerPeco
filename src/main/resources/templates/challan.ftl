@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>The Project | Tables</title>
+    <title>PECO</title>
     <meta name="description" content="The Project a Bootstrap-based, Responsive HTML5 Template">
     <meta name="author" content="author">
 
@@ -141,7 +141,7 @@
                         <tbody>
                         <tr>
                             <td class="font-weight-bold" colspan="3" style="width:60%;">GST Number: ${gstNo}</td>
-                            <td class="font-weight-bold text-center" colspan="1">For Hamdule Industries</td>
+                            <td class="font-weight-bold text-center" colspan="1">For PECO Industries</td>
                         </tr>
                         <tr>
                             <td class="font-weight-bold" colspan="2" style="width:60%;"></td>

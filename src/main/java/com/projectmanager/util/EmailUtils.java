@@ -91,9 +91,9 @@ public class EmailUtils {
 	}
 
 	public void sendInquiry(String sender, String recipient, byte[] fileBytes, String inquiryName, File file) {
-		String subject = "Hamdule Projects : Inventory Inquiry";
+		String subject = "PECO Projects : Inventory Inquiry";
 
-		String text = "Greeting of thr day from hamdule Industries. Please find attached the Inventory requirment. PLeaase update the same and respond.";
+		String text = "Greeting of thr day from PECO . Please find attached the Inventory requirment. PLeaase update the same and respond.";
 
 		FileOutputStream fos;
 		try {

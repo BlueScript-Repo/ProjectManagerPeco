@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Hamdule Project</title>
+  <title>PECO Project</title>
   <meta name="description" content="The Project a Bootstrap-based, Responsive HTML5 Template">
   <meta name="author" content="author">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -56,7 +56,7 @@
               <span class="icon default-bg circle"><i class="fa fa-connectdevelop"></i></span>
               <h3>Search Project</h3>
               <div class="separator clearfix"></div>
-              <p>Search a project using keyword. Use this link to go to the details of a perticular project.</p>
+              <p>Search a project using keyword. Use this link to go to the details of a particular project.</p>
               <br>
             </div>
           </div>
@@ -66,7 +66,7 @@
               <h3>Manage Inventory</h3>              
               <form id="updateInv" action="updateInvPO" method="GET"></form>              
               <div class="separator clearfix"></div>
-              <p>Use this link to access Inventory page to update system when Invemtory is received.</p>
+              <p>Use this link to access Inventory page to update system when Inventory is received.</p>
               <br>
             </div>
           </div>

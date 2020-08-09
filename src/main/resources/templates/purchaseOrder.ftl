@@ -3,7 +3,7 @@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <META http-equiv="X-UA-Compatible" content="IE=8">
-<TITLE>Hamdule Industries</TITLE>
+<TITLE>PECO Projects</TITLE>
 <META name="generator" content="BCL easyConverter SDK 5.0.140">
 <STYLE type="text/css">
 
@@ -170,7 +170,7 @@ input{width: 50%;font: 11px 'Calibri'}
 <BODY>
 <DIV id="page_1">
 <DIV id="p1dimg1">
-<IMG src="images/img/bg-po.png" id="p1img1"></DIV>
+<IMG src="images/img/PECO Projects_FINAL Letter Head.jpg" id="p1img1"></DIV>
 
 
 <DIV class="dclr"></DIV>
@@ -178,7 +178,7 @@ input{width: 50%;font: 11px 'Calibri'}
 <TR>
 	<TD class="tr0 td0"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr0 td1"><P class="p0 ft0">&nbsp;</P></TD>
-	<TD colspan=2 class="tr0 td2"><P class="p1 ft1">HAMDULE INDUSTRIES</P></TD>
+	<TD colspan=2 class="tr0 td2"><P class="p1 ft1">PECO PROJECTS</P></TD>
 	<TD class="tr0 td3"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr0 td4"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD colspan=4 class="tr0 td5"><P class="p2 ft2">PURCHASE ORDER</P></TD>
@@ -191,7 +191,7 @@ input{width: 50%;font: 11px 'Calibri'}
 </TR>
 <TR>
 	<TD colspan=2 class="tr2 td10"><P class="p4 ft3">VAT TIN No.</P></TD>
-	<TD colspan=2 class="tr2 td11"><P class="p5 ft3"><NOBR>27440913446-V</NOBR></P></TD>
+	<TD colspan=2 class="tr2 td11"><P class="p5 ft3"><NOBR>27251164635V</NOBR></P></TD>
 	<TD class="tr2 td12"><P class="p4 ft4">PO No.</P></TD>
 	<TD class="tr2 td13"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr2 td14"><P class="p0 ft0">&nbsp;</P></TD>
@@ -201,7 +201,7 @@ input{width: 50%;font: 11px 'Calibri'}
 </TR>
 <TR>
 	<TD colspan=2 class="tr1 td18"><P class="p4 ft3">GST No.</P></TD>
-	<TD colspan=2 class="tr1 td19"><P class="p5 ft3">27AEBPH1001B1ZM</P></TD>
+	<TD colspan=2 class="tr1 td19"><P class="p5 ft3">27AAICP1433D1ZQ</P></TD>
 	<TD colspan=3 class="tr1 td20"><P class="p4 ft4">PO DATE</P></TD>
 	<TD colspan=2 class="tr1 td21"><P class="p6 ft4"><NOBR>${PODate}</NOBR></P></TD>
 	<TD class="tr1 td22"><P class="p0 ft0">&nbsp;</P></TD>
@@ -222,7 +222,7 @@ input{width: 50%;font: 11px 'Calibri'}
 	<TD colspan=2 rowspan=2 class="tr5 td11"><P class="p5 ft8">${contactName}</P></TD>
 	<TD class="tr4 td12"><P class="p4 ft9">Name</P></TD>
 	<TD class="tr4 td13"><P class="p0 ft0">&nbsp;</P></TD>
-	<TD colspan=3 class="tr4 td28"><P class="p6 ft9">MEHMOOD D. HAMDULE</P></TD>
+	<TD colspan=3 class="tr4 td28"><P class="p6 ft9">C. Suresh</P></TD>
 	<TD class="tr4 td16"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr4 td16"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr4 td17"><P class="p0 ft0">&nbsp;</P></TD>
@@ -243,7 +243,7 @@ input{width: 50%;font: 11px 'Calibri'}
 	<TD colspan=2 class="tr1 td11"><P class="p5 ft4">${contactNumber}</P></TD>
 	<TD class="tr1 td12"><P class="p4 ft9"><NOBR>E-mail</NOBR></P></TD>
 	<TD class="tr1 td13"><P class="p0 ft0">&nbsp;</P></TD>
-	<TD colspan=5 class="tr1 td32"><P class="p6 ft10">mdhamdule@hamduleindustries.com</P></TD>
+	<TD colspan=5 class="tr1 td32"><P class="p6 ft10">peco@pecoprojects.com</P></TD>
 	<TD class="tr1 td17"><P class="p0 ft0">&nbsp;</P></TD>
 </TR>
 <TR>
@@ -251,7 +251,7 @@ input{width: 50%;font: 11px 'Calibri'}
 	<TD class="tr1 td33"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD colspan=2 class="tr1 td19"><P class="p5 ft10">${contactEmail}</P></TD>
 	<TD class="tr1 td34"><P class="p4 ft9">Phone</P></TD>
-	<TD colspan=2 class="tr1 td35"><P class="p5 ft12">020-27502200</P></TD>
+	<TD colspan=2 class="tr1 td35"><P class="p5 ft12">+91 2065300352</P></TD>
 	<TD class="tr1 td36"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr1 td37"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr1 td22"><P class="p0 ft0">&nbsp;</P></TD>
@@ -396,10 +396,10 @@ ${terms}
 	<TD class="tr17 td13"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr17 td14"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr17 td43"><P class="p0 ft0">&nbsp;</P></TD>
-	<TD colspan=4 class="tr17 td64"><P class="p24 ft18">FOR HAMDULE INDUSTRIES</P></TD>
+	<TD colspan=4 class="tr17 td64"><P class="p24 ft18">FOR PECO PROJECTS</P></TD>
 </TR>
 <TR>
-	<TD colspan=4 class="tr3 td24"><P class="p4 ft9">SHOP NO.3, BLGD C2, MANISH GARDEN, UDYAMNAGAR,</P></TD>
+	<TD colspan=4 class="tr3 td24"><P class="p4 ft9">A-601, Silver Oaks, Gat No. 275, Borhadewadi,</P></TD>
 	<TD class="tr3 td12"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr3 td13"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr3 td14"><P class="p0 ft0">&nbsp;</P></TD>
@@ -410,7 +410,7 @@ ${terms}
 	<TD class="tr3 td17"><P class="p0 ft0">&nbsp;</P></TD>
 </TR>
 <TR>
-	<TD colspan=3 class="tr18 td65"><P class="p4 ft9">PIMPRI, PUNE- 411018</P></TD>
+	<TD colspan=3 class="tr18 td65"><P class="p4 ft9">MOSHI, PUNE- 411105</P></TD>
 	<TD class="tr18 td63"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr18 td12"><P class="p0 ft0">&nbsp;</P></TD>
 	<TD class="tr18 td13"><P class="p0 ft0">&nbsp;</P></TD>

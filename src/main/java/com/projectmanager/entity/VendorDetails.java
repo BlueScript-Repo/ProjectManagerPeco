@@ -12,12 +12,20 @@ public class VendorDetails
     private String contactName;
     private String contactEmail;
     private String contactNumber;
+    private String vendorGst;
+    private String vendorPan;
+    
     
     @Override
-    public String toString() {
-	return "VendorDetails [vendorName=" + vendorName + ": vendorAddress=" + vendorAddress + ": contactName="
-		+ contactName + ": contactEmail=" + contactEmail + ": contactNumber=" + contactNumber + "]";
-    }
+	public String toString() {
+		return "VendorDetails [vendorName=" + vendorName + ", vendorAddress="
+				+ vendorAddress + ", contactName=" + contactName
+				+ ", contactEmail=" + contactEmail + ", contactNumber="
+				+ contactNumber + ", vendorGst=" + vendorGst + ", vendorPan="
+				+ vendorPan + "]";
+	}
+    
+    
 
     public VendorDetails()
     {
@@ -53,5 +61,22 @@ public class VendorDetails
     }
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
-    }    
+    }
+
+	public String getVendorGst() {
+		return vendorGst;
+	}
+
+	public void setVendorGst(String vendorGst) {
+		this.vendorGst = vendorGst;
+	}
+
+	public String getVendorPan() {
+		return vendorPan;
+	}
+
+	public void setVendorPan(String vendorPan) {
+		this.vendorPan = vendorPan;
+	}  
+    
 }

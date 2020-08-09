@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Hamdule Projects</title>
+  <title>PECO Projects</title>
   <meta name="description" content="The Project a Bootstrap-based, Responsive HTML5 Template">
   <meta name="author" content="author">
 
@@ -107,6 +107,17 @@
                 <input type="text" class="form-control" name="contactEmail">
               </div>
             </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label>Vendor Gst</label>
+                <input type="text" class="form-control" name="vendorGst">
+              </div>
+              <div class="form-group col-md-4">
+                <label>Vendor Pan</label>
+                <input type="text" class="form-control" name="vendorPan">
+              </div>
+             
+            </div>
             <div class="form-group form-row" id="terms">
              <div class="form-group col-md-6">
               <label for="inputAddress">Terms :</label>
@@ -151,6 +162,16 @@
         <input type="text" class="form-control" name="vendorContactName">
       </div>
     </div>
+     <div class="form-row"> 
+      <div class="form-group col-md-4">
+        <label>Vendor Gst No. </label>
+        <input type="text" class="form-control" name="vendorGst"> 
+      </div>
+      <div class="form-group col-md-4">
+        <label>Vendor Pan No.</label>
+        <input type="text" class="form-control" name="vendorPan">
+      </div>
+     </div>
     <div class="form-row">    
       <div class="form-group col-md-4">
         <label>Contact Number</label>
@@ -288,7 +309,7 @@
     showLoading();
     $.ajax({
      type : 'POST',
-     data :  {'vendorName' : $('[name="vendorNameStr"]').val(), 'vendorAddress': $('[name="vendorAddress"]').val(), 'contactName': $('[name="vendorContactName"]').val(), 'contactNumber': $('[name="vendorNumber"]').val(), 'contactEmail': $('[name="vendorEmail"]').val()},
+     data :  {'vendorName' : $('[name="vendorNameStr"]').val(), 'vendorAddress': $('[name="vendorAddress"]').val(), 'contactName': $('[name="vendorContactName"]').val(), 'contactNumber': $('[name="vendorNumber"]').val(), 'contactEmail': $('[name="vendorEmail"]').val(), 'vendorGst': $('[name="vendorGst"]').val(), 'vendorPan': $('[name="vendorPan"]').val()},
      url : 'saveVendor',
      success : function(data) 
      {
@@ -337,6 +358,14 @@
        else if(ele=='contactEmail')
        {
          $('[name="contactEmail"]').val(valu);
+       } 
+        else if(ele=='vendorGst')
+       {
+         $('[name="vendorGst"]').val(valu);
+       } 
+        else if(ele=='vendorPan')
+       {
+         $('[name="vendorPan"]').val(valu);
        }  			
 
      });       

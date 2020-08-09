@@ -16,6 +16,8 @@ public class PODetails {
     String contactName;
     String contactNumber;
     String contactEmail;
+    String vendorGst;
+    String vendorPan;
     
     @Column(length = 2046)
     String[] term;
@@ -118,32 +120,62 @@ public class PODetails {
 	this.lineItemNoHtml = lineItemNoHtml;
     }
     
-    public PODetails() {
+    
+    
+    public String getVendorGst() {
+		return vendorGst;
+	}
+
+	public void setVendorGst(String vendorGst) {
+		this.vendorGst = vendorGst;
+	}
+
+	public String getVendorPan() {
+		return vendorPan;
+	}
+
+	public void setVendorPan(String vendoePan) {
+		this.vendorPan = vendoePan;
+	}
+
+	public PODetails() {
     }
 
-    public PODetails(String poNumber, String vendorName, String location, String contactName, String contactNumber,
-	    String contactEmail, String[] term, String lineItem, String lineItemNoHtml, String poDate, String projectId) {
-	super();
-	this.poNumber = poNumber;
-	this.vendorName = vendorName;
-	this.location = location;
-	this.contactName = contactName;
-	this.contactNumber = contactNumber;
-	this.contactEmail = contactEmail;
-	this.term = term;
-	this.lineItem = lineItem;
-	this.lineItemNoHtml = lineItemNoHtml;
-	this.poDate = poDate;
-	this.projectId = projectId;
-    }
+   
+    
+
+	public PODetails(String poNumber, String vendorName, String location,
+			String contactName, String contactNumber, String contactEmail,
+			String vendorGst, String vendorPan, String[] term, String lineItem,
+			String lineItemNoHtml, String poDate, String projectId) {
+		super();
+		this.poNumber = poNumber;
+		this.vendorName = vendorName;
+		this.location = location;
+		this.contactName = contactName;
+		this.contactNumber = contactNumber;
+		this.contactEmail = contactEmail;
+		this.vendorGst = vendorGst;
+		this.vendorPan = vendorPan;
+		this.term = term;
+		this.lineItem = lineItem;
+		this.lineItemNoHtml = lineItemNoHtml;
+		this.poDate = poDate;
+		this.projectId = projectId;
+	}
 
 	@Override
 	public String toString() {
-		return "PODetails [poNumber=" + poNumber + ": vendorName=" + vendorName + ": location=" + location
-				+ ": contactName=" + contactName + ": contactNumber=" + contactNumber + ": contactEmail=" + contactEmail
-				+ ": term=" + Arrays.toString(term) + ": lineItem=" + lineItem + ": lineItemNoHtml=" + lineItemNoHtml
-				+ ": poDate=" + poDate + ": projectId=" + projectId + "]";
+		return "PODetails [poNumber=" + poNumber + ", vendorName=" + vendorName
+				+ ", location=" + location + ", contactName=" + contactName
+				+ ", contactNumber=" + contactNumber + ", contactEmail="
+				+ contactEmail + ", vendorGst=" + vendorGst + ", vendorPan="
+				+ vendorPan + ", term=" + Arrays.toString(term) + ", lineItem="
+				+ lineItem + ", lineItemNoHtml=" + lineItemNoHtml + ", poDate="
+				+ poDate + ", projectId=" + projectId + "]";
 	}
+
+	
     
     
     

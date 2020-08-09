@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top" id="main-nav" style="opacity:0.8;">
         <div class="container">
    			
-			<img src="./images/img/Hamdule-Logo1.png" class="navbar-brand" alt=""/>
+			<img src="./images/img/PECOLogo1.jpg" class="navbar-brand" alt=""/>
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav ml-auto">

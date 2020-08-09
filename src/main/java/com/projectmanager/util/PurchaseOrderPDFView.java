@@ -33,473 +33,609 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Component("purchaseOrderView")
 public class PurchaseOrderPDFView extends AbstractView {
 
-    @Autowired
-    Principal principal;
+	@Autowired
+	Principal principal;
 
-    @Autowired
-    NumberWordConverter numberWordConverter;
+	@Autowired
+	NumberWordConverter numberWordConverter;
 
-    @Autowired
-    TaxesDao taxesDao;
+	@Autowired
+	TaxesDao taxesDao;
 
-    @Override
-    protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
-                                           HttpServletResponse response) throws Exception {
+	@Override
+	protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 
-        PODetails poDetails = (PODetails) model.get("poDetails");
-        String poLineDetails = (String) model.get("poLineDetails");
+		PODetails poDetails = (PODetails) model.get("poDetails");
+		String poLineDetails = (String) model.get("poLineDetails");
 
-        String[] poLines = poLineDetails.split(";");
+		String[] poLines = poLineDetails.split(";");
+System.out.println(poLines.length);
+		String[] description = new String[poLines.length];
+		System.out.println(description.length);
+		String[] quantity = new String[poLines.length];
+		String[] unitPrice = new String[poLines.length];
 
-        String[] description = new String[poLines.length];
-        String[] quantity = new String[poLines.length];
-        String[] unitPrice = new String[poLines.length];
+		String[] make = new String[poLines.length];
+		String[] terms = poDetails.getTerm();
 
-        String[] make = new String[poLines.length];
-        String[] terms = poDetails.getTerm();
+		int index = 0;
+		for (String poLine : poLines) {
+			System.out.println(poLine);
+			String[] details = poLine.split(",");
+			description[index] = details[1];
+			quantity[index] = details[2];
+			unitPrice[index] = details[3];
+			index++;
 
-        int index = 0;
-        for (String poLine : poLines) {
-            String[] details = poLine.split(",");
-            description[index] = details[1];
-            quantity[index] = details[2];
-            unitPrice[index] = details[3];
-            index++;
+		}
 
-        }
+		// Save poDetails.getPoNumber() + ".pdf" in io.temp
+		try {
+			String userName = (String) model.get("userName");
+			String destination = System.getProperty("java.io.tmpdir") + "/" + userName + "/" + poDetails.getPoNumber()
+					+ ".pdf";
 
-        //Save poDetails.getPoNumber() + ".pdf" in io.temp
-        try
-        {
-            String userName = (String)model.get("userName");
-            String destination = System.getProperty("java.io.tmpdir") + "/"+userName+"/"+poDetails.getPoNumber() + ".pdf";
+			File fileToSave = new File(destination);
+			fileToSave.getParentFile().mkdirs();
 
-            File fileToSave = new File(destination);
-            fileToSave.getParentFile().mkdirs();
+			FileOutputStream fOut = new FileOutputStream(fileToSave);
 
-            FileOutputStream fOut = new FileOutputStream(fileToSave);
-        
-              generatePO("27440913446-V", "27AEBPH1001B1ZM", poDetails.getPoNumber(), poDetails.getPoDate(),
-                    poDetails.getVendorName(), "", poDetails.getContactName(), poDetails.getContactNumber(),
-                    poDetails.getContactEmail(), make, description, quantity, unitPrice, terms, response, fOut);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+			generatePO("27440913446-V", "27AEBPH1001B1ZM", poDetails.getPoNumber(), poDetails.getPoDate(),
+					poDetails.getVendorName(), "", poDetails.getContactName(), poDetails.getContactNumber(),
+					poDetails.getContactEmail(),
+					poDetails.getVendorGst(), poDetails.getVendorPan(),make, description, quantity, unitPrice, terms, response, fOut);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
-    }
+	}
 
-    public void generatePO(String vatTin, String gstNo, String purhaseOrderNo, String purhaseOrderDate,
-                           String venderName, String venderLocation, String receiverName, String receiverNo, String receiverEmail,
-                           String[] make, String[] description, String[] quantity, String[] unitPrice, String[] term,
-                           HttpServletResponse response, FileOutputStream fOut ) {
+	public void generatePO(String vatTin, String gstNo, String purhaseOrderNo, String purhaseOrderDate,
+			String venderName, String venderLocation, String receiverName, String receiverNo, String receiverEmail, String venderGst, String venderPan,
+			String[] make, String[] description, String[] quantity, String[] unitPrice, String[] term,
+			HttpServletResponse response, FileOutputStream fOut) {
 
-        try {
+		try {
 
-            Document document = new Document();
+			Document document = new Document();
 
-            PdfWriter writer = PdfWriter.getInstance(document, fOut);
-            document.open();
+			PdfWriter writer = PdfWriter.getInstance(document, fOut);
+			document.open();
 
-            ArrayList<String[]> descriptionList = new ArrayList<>();
+			ArrayList<String[]> descriptionList = new ArrayList<>();
 
-            int pages = Math.round(description.length / 10) + 1;
+			int pages = Math.round(description.length / 10) + 1;
 
-            try {
-                for (int i = 0; i < pages; i++) {
+			try {
+				for (int i = 0; i < pages; i++) {
 
-                    int end = 10 * i + 9;
-                    if (description.length < 10 * i + 10) {
-                        end = description.length - 1;
-                    }
-                    String[] newArray = Arrays.copyOfRange(description, 10 * i, end);
+					int end = 10 * i + 9;
+					if (description.length < 10 * i + 10) {
+						System.out.println(description.length < 10 * i + 10);
+						end = description.length - 1;
+					}
+					String[] newArray = Arrays.copyOfRange(description, 1 * i, end);
+					System.out.println(newArray);
+					descriptionList.add(newArray);
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 
-                    descriptionList.add(newArray);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+			for (String[] desc : descriptionList) {
+				generatePage(document, gstNo, purhaseOrderNo, purhaseOrderDate, venderName, venderLocation,
+						receiverName, receiverNo, receiverEmail, venderGst, venderPan, desc, unitPrice, quantity, make, term, writer);
+			}
 
-            for (String[] desc : descriptionList) {
-                generatePage(document, gstNo, purhaseOrderNo, purhaseOrderDate, venderName, venderLocation, receiverName, receiverNo, receiverEmail, desc, unitPrice, quantity, make, term, writer);
-            }
+			document.close();
+			writer.close();
 
-            document.close();
-            writer.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+	}
 
-    }
+	protected PdfPTable createNewTable(int numberOfColumns) {
+		PdfPTable table = new PdfPTable(numberOfColumns);
+		table.setWidthPercentage(95);
 
-    protected PdfPTable createNewTable(int numberOfColumns) {
-        PdfPTable table = new PdfPTable(numberOfColumns);
-        table.setWidthPercentage(95);
+		return table;
+	}
 
-        return table;
-    }
+	protected PdfPCell createNewCell(Paragraph ph) {
+		PdfPCell cell = new PdfPCell(ph);
+		cell.setFixedHeight(15);
+		return cell;
+	}
 
-    protected PdfPCell createNewCell(Paragraph ph) {
-        PdfPCell cell = new PdfPCell(ph);
-        cell.setFixedHeight(15);
-        return cell;
-    }
+	protected PdfPCell createNewCell(Paragraph ph, int fixedHeight) {
+		PdfPCell cell = new PdfPCell(ph);
+		cell.setFixedHeight(fixedHeight);
+		return cell;
+	}
 
-    protected PdfPCell createNewCell(Paragraph ph, int fixedHeight) {
-        PdfPCell cell = new PdfPCell(ph);
-        cell.setFixedHeight(fixedHeight);
-        return cell;
-    }
+	protected PdfPCell createNewCell(int fixedHeight) {
+		PdfPCell cell = new PdfPCell(new Paragraph());
+		cell.setFixedHeight(fixedHeight);
+		return cell;
+	}
 
-    protected PdfPCell createNewCell(int fixedHeight) {
-        PdfPCell cell = new PdfPCell(new Paragraph());
-        cell.setFixedHeight(fixedHeight);
-        return cell;
-    }
-
-    protected void generatePage(Document document, String gstNo, String purhaseOrderNo, String purhaseOrderDate, String venderName, String venderLocation, String receiverName, String receiverNo, String receiverEmail, String[] description, String[] unitPrice, String[] quantity, String[] make, String[] term, PdfWriter writer) {
-        try {
+	protected void generatePage(Document document, String gstNo, String purhaseOrderNo, String purhaseOrderDate,
+			String venderName, String venderLocation, String receiverName, String receiverNo, String receiverEmail, String vendorGst, String vendorPan,
+			String[] description, String[] unitPrice, String[] quantity, String[] make, String[] term,
+			PdfWriter writer) {
+		try {
             document.add(new Paragraph(70, "\u00a0"));
 
-            PdfPTable table = createNewTable(2);
-
-            float[] cloWidth = {2f, 2f};
-
-            table.setWidths(cloWidth);
+            //table1
+            PdfPTable table = createNewTable(1);
 
             // Row1
-            Paragraph ph = new Paragraph("HAMDULE INDUSTRIES", redCalibri14);
+            Paragraph ph = new Paragraph("PURCHASE ORDER", blackCalibri14);
             ph.setAlignment(Element.ALIGN_MIDDLE);
 
             PdfPCell c1 = createNewCell(ph);
             c1.setHorizontalAlignment(Element.ALIGN_CENTER);
             c1.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-            c1.setFixedHeight(30);
-
-            Paragraph ph2 = new Paragraph("PURCHASE ORDER",
-                    new Font(Font.FontFamily.COURIER, 14, Font.BOLD, BaseColor.BLACK));
-            ph2.setAlignment(Element.ALIGN_MIDDLE);
-
-            PdfPCell c2 = createNewCell(ph2);
-            c2.setHorizontalAlignment(Element.ALIGN_CENTER);
-            c2.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
-            c2.setFixedHeight(30);
-
-            // Row2
-            PdfPCell c3 = createNewCell();
-
-
-            c3.addElement(new Paragraph("GST No.   " + gstNo, blackCalibri10));
-            c3.addElement(new Paragraph("          ", blackCalibri10));
-
-            c3.setBorderWidthBottom(0);
-            c3.setBorderColorBottom(null);
-
-            c3.setFixedHeight(40);
-
-            PdfPCell c4 = createNewCell();
-            c4.addElement(new Paragraph("PO No.   " + purhaseOrderNo, blackCalibri10));
-            c4.addElement(new Paragraph("PO DATE.   " + purhaseOrderDate, blackCalibri10));
-            c4.setBorderWidthBottom(0);
-
-            c4.setFixedHeight(40);
-
-            // Row3
-            PdfPCell c5 = createNewCell();
-            c5.addElement(new Paragraph("To:   " + venderName, blackCalibri11));
-            c5.addElement(new Paragraph(venderLocation, blackCalibri10));
-            c5.addElement(new Paragraph("Kind Attn.   " + receiverName, blackCalibri10));
-            c5.addElement(new Paragraph("Cell#        " + receiverNo, blackCalibri10));
-            c5.addElement(new Paragraph("E-Mail       " + receiverEmail, blackCalibri10));
-
-            PdfPCell c6 = createNewCell();
-            c6.addElement(new Paragraph("ADDRESS CORRESPONDENCE TO: ", blackCalibri11));
-            c6.addElement(new Paragraph("Name   MEHMOOD D. HAMDULE", blackCalibri10));
-            c6.addElement(new Paragraph("Cell#  9766669933", blackCalibri10));
-            c6.addElement(new Paragraph("Email  business@hamduleindustries.com", blackCalibri10));
-            c6.addElement(new Paragraph("Phone  020-27502200", blackCalibri10));
-
-            c5.setFixedHeight(90);
-            c6.setFixedHeight(90);
+            c1.setFixedHeight(20);
 
             table.addCell(c1);
-            table.addCell(c2);
-
-            table.addCell(c3);
-            table.addCell(c4);
-            table.addCell(c5);
-            table.addCell(c6);
-
+                    
             document.add(table);
 
             // Table2
-            PdfPTable table2 = createNewTable(9);
+            PdfPTable table2 = createNewTable(3);
 
-            float[] colWidts = {1f, 2f, 6f, 2f, 2f, 2f, 2f, 2f, 3f};
+            float[] colWidts = {4f, 4f, 5f};
 
             table2.setWidths(colWidts);
-
-            PdfPCell r2c1 = createNewCell(new Paragraph("SR#", blackCalibri9));
-            PdfPCell r2c2 = createNewCell(new Paragraph("Make", blackCalibri9));
-            PdfPCell r2c3 = createNewCell(new Paragraph("Description", blackCalibri9));
-            PdfPCell r2c4 = createNewCell(new Paragraph("Qty", blackCalibri9));
-            PdfPCell r2c5 = createNewCell(new Paragraph("Unit", blackCalibri9));
-            PdfPCell r2c6 = createNewCell(new Paragraph("Price", blackCalibri9));
-            PdfPCell r2c7 = createNewCell(new Paragraph("CGST", blackCalibri9));
-            PdfPCell r2c8 = createNewCell(new Paragraph("SGST", blackCalibri9));
-            PdfPCell r2c9 = createNewCell(new Paragraph("Amount (Rs)", blackCalibri9));
+            //Row2
+            Paragraph ph2 = new Paragraph("Offer No.:-224/18-19", boldBlackCalibri10);
+            ph2.setAlignment(Element.ALIGN_MIDDLE);
+            
+            PdfPCell r2c1 = createNewCell(ph2);
+            r2c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r2c1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            
+            r2c1.setFixedHeight(20);
+            
+            Paragraph ph3 = new Paragraph("PO No.:- "+ purhaseOrderNo, boldBlackCalibri10);
+            ph2.setAlignment(Element.ALIGN_MIDDLE);
+            
+            PdfPCell r2c2 = createNewCell(ph3);
+            r2c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r2c2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            
+            r2c1.setFixedHeight(20);
+            
+            Paragraph ph4 = new Paragraph("Date:-"+ purhaseOrderDate, boldBlackCalibri10);
+            ph2.setAlignment(Element.ALIGN_MIDDLE);
+            
+            PdfPCell r2c3 = createNewCell(ph4);
+            r2c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r2c3.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            
+            r2c1.setFixedHeight(20);
+            
+          
 
             table2.addCell(r2c1);
             table2.addCell(r2c2);
             table2.addCell(r2c3);
-            table2.addCell(r2c4);
-            table2.addCell(r2c5);
-            table2.addCell(r2c6);
-            table2.addCell(r2c7);
-            table2.addCell(r2c8);
-            table2.addCell(r2c9);
+            
+            //Row3
+            
+            
+           // ph2.setAlignment(Element.ALIGN_MIDDLE);
+            
+            PdfPCell shipToCell = createNewCell(120);
+            shipToCell.addElement(new Paragraph("Billing to", blackCalibri9));
+            shipToCell.addElement(new Paragraph("PECO Projects Pvt Ltd", boldBlackCalibri10));
+            shipToCell.addElement(new Paragraph("A-601, Silver Oaks,", blackCalibri9));
+            shipToCell.addElement(new Paragraph("Gat No.275, Borhadewadi", blackCalibri9));
+            shipToCell.addElement(new Paragraph("Moshi, Pune-412 105", blackCalibri9));
+            shipToCell.addElement(new Paragraph("Phone:- +91 20 65300352", blackCalibri9));
+            shipToCell.addElement(new Paragraph("email:- info@pecoprojects.com", blackCalibri9));
+            shipToCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            shipToCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            
+            shipToCell.setFixedHeight(120);
+            
+            PdfPCell shipToCell2 = createNewCell(120);
+            shipToCell2.addElement(new Paragraph("Vendor", blackCalibri9));
+            shipToCell2.addElement(new Paragraph(venderName, boldBlackCalibri10));
+            shipToCell2.addElement(new Paragraph(venderLocation, blackCalibri9));
+            shipToCell2.addElement(new Paragraph(venderLocation, blackCalibri9));
+            shipToCell2.addElement(new Paragraph(venderLocation, blackCalibri9));
+            shipToCell2.addElement(new Paragraph("", blackCalibri9));
+            shipToCell2.addElement(new Paragraph(receiverEmail, blackCalibri9));
+            shipToCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            shipToCell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            
+            shipToCell2.setFixedHeight(120);
+            
+            PdfPCell shipToCell3 = createNewCell(120);
+            shipToCell3.addElement(new Paragraph("Ship to", blackCalibri9));
+            shipToCell3.addElement(new Paragraph("Megha Engineering Infrastructure Ltd", boldBlackCalibri10));
+            shipToCell3.addElement(new Paragraph("", blackCalibri11));
+            shipToCell3.addElement(new Paragraph("NK-CTF, ONGC, Chalasan(V), Jothana", blackCalibri9));
+            shipToCell3.addElement(new Paragraph("", blackCalibri9));
+            shipToCell3.addElement(new Paragraph("Mehsana - 384 001", blackCalibri9));
+            shipToCell3.addElement(new Paragraph("Gujarat.", blackCalibri9));
+            shipToCell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+            shipToCell3.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            
+            shipToCell3.setFixedHeight(120);
+            
+          
 
-            double cGstTotal = 0.0;
-            double sGstTotal = 0.0;
-            double iGstTotal = 0.0;
-
-            double subTotal = 0.0;
-
-            String total = "";
-            String cGst = "";
-            String sGst = "";
-            String iGst = "";
-
-            TaxesEntity taxes =  taxesDao.getTaxesDetails().get(0);
-
-            int cGstVal = taxes.getcGst();
-            int sGstVal = taxes.getsGst();
-            int iGstVal = taxes.getiGst();
-
-            for (int i = 0; i < description.length; i++) {
-
-                total = String.valueOf(Double.parseDouble(unitPrice[i]) * Double.parseDouble(quantity[i]));
-
-                cGst = String.valueOf(Double.parseDouble(total) * cGstVal / 100);
-                sGst = String.valueOf(Double.parseDouble(total) * sGstVal / 100);
-
-                iGst = String.valueOf(Double.parseDouble(total) * iGstVal / 100);
-
-                PdfPCell r3c1 = createNewCell(new Paragraph(String.valueOf(i + 1), blackCalibri9));
-                PdfPCell r3c2 = createNewCell(new Paragraph(make[i], blackCalibri9));
-                PdfPCell r3c3 = createNewCell(new Paragraph(description[i].replace("~", ""), blackCalibri9));
-                PdfPCell r3c4 = createNewCell(new Paragraph(quantity[i], blackCalibri9));
-                PdfPCell r3c5 = createNewCell(new Paragraph("NB", blackCalibri9));
-                PdfPCell r3c6 = createNewCell(new Paragraph(unitPrice[i], blackCalibri9));
-
-                PdfPCell r3c7 = null;
-                PdfPCell r3c8 = null;
-
-                if(gstNo.startsWith("27"))
-                {
-                    r3c7 = createNewCell(new Paragraph(cGst, blackCalibri9));
-                    r3c8 = createNewCell(new Paragraph(sGst, blackCalibri9));
-                }
-                else
-                {
-                    r3c7 = createNewCell(new Paragraph("-", blackCalibri9));
-                    r3c8 = createNewCell(new Paragraph(iGst, blackCalibri9));
-                }
-
-
-                PdfPCell r3c9 = createNewCell(new Paragraph(total, blackCalibri9));
-
-                table2.addCell(r3c1);
-                table2.addCell(r3c2);
-                table2.addCell(r3c3);
-                table2.addCell(r3c4);
-                table2.addCell(r3c5);
-                table2.addCell(r3c6);
-                table2.addCell(r3c7);
-                table2.addCell(r3c8);
-                table2.addCell(r3c9);
-
-                cGstTotal += Double.parseDouble(cGst);
-                sGstTotal += Double.parseDouble(sGst);
-                iGstTotal +=  Double.parseDouble(iGst);
-
-                subTotal += Double.parseDouble(total);
-
-            }
-
-            for (int i = 0; i < 9 - description.length; i++) {
-
-                PdfPCell r3c1 = createNewCell(new Paragraph("", blackCalibri9));
-                PdfPCell r3c2 = createNewCell(new Paragraph("", blackCalibri9));
-                PdfPCell r3c3 = createNewCell(new Paragraph("", blackCalibri9));
-                PdfPCell r3c4 = createNewCell(new Paragraph("", blackCalibri9));
-                PdfPCell r3c5 = createNewCell(new Paragraph("", blackCalibri9));
-                PdfPCell r3c6 = createNewCell(new Paragraph("", blackCalibri9));
-                PdfPCell r3c7 = createNewCell(new Paragraph("", blackCalibri9));
-                PdfPCell r3c8 = createNewCell(new Paragraph("", blackCalibri9));
-                PdfPCell r3c9 = createNewCell(new Paragraph("", blackCalibri9));
-
-                table2.addCell(r3c1);
-                table2.addCell(r3c2);
-                table2.addCell(r3c3);
-                table2.addCell(r3c4);
-                table2.addCell(r3c5);
-                table2.addCell(r3c6);
-                table2.addCell(r3c7);
-                table2.addCell(r3c8);
-                table2.addCell(r3c9);
-            }
-
-            PdfPCell r4c1 = createNewCell(new Paragraph("", blackCalibri9));
-            PdfPCell r4c2 = createNewCell(new Paragraph("", blackCalibri9));
-            PdfPCell r4c3 = createNewCell(new Paragraph("", blackCalibri9));
-            PdfPCell r4c4 = createNewCell(new Paragraph("", blackCalibri9));
-            PdfPCell r4c5 = createNewCell(new Paragraph("", blackCalibri9));
-            PdfPCell r4c6 = createNewCell(new Paragraph("Total", blackCalibri9));
-
-            PdfPCell r4c7 = null;
-            PdfPCell r4c8 = null;
-            PdfPCell r4c9 = null;
-
-            if(gstNo.startsWith("27")) {
-                r4c7 = createNewCell(new Paragraph(String.valueOf(cGstTotal), blackCalibri9));
-                r4c8 = createNewCell(new Paragraph(String.valueOf(sGstTotal), blackCalibri9));
-                r4c9 = createNewCell(new Paragraph("", blackCalibri9));
-            }
-            else
-            {
-                r4c7 = createNewCell(new Paragraph("", blackCalibri9));
-                r4c8 = createNewCell(new Paragraph("", blackCalibri9));
-                r4c9 = createNewCell(new Paragraph(String.valueOf(iGstTotal), blackCalibri9));
-            }
-
-            table2.addCell(r4c1);
-            table2.addCell(r4c2);
-            table2.addCell(r4c3);
-            table2.addCell(r4c4);
-            table2.addCell(r4c5);
-            table2.addCell(r4c6);
-            table2.addCell(r4c7);
-            table2.addCell(r4c8);
-            table2.addCell(r4c9);
-
+            table2.addCell(shipToCell);
+            table2.addCell(shipToCell2);
+            table2.addCell(shipToCell3);
+            
             document.add(table2);
+          //table3
+            PdfPTable table3 = createNewTable(1);
+            // Row4
+            Paragraph ph5 = new Paragraph("Dear Sir, With reference to your above quotation, we request you to supply the\r\n" + 
+            		"following materials / services subject to terms and conditions mentioned.", blackCalibri9);
+            ph.setAlignment(Element.ALIGN_MIDDLE);
 
-            // Table3
-            float[] colWidths = {2f, 5f, 1.5f, 1.5f};
+            PdfPCell t3c1 = createNewCell(ph5);
+            t3c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            t3c1.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-            PdfPTable table3 = createNewTable(4);
+            t3c1.setFixedHeight(30);
 
-            table3.setWidths(colWidths);
+            table3.addCell(t3c1);
+                    
+            document.add(table3);
+            
+            //table4
+            PdfPTable table4 = createNewTable(5);
+            
+            float[] colWidts1 = {1f, 5f, 2f, 2f, 3f};
 
-            PdfPCell t3r1c1 = createNewCell(new Paragraph("AMOUNT IN WORDS (Rs)", blackCalibri9), 70);
-            t3r1c1.setRowspan(4);
-            t3r1c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            t3r1c1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table4.setWidths(colWidts1);
+            //Row5
+            
+            PdfPCell r5c1 = createNewCell(new Paragraph("Sr. No.", blackCalibri10));
+            r5c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r5c1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r5c1.setFixedHeight(20);
+           
+            PdfPCell r5c2 = createNewCell(new Paragraph("Description", blackCalibri10));
+            r5c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r5c2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r5c2.setFixedHeight(20);
+            
+            PdfPCell r5c3 = createNewCell(new Paragraph("Qunatity ", blackCalibri10));
+            r5c3.addElement(new Paragraph("(MTRS.)", blackCalibri10));
+            r5c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r5c3.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r5c3.setFixedHeight(20);
+           
+            PdfPCell r5c4 = createNewCell(new Paragraph("Inch-Mtr Rate", blackCalibri10));
+            r5c4.addElement(new Paragraph("(INR)", blackCalibri10));
+            r5c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r5c4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r5c4.setFixedHeight(20);
+           
+            PdfPCell r5c5 = createNewCell(new Paragraph("Total Amount", blackCalibri10));
+            r5c5.addElement(new Paragraph("(INR)", blackCalibri10));
+            r5c5.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r5c5.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r5c5.setFixedHeight(20);
+           
+
+            table4.addCell(r5c1);
+            table4.addCell(r5c2);
+            table4.addCell(r5c3);
+            table4.addCell(r5c4);
+            table4.addCell(r5c5);
+            
+            
+            double GstTotal = 0.0;
+
+            double discountTotal = 0.0;
+            
+			double subTotal = 0.0;
+			
+			double allTotal = 0.0;
+
+			String total = "";
+			String Gst = "";
+			String Discount= "";
+            //Row6
+            for (int i = 0; i < description.length; i++) {
+            	
+            	total = String.valueOf(Double.parseDouble(unitPrice[i]) * Double.parseDouble(quantity[i]));
+
+				Gst = String.valueOf(Double.parseDouble(total) * 18 / 100);
+				
+				Discount = String.valueOf(Double.parseDouble(total) * 0 / 100);
+				
+            PdfPCell r6c1 = createNewCell(new Paragraph(String.valueOf(i + 1), blackCalibri9));
+            r6c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r6c1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            r6c1.setFixedHeight(30);
+           
+            PdfPCell r6c2 = createNewCell(new Paragraph(description[i].replace("~", ""), boldBlackCalibri10));
+            r6c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r6c2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            r6c2.setFixedHeight(30);
+            
+            PdfPCell r6c3 = createNewCell(new Paragraph(quantity[i], blackCalibri9));
+            r6c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r6c3.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            r6c3.setFixedHeight(30);
+           
+            PdfPCell r6c4 = createNewCell(new Paragraph(unitPrice[i], blackCalibri9));
+            r6c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r6c4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            r6c4.setFixedHeight(30);
+           
+            PdfPCell r6c5 = createNewCell(new Paragraph(total, blackCalibri9));
+            r6c5.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r6c5.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            r6c5.setFixedHeight(30);
+           
+
+            table4.addCell(r6c1);
+            table4.addCell(r6c2);
+            table4.addCell(r6c3);
+            table4.addCell(r6c4);
+            table4.addCell(r6c5);
+            
+            GstTotal = Double.parseDouble(total)+ Double.parseDouble(Gst);
+
+			subTotal += Double.parseDouble(total);
+						
+			discountTotal = Double.parseDouble(total)+Double.parseDouble(Discount);
+			
+			allTotal = Math.round(GstTotal + discountTotal);
+			
+			
+            }
+
+            //Row7
+           for (int i = 0; i < 9 - description.length; i++) {
+            PdfPCell r7c1 = createNewCell(new Paragraph("", blackCalibri9));
+            r7c1.setFixedHeight(30);
+           
+            PdfPCell r7c2 = createNewCell(new Paragraph("", blackCalibri9));
+             r7c2.setFixedHeight(30);
+            
+            PdfPCell r7c3 = createNewCell(new Paragraph("", blackCalibri9));
+             r7c3.setFixedHeight(30);
+           
+            PdfPCell r7c4 = createNewCell(new Paragraph("", blackCalibri9));
+            r7c4.setFixedHeight(30);
+           
+            PdfPCell r7c5 = createNewCell(new Paragraph("", blackCalibri9));
+            r7c5.setFixedHeight(30);
+           
+
+            table4.addCell(r7c1);
+            table4.addCell(r7c2);
+            table4.addCell(r7c3);
+            table4.addCell(r7c4);
+            table4.addCell(r7c5);
+            }
+           document.add(table4);
+            
+            //table5
+            PdfPTable table5 = createNewTable(5);
+            
+            float[] colWidts2 = {3f, 1f, 2f, 4f, 3f};
+
+            table5.setWidths(colWidts2);
+            
+            //Row9
+            PdfPCell r9c1 = createNewCell(new Paragraph("GST", blackCalibri10));
+            r9c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r9c1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r9c1.setFixedHeight(30);
+           
+            PdfPCell r9c2 = createNewCell(new Paragraph("18.0%", blackCalibri10));
+            r9c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r9c2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r9c2.setFixedHeight(30);
+            
+            PdfPCell r9c3 = createNewCell(new Paragraph(Gst, blackCalibri10));
+            r9c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r9c3.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r9c3.setFixedHeight(30);
+           
+            PdfPCell r9c4 = createNewCell(new Paragraph("Total", blackCalibri10));
+            r9c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r9c4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r9c4.setFixedHeight(30);
+           
+            PdfPCell r9c5 = createNewCell(new Paragraph(String.valueOf(GstTotal), blackCalibri10));
+            r9c5.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r9c5.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r9c5.setFixedHeight(30);
+           
+
+            table5.addCell(r9c1);
+            table5.addCell(r9c2);
+            table5.addCell(r9c3);
+            table5.addCell(r9c4);
+            table5.addCell(r9c5);
+            
+
+            //Row10
+            PdfPCell r10c1 = createNewCell(new Paragraph("Discount", blackCalibri10));
+            r10c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r10c1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r10c1.setFixedHeight(30);
+           
+            PdfPCell r10c2 = createNewCell(new Paragraph("0.0%", blackCalibri11));
+            r10c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r10c2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r10c2.setFixedHeight(30);
+            
+            PdfPCell r10c3 = createNewCell(new Paragraph(Discount, blackCalibri10));
+            r10c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r10c3.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r10c3.setFixedHeight(30);
+           
+            PdfPCell r10c4 = createNewCell(new Paragraph("Final Amount", blackCalibri10));
+            r10c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r10c4.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r10c4.setFixedHeight(30);
+           
+            PdfPCell r10c5 = createNewCell(new Paragraph(String.valueOf(discountTotal), blackCalibri10));
+            r10c5.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r10c5.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r10c5.setFixedHeight(30);
+           
+
+            table5.addCell(r10c1);
+            table5.addCell(r10c2);
+            table5.addCell(r10c3);
+            table5.addCell(r10c4);
+            table5.addCell(r10c5);
+            
+
+           
+            document.add(table5);
+            
+            //table6
+            
+            PdfPTable table6 = createNewTable(2);
+
+            float[] colWidts3 = {10f, 3f};
+
+            table6.setWidths(colWidts3);
+            //Row11
+            Paragraph ph6 = new Paragraph("Total PO Value", boldBlackCalibri10);
+            ph6.setAlignment(Element.ALIGN_MIDDLE);
+            
+            PdfPCell r11c1 = createNewCell(ph6);
+            r11c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r11c1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            
+            r11c1.setFixedHeight(20);
+            
+            Paragraph ph7 = new Paragraph(String.valueOf(allTotal), blackCalibri10 );
+            ph2.setAlignment(Element.ALIGN_MIDDLE);
+            
+            PdfPCell r11c2 = createNewCell(ph7);
+            r11c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r11c2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            
+            r11c2.setFixedHeight(20);
+            
+            table6.addCell(r11c1);
+            table6.addCell(r11c2);
+
+            
+            document.add(table6);
+            
+            //table7
+            
+            PdfPTable table7 = createNewTable(1);
 
             String amountInWords = "";
 
-            if(gstNo.startsWith("27"))
-            {
-                 amountInWords = numberWordConverter.convert((int) Math.round(subTotal + cGstTotal + sGstTotal));
-            }
-            else
-            {
-                amountInWords = numberWordConverter.convert((int) Math.round(subTotal + iGstTotal));
-            }
+			if (gstNo.startsWith("27")) {
+				amountInWords = numberWordConverter.convert((int) Math.round(subTotal + GstTotal + discountTotal));
+			} else {
+				amountInWords = numberWordConverter.convert((int) Math.round(subTotal + GstTotal + discountTotal));
+			}
+            // Row12
+            Paragraph ph8 = new Paragraph("Total Amount (In Words) :-    "   + amountInWords, blackCalibri9);
+           
+            PdfPCell r12c1 = createNewCell(ph8);
+           
 
+            r12c1.setFixedHeight(20);
+            
+          
 
-            PdfPCell t3r1c2 = createNewCell(new Paragraph(amountInWords, blackCalibri9), 70);
-            t3r1c2.setRowspan(4);
-            t3r1c2.setHorizontalAlignment(Element.ALIGN_CENTER);
-            t3r1c2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			
 
-            PdfPCell t3r1c3 = createNewCell(70);
+            table7.addCell(r12c1);
+       
+            
+            //row13
+            Paragraph ph9 = new Paragraph("A. Payment Terms:-", boldBlackCalibri10);
+            PdfPCell r13c1 = createNewCell(ph9);
+            r13c1.setFixedHeight(20);
 
-            t3r1c3.addElement(new Paragraph("SUB TOTAL", blackCalibri9));
-            t3r1c3.addElement(new Paragraph("GST TAXES", blackCalibri9));
-            t3r1c3.addElement(new Paragraph("TOTAL", blackCalibri9));
-            t3r1c3.setHorizontalAlignment(Element.ALIGN_CENTER);
-            t3r1c3.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            table7.addCell(r13c1);
+                    
+            document.add(table7);
+            
+            //table8
+            PdfPTable table8 = createNewTable(2);
 
-            PdfPCell t3r1c4 = createNewCell(70);
+            float[] colWidts4 = {6f, 7f};
 
+            table8.setWidths(colWidts4);
 
+            //row14
+            PdfPCell ship14ToCell1 = createNewCell(120);
+            ship14ToCell1.addElement(new Paragraph("B. Vendor Tax reg. details:-", boldBlackCalibri10));
+            ship14ToCell1.addElement(new Paragraph("VAT     ", blackCalibri9));
+            ship14ToCell1.addElement(new Paragraph("CST     ", blackCalibri9));
+            ship14ToCell1.addElement(new Paragraph("GST     " +vendorGst, blackCalibri9));
+            ship14ToCell1.addElement(new Paragraph("PAN     " + vendorPan, blackCalibri9));
+           
+            ship14ToCell1.setFixedHeight(80);
+            
+            PdfPCell shipTo14Cell2 = createNewCell(120);
+            shipTo14Cell2.addElement(new Paragraph("C. Our Tax reg. details:-", boldBlackCalibri10));
+            shipTo14Cell2.addElement(new Paragraph("VAT        " +  		"   27251164635V", blackCalibri9));
+            shipTo14Cell2.addElement(new Paragraph("CST        " +     		"   27251164635C", blackCalibri9));
+            shipTo14Cell2.addElement(new Paragraph("SERVICE TAX" +  		"   AAICP1433DSD001", blackCalibri9));
+            shipTo14Cell2.addElement(new Paragraph("PAN        " +          "   AAICP1433D", blackCalibri9));
+            
+           
+            
+            shipTo14Cell2.setFixedHeight(80);
+            table8.addCell(ship14ToCell1);
+            table8.addCell(shipTo14Cell2);
+            
+            //row15
+            PdfPCell ship15ToCell1 = createNewCell(120);
+            ship15ToCell1.addElement(new Paragraph("D. Buyer Details:-", boldBlackCalibri10));
+            ship15ToCell1.addElement(new Paragraph("Buyer Name:- C Suresh", blackCalibri9));
+            ship15ToCell1.addElement(new Paragraph("Contact No:- +91 9765895255/+91 2065300352", blackCalibri9));
+            ship15ToCell1.addElement(new Paragraph("Email Id: csuresh@pecoprojects.com", blackCalibri9));
+           
+           
+            ship15ToCell1.setFixedHeight(200);
+            
+            PdfPCell shipTo15Cell2 = createNewCell(120);
+            Paragraph ph10 = new Paragraph("FOR PECO PROJECTS PVT LTD", blackCalibri10);
+            ph10.setAlignment(Element.ALIGN_CENTER);
+            shipTo15Cell2.addElement(ph10);
+            
+           try {
 
-
-            t3r1c4.addElement(new Paragraph("\u20B9    "+String.valueOf(subTotal), arial));
-            t3r1c4.addElement(new Paragraph("\u20B9    "+String.valueOf(cGstTotal + sGstTotal), arial));
-            t3r1c4.addElement(new Paragraph("\u20B9    "+String.valueOf(subTotal + cGstTotal + sGstTotal), arial));
-            t3r1c4.setHorizontalAlignment(Element.ALIGN_CENTER);
-            t3r1c4.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
-            table3.addCell(t3r1c1);
-            table3.addCell(t3r1c2);
-            table3.addCell(t3r1c3);
-            table3.addCell(t3r1c4);
-
-            document.add(table3);
-
-            // Table4
-            PdfPTable table4 = createNewTable(1);
-
-            PdfPCell termCell = createNewCell();
-            termCell.addElement(new Paragraph("Terms :-    ", boldBlackCalibri10));
-            termCell.addElement(new Paragraph("     " + (term.length > 0 ? term[0] : ""), blackCalibri10));
-            termCell.addElement(new Paragraph("     " + (term.length > 1 ? term[1] : ""), blackCalibri10));
-            termCell.addElement(new Paragraph("     " + (term.length > 2 ? term[2] : ""), blackCalibri10));
-            termCell.addElement(new Paragraph("     " + (term.length > 3 ? term[3] : ""), blackCalibri10));
-            termCell.addElement(new Paragraph("     " + (term.length > 4 ? term[4] : ""), blackCalibri10));
-            termCell.setFixedHeight(150);
-
-            table4.addCell(termCell);
-
-            document.add(table4);
-
-            // Table5
-            PdfPTable table5 = createNewTable(3);
-
-            float[] colWidthTable5 = {4f, 2f, 3f};
-
-            table5.setWidths(colWidthTable5);
-
-            PdfPCell shipToCell = createNewCell(120);
-            shipToCell.addElement(new Paragraph("SHIP TO :  HAMDULE INDUSTRIES,", boldBlackCalibri10));
-            shipToCell.addElement(new Paragraph("MANISH GARDEN SOCIETY, SWAPNA NAGARI, PIMPRI", blackCalibri10));
-            shipToCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-            PdfPCell stampCell = createNewCell(120);
-            try {
-                File file = ResourceUtils.getFile("classpath:stamp.png");
-                // init array with file length
-                byte[] bytesArray = new byte[(int) file.length()];
-
-                FileInputStream fis = new FileInputStream(file);
-                fis.read(bytesArray); // read file into bytes[]
-                fis.close();
-
-                Image img = Image.getInstance(bytesArray);
-                stampCell.addElement(img);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-            Paragraph ph4 = new Paragraph("VERIFIED BY", blackCalibri9);
-            ph4.setAlignment(Element.ALIGN_CENTER);
-            stampCell.addElement(ph4);
-            stampCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            stampCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
-            PdfPCell signCell = createNewCell(120);
-            Paragraph ph1 = new Paragraph("FOR HAMDULE INDUSTRIES", blackCalibri10);
-            ph1.setAlignment(Element.ALIGN_CENTER);
-            signCell.addElement(ph1);
-            try {
-
-                File file = ResourceUtils.getFile("classpath:sign.png");
+                File file = ResourceUtils.getFile("classpath:PECO_Stamp.png");
                 // init array with file length
                 byte[] bytesArray = new byte[(int) file.length()];
 
@@ -508,26 +644,139 @@ public class PurchaseOrderPDFView extends AbstractView {
                 fis.close();
 
                 Image signImg = Image.getInstance(bytesArray);
-                signCell.addElement(signImg);
+                shipTo15Cell2.addElement(signImg);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+           
+            Paragraph ph11 = new Paragraph("(Authorized Signatory & Stamp)", blackCalibri10);
+            ph11.setAlignment(Element.ALIGN_CENTER);
+            shipTo15Cell2.addElement(ph11);
+            shipTo15Cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            shipTo15Cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            
+            shipTo15Cell2.setFixedHeight(200);
+            
+            table8.addCell(ship15ToCell1);
+            table8.addCell(shipTo15Cell2);
+            document.add(table8);
+            
+            //table9
+            PdfPTable table9 = createNewTable(1);
 
-            Paragraph ph3 = new Paragraph("Authorized Signatory", blackCalibri10);
-            ph3.setAlignment(Element.ALIGN_CENTER);
-            signCell.addElement(ph3);
+            // Row1
+            Paragraph ph14 = new Paragraph("E. Terms & Conditions:-", boldBlackCalibri10);
+            
 
-            signCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            signCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            PdfPCell r17c1 = createNewCell(ph14);
+            r17c1.setFixedHeight(20);
 
-            table5.addCell(shipToCell);
-            table5.addCell(stampCell);
-            table5.addCell(signCell);
+            table9.addCell(r17c1);
+            
+            PdfPCell shipTo18Cell2 = createNewCell(120);
+            Paragraph ph15 = new Paragraph("General Scope:-", boldBlackCalibri10);
+            //ph.setAlignment(Element.ALIGN_MIDDLE);
+            shipTo18Cell2.addElement(ph15);
+            shipTo18Cell2.addElement(new Paragraph("1. Manpower boarding & lodging in our scope, excluding food.", blackCalibri9));
+            shipTo18Cell2.addElement(new Paragraph("2. Drinking Water & Toiltes facilities shall be arranged by end client.", blackCalibri9));
+            shipTo18Cell2.addElement(new Paragraph("3. All required machinery, tools & tackles shall be provided by Client.", blackCalibri9));
+            shipTo18Cell2.addElement(new Paragraph("4. All the workers shall be completed with Police Verification for site premises entry.", blackCalibri9));
+          
 
-            document.add(table5);
+           
+           shipTo18Cell2.setFixedHeight(80);
 
+            table9.addCell(shipTo18Cell2);
+            
+            
+            PdfPCell shipTo19Cell2 = createNewCell(200);
+            Paragraph ph16 = new Paragraph("Billing Instruction:-", boldBlackCalibri10);
+           
+            shipTo19Cell2.addElement(ph16);
+            shipTo19Cell2.addElement(new Paragraph("1. Please raise your Bill/invoice in favour of PECO Projects Private Limited - Pune, in duplicate and submit it to official placing this  purchase order  with a  reference to the  purchase order and Section/Unit wherefrom the order is placed  enclosing  a copy of your delivery challan duly signed by the recipient of the goods/service.  ", blackCalibri9));
+            shipTo19Cell2.addElement(new Paragraph("2. The price of any item mentioned in this order should not exceed the accepted price. The quantity/no. of item may vary in the order without any change in the accepted price. ", blackCalibri9));
+            shipTo19Cell2.addElement(new Paragraph("3. Failure to  comply  with specifications,  terms and conditions of this order, or accepted  delivery schedule shall be sufficient grounds for cancellation of order by purchaser without  being liable  for paying any compensation to the supplier. ", blackCalibri9));
+            shipTo19Cell2.addElement(new Paragraph("4. In case of delay in supply, liquidated damage at the rate of 0.5% on value of the purchase order per week, or part thereof, will be recovered. ", blackCalibri9));
+          
 
-            File file = ResourceUtils.getFile("classpath:background.jpg");
+           
+            shipTo19Cell2.setFixedHeight(150);
+
+            table9.addCell(shipTo19Cell2);
+
+            
+            Paragraph ph17 = new Paragraph("", boldBlackCalibri10);
+            
+            PdfPCell r20c1 = createNewCell(ph17);
+            r20c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            r20c1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            r20c1.setFixedHeight(20);
+
+            table9.addCell(r20c1);
+            
+            PdfPCell shipTo21Cell2 = createNewCell(60);
+            Paragraph ph18 = new Paragraph("Mode of payment : ", boldBlackCalibri10);
+           
+            shipTo21Cell2.addElement(ph18);
+            shipTo21Cell2.addElement(new Paragraph("1. Payments shall be  made in  A/c Payee Cheque drawn on  Nationalised  Bank after successful compliance  of this  purchase order.", blackCalibri9));
+            shipTo21Cell2.addElement(new Paragraph("2. Deduction on account of Income Tax, Sales Tax/Vat will be made wherever applicable as per statute. ", blackCalibri9));
+           
+            shipTo21Cell2.setFixedHeight(80);
+
+            table9.addCell(shipTo21Cell2);
+            
+            PdfPCell shipTo22Cell2 = createNewCell(120);
+            Paragraph ph19 = new Paragraph("E. Quality:-", boldBlackCalibri10);
+           
+            shipTo22Cell2.addElement(ph19);
+            shipTo22Cell2.addElement(new Paragraph("1. All supplies must confirm exactly to our drawings or specifications.", blackCalibri9));
+            shipTo22Cell2.addElement(new Paragraph("2. The Supplies should be accompanied by suppliers own detailed inspection report in duplicate.", blackCalibri9));
+            shipTo22Cell2.addElement(new Paragraph("3. All materials will be subjected to our final inspection and approval at our Works before acceptance.", blackCalibri9));
+            shipTo22Cell2.addElement(new Paragraph("4. Samples where required must be submitted as per given schedule along with inspection report.", blackCalibri9));
+          
+
+           
+            shipTo22Cell2.setFixedHeight(90);
+
+            table9.addCell(shipTo22Cell2);
+            
+            PdfPCell shipTo23Cell2 = createNewCell(120);
+            Paragraph ph20 = new Paragraph("G. Delivery:-", boldBlackCalibri10);
+           
+            shipTo23Cell2.addElement(ph20);
+            shipTo23Cell2.addElement(new Paragraph("1. Delivery is essence of this order and the supplies must be made as per the schedules given failing which the company reserve the right to cancel the order without notice and refuse all subsequent deliveries. ", blackCalibri9));
+            shipTo23Cell2.addElement(new Paragraph("2. Delivery’s should be accompanied by your challan in triplicate clearly stating item description, purchase order no. along with invoice and excise documents which ever is applicable. ", blackCalibri9));
+            shipTo23Cell2.addElement(new Paragraph("3. Deliveries should be effected with in the notified hours (9.00 am to 5.00 pm) on all working days.", blackCalibri9));
+            shipTo23Cell2.addElement(new Paragraph("4. Supplies in excess of the given schedule must not be made without prior written consent failing which excess will not be accepted.", blackCalibri9));
+            shipTo23Cell2.addElement(new Paragraph("5. Company reserve the right to amend/postpone delivery schedule as per the requirement without any liability arising in us therein.", blackCalibri9));
+
+           
+            shipTo23Cell2.setFixedHeight(150);
+
+            table9.addCell(shipTo23Cell2);
+            
+            PdfPCell shipTo24Cell2 = createNewCell(60);
+            Paragraph ph21 = new Paragraph("F. Jurisdiction:- ", boldBlackCalibri10);
+           
+            shipTo24Cell2.addElement(ph21);
+            shipTo24Cell2.addElement(new Paragraph("All dispute whatsoever that may arise between outstation parties in connection with this Order shall always be deemed to have arisen in Pune and only Pune Courts will have jurisdiction to entertain them.", blackCalibri9));
+           
+            shipTo24Cell2.setFixedHeight(60);
+
+            table9.addCell(shipTo24Cell2);
+            Paragraph ph22 = new Paragraph("", boldBlackCalibri10);
+            PdfPCell r25c1 = createNewCell(ph22);
+           
+            r25c1.setFixedHeight(20);
+
+            table9.addCell(r25c1);
+
+                    
+            document.add(table9);
+            
+
+            File file = ResourceUtils.getFile("classpath:PECO Projects_FINAL Letter Head.jpg");
             // init array with file length
             byte[] bytesArray = new byte[(int) file.length()];
 
@@ -540,20 +789,28 @@ public class PurchaseOrderPDFView extends AbstractView {
             float width = document.getPageSize().getWidth();
             float height = document.getPageSize().getHeight();
             writer.getDirectContentUnder().addImage(background, width, 0, 0, height, 0, 0);
+            
+            document.close();
+            writer.close();
+           // fOut.close();
+        
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+	}
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+	protected PdfPCell createNewCell() {
+		return createNewCell(new Paragraph());
+	}
 
-    protected PdfPCell createNewCell() {
-        return createNewCell(new Paragraph());
-    }
-
-    public static final Font redCalibri14 = new Font(Font.getFamily("Calibri"), 14, Font.BOLD, BaseColor.RED);
+	public static final Font boldBlackCalibri12 = new Font(Font.getFamily("Calibri"), 12, Font.BOLD, BaseColor.BLACK);
+	 public static final Font boldBlackCalibri11 = new Font(Font.getFamily("Calibri"), 11, Font.BOLD, BaseColor.BLACK);
+	public static final Font blackCalibri14 = new Font(Font.getFamily("Calibri"), 14, Font.BOLD, BaseColor.BLACK);
     public static final Font blackCalibri9 = new Font(Font.getFamily("Calibri"), 9, Font.NORMAL, BaseColor.BLACK);
-    public static final Font blackCalibri10 = new Font(Font.getFamily("Calibri"), 10, Font.NORMAL, BaseColor.BLACK);
-    public static final Font blackCalibri11 = new Font(Font.getFamily("Calibri"), 11, Font.NORMAL, BaseColor.BLACK);
-    public static final Font boldBlackCalibri10 = new Font(Font.getFamily("Calibri"), 10, Font.BOLD, BaseColor.BLACK);
-    public static final Font arial = new Font(Font.getFamily("arial"), 12, Font.BOLD, BaseColor.BLACK);
+	public static final Font blackCalibri10 = new Font(Font.getFamily("Calibri"), 10, Font.NORMAL, BaseColor.BLACK);
+	public static final Font blackCalibri11 = new Font(Font.getFamily("Calibri"), 11, Font.NORMAL, BaseColor.BLACK);
+	public static final Font boldBlackCalibri10 = new Font(Font.getFamily("Calibri"), 10, Font.BOLD, BaseColor.BLACK);
+	public static final Font arial = new Font(Font.getFamily("arial"), 12, Font.BOLD, BaseColor.BLACK);
 }
