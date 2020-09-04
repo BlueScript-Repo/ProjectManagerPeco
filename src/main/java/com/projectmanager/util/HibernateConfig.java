@@ -34,9 +34,9 @@ public class HibernateConfig {
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 
         //PROD
-        /*dataSource.setUrl("jdbc:mysql://inventorymgmt.ckvjglniutlo.us-east-2.rds.amazonaws.com:3306/inventoryMgmt");
-        dataSource.setUsername("InvMgmtUser");
-        dataSource.setPassword("InvMgmtUser9933");*/
+        /*dataSource.setUrl("jdbc:mysql://pecoprojectsdb.cgtw3wrdwjtx.us-east-2.rds.amazonaws.com:3306/pecoProjects?useSSL=false");
+        dataSource.setUsername("pecoProjectAdmin");
+        dataSource.setPassword("pecoProjects9933");*/
 
         //UAT
         /*dataSource.setUrl("jdbc:mysql://hamdule.cmbzdfvjyats.us-east-2.rds.amazonaws.com:3306/inventoryMgmt");

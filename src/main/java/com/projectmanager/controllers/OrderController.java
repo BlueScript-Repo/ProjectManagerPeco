@@ -2,12 +2,11 @@ package com.projectmanager.controllers;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 
 import com.projectmanager.dao.*;
 import com.projectmanager.util.NotificationUtil;
+import com.projectmanager.util.PurchaseOrderPDFView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +24,10 @@ import com.projectmanager.entity.Project;
 import com.projectmanager.entity.ProjectDetails;
 import com.projectmanager.entity.TaxInvoiceDetails;
 import com.projectmanager.util.InventoryUtils;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -53,9 +55,12 @@ public class OrderController {
 	@Autowired
 	NotificationUtil notificationUtil;
 
+	@Autowired
+	PurchaseOrderPDFView purchaseOrderPDFView;
+
 	@RequestMapping(value = "/generateOrderForm", method = RequestMethod.POST)
-	public ModelAndView generateOfferFrom(String[] inventoryName, String[] material, String[] type, String[] manifMetod,
-			String[] classOrGrade, String[] ends, String[] size, String[] quantity, String[] supplyRate,
+	public ModelAndView generateOfferFrom(String[] product, String[] moc, String[] manufactureType, String[] classOrGrade,
+			String[] materialSpecs, String[] standardType, String[] ends, String[] size, String[] quantity, String[] supplyRate,
 			String projectId) {
 		StringBuffer lineItemData = new StringBuffer();
 
@@ -63,13 +68,13 @@ public class OrderController {
 
 		ModelAndView mav = new ModelAndView("purchaseOrderForm");
 
-		int length = inventoryName.length;
+		int length = product.length;
 
 		System.out.println("inventoryName.length is : " + length);
 		for (int i = 0; i < length; i++) {
 
-			String description = inventoryUtils.createDescriptionLine(material[i], type[i], inventoryName[i],
-					classOrGrade[i], manifMetod[i], ends[i], size[i]);
+			String description = inventoryUtils.createDescriptionLine(moc[i], product[i],
+					classOrGrade[i], manufactureType[i], materialSpecs[i], standardType[i], ends[i], size[i]);
 			String index = String.valueOf(i + 1);
 			String lineItem = getInventoryDetailsRow(index, description, quantity[i], supplyRate[i]);
 			lineItemData.append(lineItem);
@@ -87,7 +92,8 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/generateOrder", method = RequestMethod.POST)
-	public String generateOffer(PODetails poDetails, String lineItemSimple, Model model, HttpSession session) {
+	public ModelAndView generateOffer(RedirectAttributes redirectAttrs, PODetails poDetails, String lineItemSimple, Model model,
+									  HttpSession session, HttpServletResponse response, HttpServletRequest request) {
 
 		ModelAndView mav = new ModelAndView("purchaseOrder");
 
@@ -175,10 +181,40 @@ public class OrderController {
 
 		//save entry to notification table
 
-		notificationUtil.pushNotification(userName,poDetails.getContactEmail(),"Purchase Order :" + poDetails.getVendorName(),"Enter body Text here",poNumber+"pdf","INBOX",new Date());
+		String poName = poNumber.replace("/", "_");
+		notificationUtil.pushNotification(userName,poDetails.getContactEmail(),
+				"Purchase Order :" + poDetails.getVendorName(),
+				"Enter body Text here",
+				poName+".pdf",
+				"INBOX",new Date());
 
-		return "purchaseOrderView";
+		//return "purchaseOrderView";
 
+
+		Map<String, Object> modelObject = new HashMap<>();
+		modelObject.put("poDetails", poDetails);
+		modelObject.put("poLineDetails", lineItemSimpleStr);
+		modelObject.put("userName", userName);
+
+		try
+		{
+			purchaseOrderPDFView.renderMergedOutputModel(modelObject, request, response);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+
+		Project project = projectDao.getProject(Integer.parseInt(poDetails.getProjectId()));
+
+		ModelAndView projectDetails = new ModelAndView("redirect:/projectDetails");
+
+
+		redirectAttrs.addAttribute("projectId", String.valueOf(poDetails.getProjectId()));
+		redirectAttrs.addAttribute("projectName", project.getProjectName());
+		redirectAttrs.addAttribute("projectDesc", project.getProjectDesc());
+
+		return projectDetails;
 	}
 
 	@RequestMapping(value = "/showInvoice", method = { RequestMethod.POST, RequestMethod.GET })
@@ -239,22 +275,25 @@ public class OrderController {
 
 				String[] details = words[1].split("~");
 
-				String inventoryNameVal = details[0].trim();
-				String materialVal = details[1].trim();
-				String manifacturingMethod = details[5].trim();
-				String gradeOrClassVal = details[2].trim();
-				String endsVal = details[4].trim();
-				String sizeVal = details[6].trim();
-				String typeVal = details[3].trim();
+				String productVal = details[0].trim();
+				String mocVal = details[1].trim();
+				String manufactureType = details[2].trim();
+				String gradeOrClassVal = details[3].trim();
+				String materialSpecsVal = details[4].trim();
+				String standardTypeVal = details[5].trim();
+				String endsVal = details[6].trim();
+				String sizeVal = details[7].trim();
+
 
 				String purchaseRate = words[3];
 				String poQuantity = words[2];
 				String projectNameVal = project.getProjectName();
 
-				itemsStr = itemsStr.replace("inventoryNameVal", inventoryNameVal);
-				itemsStr = itemsStr.replace("materialVal", materialVal);
-				itemsStr = itemsStr.replace("typeVal", typeVal);
-				itemsStr = itemsStr.replace("manifacturingMethod", manifacturingMethod);
+				itemsStr = itemsStr.replace("productVal", productVal);
+				itemsStr = itemsStr.replace("mocVal", mocVal);
+				itemsStr = itemsStr.replace("manufactureTypeVal", manufactureType);
+				itemsStr = itemsStr.replace("materialSpecsVal", materialSpecsVal);
+				itemsStr = itemsStr.replace("standardTypeVal", standardTypeVal);
 				itemsStr = itemsStr.replace("gradeOrClassVal", gradeOrClassVal);
 				itemsStr = itemsStr.replace("endsVal", endsVal);
 				itemsStr = itemsStr.replace("sizeVal", sizeVal);
@@ -271,31 +310,34 @@ public class OrderController {
 
 	@RequestMapping(value = "/getNoInvoiceInventory", method = RequestMethod.POST)
 	public @ResponseBody String getNoInvoiceInventory(int projectId) throws Exception {
-		String rowToReturn = "";
+		String rowToReturn = "<tr><td colspan=\"13\" class=\"text-center\">No inventory to BILL..!!<t d=\"\"></t></td></tr>";
 
 		Project project = projectDao.getProject(projectId);
 		ArrayList<Inventory> receivedInvListNoInvoice = inventoryDao.getNoInvoiceInventory(project.getProjectName());
 
-		for (Inventory receivedInventory : receivedInvListNoInvoice) {
+		if(receivedInvListNoInvoice.size()>0) {
+			for (Inventory receivedInventory : receivedInvListNoInvoice) {
 
-			InventorySpec invSpec = receivedInventory.getInventorySpec();
-			String itemsStr = noInvoiceInventoryRow;
-			itemsStr = itemsStr.replace("inventoryNameVal", invSpec.getInventoryName());
-			itemsStr = itemsStr.replace("materialVal", invSpec.getMaterial());
-			itemsStr = itemsStr.replace("typeVal", invSpec.getType());
-			itemsStr = itemsStr.replace("manifacturingMethod", invSpec.getManifMethod());
-			itemsStr = itemsStr.replace("gradeOrClassVal", invSpec.getGradeOrClass());
-			itemsStr = itemsStr.replace("endsVal", invSpec.getEnds());
-			itemsStr = itemsStr.replace("sizeVal", invSpec.getSize());
-			itemsStr = itemsStr.replace("receivedQuantityVal", String.valueOf(receivedInventory.getQuantity()));
-			itemsStr = itemsStr.replace("projectNameVal", invSpec.getAssignedProject());
-			itemsStr = itemsStr.replace("purchaseRateVal", receivedInventory.getPurchaseRate());
-			itemsStr = itemsStr.replace("locationVal", receivedInventory.getLocation());
-			itemsStr = itemsStr.replace("receivedDateVal",
-					(StringUtils.isNullOrEmpty(receivedInventory.getReceivedDate()) ? ""
-							: receivedInventory.getReceivedDate().substring(0, 10)));
+				InventorySpec invSpec = receivedInventory.getInventorySpec();
+				String itemsStr = noInvoiceInventoryRow;
+				itemsStr = itemsStr.replace("productVal", invSpec.getInventoryName());
+				itemsStr = itemsStr.replace("mocVal", invSpec.getMaterial());
+				itemsStr = itemsStr.replace("manufactureTypeVal", invSpec.getManifMethod());
+				itemsStr = itemsStr.replace("gradeOrClassVal", invSpec.getGradeOrClass());
+				itemsStr = itemsStr.replace("standardTypeVal", invSpec.getStandardType());
+				itemsStr = itemsStr.replace("materialSpecsVal", invSpec.getMaterialSpecs());
+				itemsStr = itemsStr.replace("endsVal", invSpec.getEnds());
+				itemsStr = itemsStr.replace("sizeVal", invSpec.getSize());
+				itemsStr = itemsStr.replace("receivedQuantityVal", String.valueOf(receivedInventory.getQuantity()));
+				itemsStr = itemsStr.replace("projectNameVal", invSpec.getAssignedProject());
+				itemsStr = itemsStr.replace("purchaseRateVal", receivedInventory.getPurchaseRate());
+				itemsStr = itemsStr.replace("locationVal", receivedInventory.getLocation());
+				itemsStr = itemsStr.replace("receivedDateVal",
+						(StringUtils.isNullOrEmpty(receivedInventory.getReceivedDate()) ? ""
+								: receivedInventory.getReceivedDate().substring(0, 10)));
 
-			rowToReturn = rowToReturn + itemsStr;
+				rowToReturn = rowToReturn + itemsStr;
+			}
 		}
 
 		return rowToReturn;
@@ -367,11 +409,12 @@ public class OrderController {
 
 	private static final String poDetailsRow = "	   <tr>"
 			+ "    <td> <input type='button' value='X' onClick='removeRow($(this));'></td>"
-			+ "    <td> <input type='hidden' name='inventoryName' value='inventoryNameVal'></input> inventoryNameVal </td>"
-			+ "    <td> <input type='hidden' name='material' value='materialVal'></input>materialVal</td>"
-			+ "    <td> <input type='hidden' name='type' value='typeVal'></input>typeVal</td>"
-			+ "    <td> <input type='hidden' name='manifMethod' value='manifacturingMethod'></input>manifacturingMethod</td>"
+			+ "    <td> <input type='hidden' name='product' value='productVal'></input> productVal </td>"
+			+ "    <td> <input type='hidden' name='moc' value='mocVal'></input>mocVal</td>"
+			+ "    <td> <input type='hidden' name='manufactureType' value='manufactureTypeVal'></input>manufactureTypeVal</td>"
 			+ "    <td> <input type='hidden' name='gradeOrClass' value='gradeOrClassVal'></input>gradeOrClassVal</td>"
+			+ "    <td> <input type='hidden' name='materialSpecs' value='materialSpecsVal'></input>materialSpecsVal</td>"
+			+ "    <td> <input type='hidden' name='standardType' value='standardTypeVal'></input>standardTypeVal</td>"
 			+ "    <td> <input type='hidden' name='ends' value='endsVal'></input>endsVal</td>"
 			+ "    <td> <input type='hidden' name='size' value='sizeVal'></input>sizeVal</td>"
 			+ "	   <td> <input type='hidden' name='purchaseRate' value='purchaseRateVal'></input> purchaseRateVal </td>"
@@ -382,11 +425,12 @@ public class OrderController {
 
 	private static final String noInvoiceInventoryRow = "	   <tr>"
 			+ "    <td> <input type=\"checkbox\" name=\"checkbox\" class=\"checkbox\" /></td>"
-			+ "    <td> <input type='hidden' name='inventoryName' value='inventoryNameVal'></input> inventoryNameVal </td>"
-			+ "    <td> <input type='hidden' name='material' value='materialVal'></input>materialVal</td>"
-			+ "    <td> <input type='hidden' name='type' value='typeVal'></input>typeVal</td>"
-			+ "    <td> <input type='hidden' name='manifMethod' value='manifacturingMethod'></input>manifacturingMethod</td>"
+			+ "    <td> <input type='hidden' name='product' value='productVal'></input> productVal </td>"
+			+ "    <td> <input type='hidden' name='moc' value='mocVal'></input>mocVal</td>"
+			+ "    <td> <input type='hidden' name='manufactureType' value='manufactureTypeVal'></input>manufactureTypeVal</td>"
 			+ "    <td> <input type='hidden' name='gradeOrClass' value='gradeOrClassVal'></input>gradeOrClassVal</td>"
+			+ "    <td> <input type='hidden' name='materialSpecs' value='materialSpecsVal'></input>materialSpecsVal</td>"
+			+ "    <td> <input type='hidden' name='standardType' value='standardTypeVal'></input>standardTypeVal</td>"
 			+ "    <td> <input type='hidden' name='ends' value='endsVal'></input>endsVal</td>"
 			+ "    <td> <input type='hidden' name='size' value='sizeVal'></input>sizeVal</td>"
 			+ "	   <td> <input type='hidden' name='purchaseRate' value='purchaseRateVal'></input> purchaseRateVal </td>"
@@ -394,6 +438,7 @@ public class OrderController {
 			+ "			receivedQuantityVal <input type='hidden' name='projectName' id='projectNm' value='projectNameVal'></td>"
 			+ "	   <td> <input type='hidden' name='location' value='locationVal'></input>locationVal</td>"
 			+ "	   <td style='width:10%;'> <input type='hidden' name='receivedDate'  value='receivedDateVal'></input>receivedDateVal</td>"
-			+ "	   <input type='hidden' name='status' value='assigned'>" + "    </tr>";
+			+ "	   <input type='hidden' name='status' value='assigned'>"
+			+ "    </tr>";
 
 }

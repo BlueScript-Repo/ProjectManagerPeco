@@ -2,6 +2,7 @@ package com.projectmanager.util;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.projectmanager.dao.InventoryDao;
 import com.projectmanager.dao.PODetailsDao;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.util.ResourceUtils;
 
 @ManagedBean
@@ -26,37 +29,36 @@ public class InventoryUtils {
 	@Autowired
 	PODetailsDao poDetailsDao;
 
-	public String createDescriptionLine(String material, String type, String inventory, String classOrgrade,
-			String manifMethod, String ends, String size) {
+	public String createDescriptionLine(String material, String inventory, String classOrgrade,
+			String manifMethod, String materialSpecs, String standardType, String ends, String size) {
 		//String templateDesc = "material type inventory of Grade(OR Class) as classOrgrade with Ends as endsVal Manifacturing Method as manifMethod of size sizeVal";
 
-		String templateDesc = "inventory~ material~ classOrgrade~ type~ endsVal~ manifMethod~ sizeVal";
+		String templateDesc = "inventory~ moc~ manifMethod~ classOrgrade~ materialSpecs~ standardType~ endsVal~ sizeVal";
 		
 		String description = templateDesc;
 
-		description = description.replace("material", material);
-		
-		description = description.replace("type", type);
-
+		description = description.replace("moc", material);
 		description = description.replace("inventory", inventory);
 		description = description.replace("classOrgrade", classOrgrade);
 
 		description = description.replace("endsVal", ends);
 		description = description.replace("sizeVal", size);
 		description = description.replace("manifMethod", manifMethod);
+		description = description.replace("materialSpecs", materialSpecs);
+		description = description.replace("standardType", standardType);
 
 		return description;
 	}
 
 	public List<InventorySpec> createInventorySpecList(String[] inventoryName, String[] material, String[] type,
 			String[] manifMethod, String[] gradeOrClass, String[] ends, String[] size, String[] project,
-			String[] status) {
+			String[] status, String[] materialSpecs, String[] standardType) {
 		ArrayList<InventorySpec> inventorySpecList = new ArrayList<InventorySpec>();
 		String projectname = project[0];
 
 		for (int i = 0; i < inventoryName.length; i++) {
-			inventorySpecList.add(new InventorySpec(inventoryName[i], material[i], type[i], manifMethod[i],
-					gradeOrClass[i], ends[i], size[i], projectname, status[i]));
+			inventorySpecList.add(new InventorySpec(inventoryName[i], material[i], "", manifMethod[i],
+					gradeOrClass[i], ends[i], size[i], projectname, status[i], materialSpecs[i], standardType[i]));
 		}
 
 		return inventorySpecList;
@@ -74,9 +76,17 @@ public class InventoryUtils {
 			inventoryId = inventoryId + index;
 		}
 
-		String template = "<tr id=\"" + inventoryId + "\"><form><td></td>"
-				+ "<td>InventoryVal</td>    <td>MaterialVal</td>    <td>TypeVal</td>"
-				+ "<td>ManifMethodVal</td><td>gradeOrClassVal</td>    <td>endsVal</td>" + "<td>sizeVal</td>" + "<td>"
+		String template = "<tr id=\"" + inventoryId + "\"><form>"
+				+"<td></td>"
+				+"<td>ProductVal</td>"
+				+"<td>MOCVal</td>"
+				+"<td>ManufactureTypeVal</td>"
+				+"<td>ClassGradeVal</td>"
+				+"<td>MaterialSpecsVal</td>"
+				+"<td>StandardTypeVal</td>"
+				+"<td>EndsVal</td>"
+				+"<td>SizeVal</td>"
+				+ "<td>"
 				+ (isConsumed ? "availableQuantity</td>"
 						: "<input type=\"text\" style=\"width:45px;\" name=\"quantity\" value=\"availableQuantity\" > </td>")
 				+ "<td>purchaseRateVal</td>"
@@ -84,27 +94,29 @@ public class InventoryUtils {
 						? "<td><select class='form-control currentProjectList' name='project' name='projectName' ><option></option></td>"
 						: "<td>projectVal</td>")
 				+ "<td>locationVal</td>"
-
 				+ (isConsumed ? ""
 						: "<td><input type=\"button\" class=\"btn btn-default statusTo \" value=\"release\"></td>")
-				+ "<input type=\"hidden\" name=\"inventoryStr\" value=\"InventoryVal\" >"
-				+ "<input type=\"hidden\" name=\"materialStr\" value=\"MaterialVal\" >"
-				+ "<input type=\"hidden\" name=\"typeStr\" value=\"TypeVal\" >"
-				+ "<input type=\"hidden\" name=\"manifMethodStr\" value=\"ManifMethodVal\" >"
-				+ "<input type=\"hidden\" name=\"gradeOrClassStr\" value=\"gradeOrClassVal\" >"
-				+ "<input type=\"hidden\" name=\"endsStr\" value=\"endsVal\" >"
-				+ "<input type=\"hidden\" name=\"sizeStr\" value=\"sizeVal\" >"
+				+ "<input type=\"hidden\" name=\"inventoryStr\" value=\"ProductVal\" >"
+				+ "<input type=\"hidden\" name=\"materialStr\" value=\"MOCVal\" >"
+				+ "<input type=\"hidden\" name=\"typeStr\" value=\"ManufactureTypeVal\" >"
+				+ "<input type=\"hidden\" name=\"gradeOrClassStr\" value=\"ClassGradeVal\" >"
+				+ "<input type=\"hidden\" name=\"materialSpecsValStr\" value=\"MaterialSpecsVal\" >"
+				+ "<input type=\"hidden\" name=\"standardTypeValStr\" value=\"StandardTypeVal\" >"
+				+ "<input type=\"hidden\" name=\"endsStr\" value=\"EndsVal\" >"
+				+ "<input type=\"hidden\" name=\"sizeStr\" value=\"SizeVal\" >"
 				+ "<input type=\"hidden\" name=\"purchaseRateStr\" value=\"purchaseRateVal\" >"
 				+ "<input type=\"hidden\" name=\"projectStr\" value=\"projectVal\" >"
 				+ "<input type=\"hidden\" name=\"locationStr\" value=\"locationVal\" > "
-				+ "<input type=\"hidden\" name=\"status\" value=\"assigned\"> " + "</tr>";
+				+ "<input type=\"hidden\" name=\"status\" value=\"assigned\"> "
+				+ "</tr>";
 
 		String rowToReturn = template;
-		rowToReturn = rowToReturn.replace("InventoryVal", inv.getInventorySpec().getInventoryName());
-		rowToReturn = rowToReturn.replace("MaterialVal", inv.getInventorySpec().getMaterial());
-		rowToReturn = rowToReturn.replace("TypeVal", inv.getInventorySpec().getType());
-		rowToReturn = rowToReturn.replace("ManifMethodVal", inv.getInventorySpec().getManifMethod());
-		rowToReturn = rowToReturn.replace("gradeOrClassVal", inv.getInventorySpec().getGradeOrClass());
+		rowToReturn = rowToReturn.replace("ProductVal", inv.getInventorySpec().getInventoryName());
+		rowToReturn = rowToReturn.replace("MOCVal", inv.getInventorySpec().getMaterial());
+		rowToReturn = rowToReturn.replace("ManufactureTypeVal", inv.getInventorySpec().getManifMethod());
+		rowToReturn = rowToReturn.replace("ClassGradeVal", inv.getInventorySpec().getGradeOrClass());
+		rowToReturn = rowToReturn.replace("MaterialSpecsVal", inv.getInventorySpec().getMaterialSpecs());
+		rowToReturn = rowToReturn.replace("StandardTypeVal", inv.getInventorySpec().getStandardType());
 		rowToReturn = rowToReturn.replace("endsVal", inv.getInventorySpec().getEnds());
 		rowToReturn = rowToReturn.replace("sizeVal", inv.getInventorySpec().getSize());
 
@@ -191,7 +203,7 @@ public class InventoryUtils {
 	public ArrayList<BOQDetails> getBOQDetailsList(String projectId, String boqName, String[] inventoryName,
 			String[] material, String[] type, String[] manifMetod, String[] classOrGrade, String[] ends, String[] size,
 			String[] quantity, String[] supplyRate, String[] erectionRate, String[] supplyAmount,
-			String[] erectionAmount, String[] baseErectionRate, String[] baseSupplyRate, String sheetDetails) {
+			String[] erectionAmount, String[] baseErectionRate, String[] baseSupplyRate, String sheetDetails, String[] materialSpecs, String[] standardType) {
 		int noOfEntries = inventoryName.length;
 		ArrayList<BOQDetails> boqInventoryDetails = new ArrayList<>();
 
@@ -205,7 +217,7 @@ public class InventoryUtils {
 			if (i % 2 == 0) {
 				sheetNames.add(sheetDetailsArray[i]);
 			} else {
-				total = total + Integer.valueOf(sheetDetailsArray[i]);
+				total = total + Integer.parseInt(sheetDetailsArray[i]);
 
 				sheetInventoryCount.add(total);
 			}
@@ -221,14 +233,16 @@ public class InventoryUtils {
 				}
 			}
 
-			boqInventoryDetails.add(new BOQDetails(projectId, boqName, inventoryName[i], material[i], type[i],
+			boqInventoryDetails.add(new BOQDetails(projectId, boqName, inventoryName[i], material[i], type == null ? "" : type[i],
 					manifMetod != null ? (manifMetod.length > i ? manifMetod[i] : "-") : "-", classOrGrade[i], ends[i],
 					size[i], quantity[i], supplyRate.length > 0 ? supplyRate[i] : "",
 					erectionRate.length > 0 ? erectionRate[i] : "", supplyAmount.length > 0 ? supplyAmount[i] : "",
 					erectionAmount.length > 0 ? erectionAmount[i] : "",
 					baseErectionRate.length > 0 ? baseErectionRate[i] : "",
-					baseSupplyRate.length > 0 ? baseSupplyRate[i] : "", sheetName));
-			System.out.println(boqInventoryDetails.get(i).toString());
+					baseSupplyRate.length > 0 ? baseSupplyRate[i] : "", sheetName,
+					materialSpecs != null && materialSpecs.length > 0 ? materialSpecs[i] : "",
+					standardType != null && standardType.length > 0 ? standardType[i] : ""));
+
 		}
 
 		return boqInventoryDetails;
@@ -254,7 +268,11 @@ public class InventoryUtils {
 
 		try
 		{
-			FileInputStream inputStream = new FileInputStream(ResourceUtils.getFile("classpath:extendedChallan"));
+			//FileInputStream inputStream = new FileInputStream(ResourceUtils.getFile("classpath:extendedChallan"));
+
+			Resource resource = new ClassPathResource("classpath:extendedChallan");
+			InputStream inputStream = resource.getInputStream();
+
 			String str = "";
 			StringBuffer buf = new StringBuffer();
 

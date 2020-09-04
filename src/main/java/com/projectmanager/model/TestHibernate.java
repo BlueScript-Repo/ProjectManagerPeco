@@ -1,11 +1,15 @@
 package com.projectmanager.model;
 
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import com.projectmanager.entity.Project;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,19 +22,13 @@ public class TestHibernate {
 
 	public static void main(String[] args) {
 
-		try {
-			String dateStr = "2020";
-
-			ArrayList<String> stringList = new ArrayList<>();
-
-			stringList.add(dateStr);
-
-			System.out.println(stringList.contains("2020"));
-
-		}
-		catch (Exception ex)
+		try
 		{
-			ex.printStackTrace();
+			Resource resource = new ClassPathResource("classpath:BOQ_Template.xls");
+			System.out.println("Finished");
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 /*		try {
 			Configuration configuration = new Configuration();

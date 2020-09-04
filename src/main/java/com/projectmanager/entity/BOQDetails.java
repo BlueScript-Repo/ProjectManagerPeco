@@ -5,10 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
-@Table(name="BOQDetails")
 public class BOQDetails {
 
 	String projectId;
@@ -17,7 +15,7 @@ public class BOQDetails {
 	String inventoryName;
 	String material;
 	String type;
-	String manifacturingMethod;
+	String manufacturingMethod;
 	String classOrGrade;
 	String ends;
 	String size;
@@ -29,6 +27,8 @@ public class BOQDetails {
 	String supplyAmount;
 	String erectionAmount;
 	String sheetName;
+	String materialSpecs;
+	String standardType;
 
 	public BOQDetails()
 	{
@@ -36,16 +36,16 @@ public class BOQDetails {
 	}
 
 	public BOQDetails(String projectId, String boqName, String inventoryName, String material, String type,
-			String manifacturingMethod, String classOrGrade, String ends, String size, String quantity,
+			String manufacturingMethod, String classOrGrade, String ends, String size, String quantity,
 			String supplyRate, String erectionRate, String supplyAmount, String erectionAmount,
-			String baseErectionRate, String baseSupplyRate, String sheetName) {
+			String baseErectionRate, String baseSupplyRate, String sheetName, String materialSpecs, String standardType) {
 		super();
 		this.projectId = projectId;
 		this.boqName = boqName;
 		this.inventoryName = inventoryName;
 		this.material = material;
 		this.type = type;
-		this.manifacturingMethod = manifacturingMethod;
+		this.manufacturingMethod = manufacturingMethod;
 		this.classOrGrade = classOrGrade;
 		this.ends = ends;
 		this.size = size;
@@ -57,6 +57,8 @@ public class BOQDetails {
 		this.baseErectionRate = baseErectionRate;
 		this.baseSupplyRate = baseSupplyRate;
 		this.sheetName = sheetName;
+		this.materialSpecs = materialSpecs;
+		this.standardType = standardType;
 	}
 
 	@Id
@@ -120,12 +122,12 @@ public class BOQDetails {
 		this.type = type;
 	}
 
-	public String getManifacturingMethod() {
-		return manifacturingMethod;
+	public String getManufacturingMethod() {
+		return manufacturingMethod;
 	}
 
-	public void setManifacturingMethod(String manifacturingMethod) {
-		this.manifacturingMethod = manifacturingMethod;
+	public void setManufacturingMethod(String manufacturingMethod) {
+		this.manufacturingMethod = manufacturingMethod;
 	}
 
 	public String getClassOrGrade() {
@@ -223,7 +225,20 @@ public class BOQDetails {
 	public void setSheetName(String sheetName) {
 		this.sheetName = sheetName;
 	}
-	
-	
-	
+
+	public String getMaterialSpecs() {
+		return materialSpecs;
+	}
+
+	public void setMaterialSpecs(String materialSpecs) {
+		this.materialSpecs = materialSpecs;
+	}
+
+	public String getStandardType() {
+		return standardType;
+	}
+
+	public void setStandardType(String standardType) {
+		this.standardType = standardType;
+	}
 }

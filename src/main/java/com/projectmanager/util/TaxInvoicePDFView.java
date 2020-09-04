@@ -2,6 +2,7 @@ package com.projectmanager.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.itextpdf.text.*;
 import com.projectmanager.dao.TaxesDao;
 import com.projectmanager.entity.TaxesEntity;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.view.AbstractView;
@@ -43,9 +47,13 @@ public class TaxInvoicePDFView extends AbstractView {
 	public void createInvoice(HttpServletResponse response, TaxInvoiceDetails taxInvoiceDetails) {
 
 		try {
+			Resource resource = new ClassPathResource("classpath:static/fonts/BankGothicRegular.ttf");
+			InputStream inputStream = resource.getInputStream();
 
-			FontFactory.register(ResourceUtils.getFile("classpath:static/fonts/BankGothicRegular.ttf").getAbsolutePath(),"Bank_Gothic");
-			/*Font bankGothicFamily = FontFactory.getFont("Bank_Gothic", "Cp1253", true);*/
+			File BankGothicRegular = new File(System.getProperty("java.io.tmpdir") + "/BankGothicRegular.ttf");
+			FileUtils.copyInputStreamToFile(inputStream, BankGothicRegular);
+
+			FontFactory.register(BankGothicRegular.getAbsolutePath(), "Bank_Gothic");
 
 			Font blackBGLBi14 = FontFactory.getFont("Bank_Gothic", 14, Font.BOLD, BaseColor.BLACK);
 			Font blackBGLB9 = FontFactory.getFont("Bank_Gothic", 9, Font.NORMAL, BaseColor.BLACK);
@@ -203,7 +211,7 @@ public class TaxInvoicePDFView extends AbstractView {
 			table5.setWidths(table5Widths);
 
 			table5.addCell(createNewCell(new Paragraph("Company's Bank Details ", blackBGLB11)));
-			table5.addCell(createNewCell(new Paragraph("Hamdule Industries", boldBlackBGLB11)));
+			table5.addCell(createNewCell(new Paragraph("PECO Projects", boldBlackBGLB11)));
 			table5.addCell(createNewCell(new Paragraph("Bank Name: HDFC Bank Ltd ", blackBGLB11)));
 
 			PdfPCell signCell = createNewCell(70);
@@ -231,8 +239,8 @@ public class TaxInvoicePDFView extends AbstractView {
 
 			table5.addCell(signCell);
 
-			table5.addCell(createNewCell(new Paragraph("A/c No.: 50200007593854 ", blackBGLB11)));
-			table5.addCell(createNewCell(new Paragraph("IFSC Code: HDFC0000437 ", blackBGLB11)));
+			table5.addCell(createNewCell(new Paragraph("A/c No.: 00000000000000 ", blackBGLB11)));
+			table5.addCell(createNewCell(new Paragraph("IFSC Code: HDFC0000000 ", blackBGLB11)));
 
 			table5.addCell(createNewCell(new Paragraph("Branch:  Pimpri, Pune ", blackBGLB11)));
 			table5.addCell(createNewCell(new Paragraph("AUTHORIZED SIGNATORY ", boldBlackBGLB11)));

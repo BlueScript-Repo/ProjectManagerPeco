@@ -74,23 +74,22 @@
                 <tr>
                 	<th>#</th>
                 	<th></th>
-                	<th>Inventory Name</th>
-                	<th>Material</th>
-                	<th>Type</th>
-                	<th>Class Or Grade</th>
-                	<th>Category</th>
+                	<th>Product</th>
+                	<th>MOC</th>
+                	<th>Construction Type</th>
+                	<th>Class Or Schedule</th>
+                	<th>Material Specs</th>
+                  <th>Standard Type</th>
                 </tr>
               </thead>
               <form id="updateMappingDetails" action="updateMappingDetails" method="POST">
-                <tbody>
+                <tbody id="productDefinitionTab">
                  ${mappingDetails}
-
                </tbody> 
              </table> 
              <input id="addMappingBtn" type="button" class="btn btn-primary mt-5" value="+" onclick="addRow('tblMappingDetails');change()">
              <input id="updateMappingBtn" type="submit" class="btn btn-primary mt-5" value="Update">
            </form>
-
          </div>
        </div>
      </div>
@@ -124,18 +123,16 @@
      </div>
    </div>
  </div>
-
  <div class="tab-pane fade " id="htab3" role="tabpanel">                  
   <div class="row">
     <div class="col-md-12">
-
      <form id="updateTaxesDetails" action="updateTaxesDetails" method="POST">
       ${taxesDetails}
-       <input id="updateTaxesBtn" type="submit" class="btn btn-primary mt-5" value="Update">
-     </form>
+      <input id="updateTaxesBtn" type="submit" class="btn btn-primary mt-5" value="Update">
+    </form>
 
-   </div>
- </div>
+  </div>
+</div>
 </div>
 </div>	  		
 </div>
@@ -188,8 +185,8 @@
     {
       row = $(this).closest("tr");
 
-      var InventoryLength = $(row).find("input[name=inventoryName]").val().length;
-      var MaterialLength =$(row).find("input[name=material]").val().length;
+      var InventoryLength = $(row).find("input[name=product]").val().length;
+      var MaterialLength =$(row).find("input[name=materialOfConstruction]").val().length;
       if(InventoryLength == 0 && MaterialLength == 0 || InventoryLength == 0 || MaterialLength == 0 )
       {
        alert("Please enter Inventory name and Material");
@@ -201,11 +198,12 @@
    row = $(this).closest("tr");
    dataArrayToSend.push({ 
     item_id : $(row).find("input[name=ItemId]").val(),
-    inventoryName  : $(row).find("input[name=inventoryName]").val(),
-    material     : $(row).find("input[name=material]").val(),
-    type     : $(row).find("input[name=type]").val(),
-    classOrGrade     : $(row).find("input[name=classOrGrade]").val(),
-    catogory     : $(row).find("input[name=catogory]").val()       
+    product  : $(row).find("input[name=product]").val(),
+    materialOfConstruct     : $(row).find("input[name=materialOfConstruction]").val(),
+    constructType     : $(row).find("input[name=manufactureMethod]").val(),
+    classOrSch     : $(row).find("input[name=classOrSch]").val(),
+    materialSpec     : $(row).find("input[name=materialSpecs]").val(),
+    standardType     : $(row).find("input[name=standardType]").val()
   });
 
 
@@ -216,7 +214,7 @@
     if(dataArrayToSend.length > 0)
     {
      var ajaxReq = $.ajax({
-       url : 'updateMappingDetails',
+       url : 'updateProductDetails',
        type : 'POST',
        data : JSON.stringify(dataArrayToSend),
        dataType: "json",
@@ -245,15 +243,15 @@
   }
 
 
-  function addRow(tableID) {
-
+  function addRow(tableID)
+  {
 
    var table = document.getElementById(tableID);
 
    var rowCount = table.rows.length;
    var row = table.insertRow(rowCount);
 
-   var cell1 = row.insertCell(0);
+   /*var cell1 = row.insertCell(0);
    var element1 = document.createElement("input");
    element1.value = rowCount + 1;
    element1.type = "text";
@@ -316,7 +314,21 @@
    element7.class = "form-control";
    element7.name = "catogory";
    element7.value = "";
-   cell7.appendChild(element7);
+   cell7.appendChild(element7);*/
+
+   var productRow = 
+   "<tr class='lazy' >" +
+   "<td><input type='hidden' class='form-control' value='' name='ItemId'>" + parseInt(rowCount) + 1 + "</td>" +
+   "<td><input type='checkbox' class='chkView' ></td>" +
+   "<td><input type='text'  class='form-control' value='' name='product'  ></td>" +
+   "<td><input type='text'  class='form-control' value='' name='materialOfConstruction' ></td>" +
+   "<td><input type='text'  class='form-control' value='' name='manufactureMethod'  ></td>" +
+   "<td><input type='text'  class='form-control' value='' name='classOrSch'  ></td>" +
+   "<td><input type='text'  class='form-control' value='' name='materialSpecs'  ></td>" +
+   "<td><input type='text'  class='form-control' value='' name='standardType'  ></td>" +
+   "</tr>";
+
+   $('#productDefinitionTab').append(productRow);
 
  } 
 
@@ -520,7 +532,8 @@
   $('#tblMappingDetails').on('change', '.chkView[type=checkbox]', function(event) {
 
     let viewCheck = $(this);
-    let isViewChecked = !!viewCheck.prop('checked');
+
+   let isViewChecked = !!viewCheck.prop('checked');
     let isViewDisbled = !!viewCheck.prop('disabled');
     let rowChecks = viewCheck
     .closest('tr')
@@ -537,7 +550,7 @@
 
   }).find('.chkView[type=checkbox]').filter(function(index, element) {
     return !!$(element).siblings('input[type=checkbox]');
-  }).trigger('change'); 
+  }).trigger('change');
 
 </script>
 

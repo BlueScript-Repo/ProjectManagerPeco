@@ -6,7 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "projectdetails")
 public class ProjectDetails 
 {
 	@Id

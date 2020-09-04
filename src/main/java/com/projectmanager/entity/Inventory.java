@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 @Entity
 @Embeddable
-@Table(name = "inventory")
 public class Inventory implements Serializable, BOQData {
 
 	@Id

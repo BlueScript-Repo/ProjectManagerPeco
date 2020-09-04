@@ -27,7 +27,7 @@ public class TaxesDao {
 		
 		Query query = session.createQuery(sqlStr);
 		
-	ArrayList<TaxesEntity> result  =(ArrayList<TaxesEntity>) query.getResultList();
+	ArrayList<TaxesEntity> result  = (ArrayList<TaxesEntity>) query.getResultList();
 		
 		return result;
 	}

@@ -10,7 +10,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 import org.jetbrains.annotations.Nullable;
 
-@Table
 @Entity
 public class AccessoryDetails implements Serializable {
 

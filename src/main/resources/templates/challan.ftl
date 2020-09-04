@@ -54,15 +54,13 @@
                                 style="width:40%;text-align:center;background-color: #ffffff;border-color:#ffffff;">
                                 <div class="card shadow-sm">
                                     <div class="card-body" style="padding:0.5rem;">
-                                        <p class="card-text text-dark" style="font-size:11px;" font-size>Detail
-                                            Engineering | IBR / NIBR Boilers | Tanks & Chimneys</p>
-                                        <p class="card-text text-dark" style="font-size:11px;">Piping Services | Turnkey
-                                            Projects | Overseas Projects</p>
+                                        <p class="card-text text-dark" style="font-size:11px;" font-size>Piping Design | Stress Analysis | CAD/CAM</p>
+                                        <p class="card-text text-dark" style="font-size:11px;"> Turnkey Projects | HVAC & Fire Fighting | Electrical Services</p>
                                     </div>
                                 </div>
                             </th>
                             <th style="width:50%;text-align:center;background-color: #ffffff;border-color:#ffffff;">
-                                <img style="width:120%;height:100%;" src="./images/img/Hamdule-Logo1.png">
+                                <img style="width:120%;height:100%;" src="./images/img/PECOLogo1.jpg">
                             </th>
                         </tr>
                         <tr>
@@ -141,7 +139,7 @@
                         <tbody>
                         <tr>
                             <td class="font-weight-bold" colspan="3" style="width:60%;">GST Number: ${gstNo}</td>
-                            <td class="font-weight-bold text-center" colspan="1">For PECO Industries</td>
+                            <td class="font-weight-bold text-center" colspan="1">For PECO Projects</td>
                         </tr>
                         <tr>
                             <td class="font-weight-bold" colspan="2" style="width:60%;"></td>
@@ -186,22 +184,13 @@
                             <td class="font-weight-bold text-center">Authorised Signatory</td>
                         </tr>
                         <tr>
-                            <td class="font-weight-bold text-center"
-                                style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Regd. Address : Shop
-                                # 3, Blgd C2,Manish Gardan, Udyam Nagar, Pimpri,Pune 411018
-                            </td>
+                            <td class="font-weight-bold text-center" style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4"><h3>PECO Projects Pvt. Ltd.</h3></td>
                         </tr>
                         <tr>
-                            <td class="font-weight-bold text-center"
-                                style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Works: Plot No.
-                                55,Gat 55 &amp; 57, Chakan, Askhed, Tal. Khed, Pune - 410501
-                            </td>
+                            <td class="font-weight-bold text-center" style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Regd. Address : A-601, Silver Oaks, Gat No. 275, Borhadewadi, Moshi, Pune - 411 105</td>
                         </tr>
                         <tr>
-                            <td class="font-weight-bold text-center"
-                                style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Cell: +91 20 2750
-                                2200 | Email:business@hamduleindustries.com | www.hamduleindustries.com
-                            </td>
+                            <td class="font-weight-bold text-center" style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Cell: +91 20 65300352 | Email:info@pecoprojects.com | www.pecoprojects.com</td>
                         </tr>
                         </tbody>
                     </table>

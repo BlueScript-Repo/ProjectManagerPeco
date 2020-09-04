@@ -338,9 +338,6 @@
      {
       var venderName = $('[name="vendorNameStr"]').val();
       $("[name='vendorName']").append("<option value=" + venderName + ">" + venderName + "</option>");
-
-      document.getElementById("textOverlaySearch").style.display = "none";
-
       alert('Vender has been added successfully');              
     }
   });

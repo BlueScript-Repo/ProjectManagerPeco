@@ -256,7 +256,6 @@
   {
     this.setTimeout($.unblockUI,1000);
     //$.unblockUI();
-
   }
 </script>
 
@@ -314,18 +313,14 @@
      success : function(data) 
      {
       var venderName = $('[name="vendorNameStr"]').val();
-      $("[name='vendorName']").append("<option value=" + venderName + ">" + venderName + "</option>");
+      $("[name='vendorName']").append("<option value='" + venderName + "''>" + venderName + "</option>");
 
       document.getElementById("textOverlaySearch").style.display = "none";     			       
     }
-    hideLoading();
   });
-
-
   }
 </script>
 <script>
-
   function getCompanyDetails(thisObj)
   {
    var vendorName = $('#vendorName').val();
@@ -366,8 +361,7 @@
         else if(ele=='vendorPan')
        {
          $('[name="vendorPan"]').val(valu);
-       }  			
-
+       }
      });       
     }
   });
@@ -387,7 +381,7 @@
        var venderName = vList[i];
 
        if(venderName != "")
-        $("[name='vendorName']").append("<option value=" + venderName + ">" + venderName + "</option>");
+        $("[name='vendorName']").append("<option value='" + venderName + "''>" + venderName + "</option>");
       }
   }
 

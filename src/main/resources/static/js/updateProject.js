@@ -27,7 +27,6 @@
    }
  }
 
-
   function hideOthers1(idToBeOpen)
   {
 
@@ -80,8 +79,6 @@
 
   }
 
-
-
   function captureFileLocation() {
     $('#LoadingImage').show();
     var fileLocation;
@@ -123,20 +120,21 @@
      console.log('Inside adjustWidth');
    }
 
-
-
-
-  function myFunction(value, tagName, nextTagName) {
+  function myFunction(nextTagName) {
 
     $('#LoadingImage').show();
     var tag = '#'+nextTagName;
-    var inventory = $('#inventoryName')[0].value;
-    
+    var inventory = $('#product')[0].value;
+
+    var product = $('#product')[0].value;
+    var material =  $('#moc')[0].value;
+    var manufactureMethod = $('#manufactureType')[0].value;
+
     showLoading();
 
     $.ajax({
      type : 'POST',
-     data :  {'value' : value,'currentTag' : tagName,'nextTagName' : nextTagName, 'inventory' : inventory},
+     data :  {'product': product, 'moc': material, 'manufactureType': manufactureMethod, 'nextTagName': nextTagName},
      url : 'getDropdown',
      success : function(data) {
 
@@ -150,8 +148,6 @@
     }
   });
   }
-
-
 
   function updateSupplyRate(thisObj)
   {
@@ -203,11 +199,8 @@
 
     }
 
-
-
     function updateErectionRate(thisObj)
     {
-
       var rate = [];
       var quantity = [];
 
@@ -246,8 +239,6 @@
       updateSubTotal($('.createBOQ').find('.active.show').attr('href').substr(1));
     }
 
-
-
     function updateSubTotal(sheetName)
     {
 
@@ -275,9 +266,6 @@
       e.preventDefault();  
       $(this).tab('show');
     });
-
-
-
 
     $(document).ready(function(){
    // we define and invoke a function
@@ -489,170 +477,81 @@
    console.log('Inside adjustWidth');
  }
 
+function createInquiry() 
+{
+  showLoading();
 
+  var checkedRows = $($('#tableContentInqSec').find('.tab-pane')[0]).find('input:checkbox:checked');
 
-
-
-  function createInquiry() 
+  var rows = [];
+  for(var i=0; i< checkedRows.length;i++) 
   {
+    rows[i]= $($('#tableContentInqSec').find('.tab-pane')[0]).find('input:checkbox:checked').parent().parent()[i];
+  }
 
-    showLoading();
+  var formData = $(this).serializeArray();
 
-    var inventoryName       = [];
-    var material            = [];
-    var type                = [];
-    var manifacturingMethod = [];
-    var classOrGrade        = [];
-    var ends                = [];
-    var size                = [];
-    var quantity            = [];
-    var baseSupplyRate      = [];
-    var supplyRate          = [];
-    var baseErectionRate    = [];
-    var erectionRate        = [];
-    var supplyAmount        = [];
-    var erectionAmount      = [];
-    var sheetDetails        = "";
+  formData.push({name: 'projectId', value: $('[name="projectId"]').val()});
+  formData.push({name: 'boqName', value: $('[name="inquiryName"]').val()});
 
     var tabs = $('.tab-pane');
+    var sheetDetails = "";
     for(var r=0;r<tabs.length;r++)
     {
+      var checkedRows = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input:checkbox:checked');
+      var rows = [];
 
-      var CheckeleCount = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input:checkbox').length;
-
-      var selectedElements = [];
-      var i;
-      var checkedEle = 0;
-      for(i=0; i < CheckeleCount; i++)
+      for(var i=0; i< checkedRows.length;i++) 
       {
-        if($($('#tableContentInqSec').find('.tab-pane')[r]).find('input:checkbox')[i].checked)
-        {
-         selectedElements[i] = i;
-         checkedEle++;
-       }
-     }
+        rows[i]= $($('#tableContentInqSec').find('.tab-pane')[r]).find('input:checkbox:checked').parent().parent()[i];
+      }
 
-     if(checkedEle>0)
-     {
-      sheetDetails = sheetDetails + $($('#tableContentInqSec').find('.tab-pane')[r]).attr('id')+','+checkedEle+',';
+      for(var l=0;l<$(rows).length;l++)
+      {
+        var inputes = $(rows[l]).find('input');
+        for(var k=0;k<$(inputes).length;k++)
+        {
+          formData.push({name: $(inputes)[k].name, value: $(inputes)[k].value});  
+        }
+      }
+
+      if(checkedRows.length>0)
+      {
+        sheetDetails = sheetDetails + $($('#tableContentInqSec').find('.tab-pane')[r]).attr('id')+','+checkedRows.length+',';
+      }
+   }
+
+  formData.push({name: 'venderName', value: $('[name="selectedVenderName"]').val()});
+  formData.push({name: 'isOffer', value: 'true'});
+  formData.push({name: 'sheetDetails', value: sheetDetails});
+
+  var inquiryNameList = $('.offerRevisionSection')[0].options; 
+  var revisionNo = 0;
+  for(var k = 0; k < inquiryNameList.length; k++)
+  {
+    if(inquiryNameList[k].value.startsWith('Inquiry_'+$('[name="inquiryName"]').val()))
+    {
+      revisionNo ++;
+      var optionVal = inquiryNameList[k].value;
     }
 
-    var eleCount = $('#tableContentInqSec input').length;
-    var j;
-    var k = 0;
-    var n = 1;
-    for(k=0;k<selectedElements.length;k++)
-    {
-
-     if(selectedElements[k] != undefined)
-     {
-      var start = 3 + 15*parseFloat(selectedElements[k]);
-      console.log('Start is : '+start);
-
-      quantity[quantity.length+k]           = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;
-      baseSupplyRate[baseSupplyRate.length+k]     = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;
-      supplyRate[supplyRate.length+k]         = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;
-      baseErectionRate[baseErectionRate.length+k]   = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;
-      erectionRate[erectionRate.length+k]       = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;
-      supplyAmount[supplyAmount.length+k]       = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;
-      erectionAmount[erectionAmount.length+k]     = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;
-      inventoryName[inventoryName.length+k]       = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;                    
-      material[material.length+k]           = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;     
-      type[type.length+k]               = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;
-
-      var tempVal = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;
-
-      if(tempVal==="")
-      {
-        manifacturingMethod[manifacturingMethod.length+k] = " ";
-      }
-      else
-      {
-        manifacturingMethod[manifacturingMethod.length+k] = tempVal;
-      }
-
-
-      classOrGrade[classOrGrade.length+k]       = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;
-      ends[ends.length+k]               = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;
-      size[size.length+k]               = $($('#tableContentInqSec').find('.tab-pane')[r]).find('input')[start++].value;
-    } 
-  }
-}
-var lastArray = 3 + 20*parseFloat(selectedElements[parseFloat(selectedElements.length) - 1]);
-
-
-var formData = $(this).serializeArray();
-
-formData.push({name: 'projectId', value: $('[name="projectId"]').val()});
-formData.push({name: 'boqName', value: $('[name="inquiryName"]').val()});
-
-
-var inventoryName_string = cleanArray(inventoryName);
-formData.push({name: 'inventoryName', value: inventoryName_string});
-var material_string = cleanArray(material);
-formData.push({name: 'material', value: material_string});
-var type_string = cleanArray(type);
-formData.push({name: 'type', value: type_string});
-var manifacturingMethod_string = cleanArray(manifacturingMethod);
-formData.push({name: 'manifMetod', value: manifacturingMethod_string});
-var classOrGrade_string = cleanArray(classOrGrade);
-formData.push({name: 'classOrGrade', value: classOrGrade_string});
-var ends_string = cleanArray(ends);
-formData.push({name: 'ends', value: ends_string});
-var size_string = cleanArray(size);
-formData.push({name: 'size', value: size_string});
-var quantity_string = cleanArray(quantity);
-formData.push({name: 'quantity', value: quantity_string});
-
-var baseSupplyRate_string = cleanArray(baseSupplyRate);
-formData.push({name: 'baseSupplyRate', value: baseSupplyRate_string});
-var supplyRate_string = cleanArray(supplyRate);
-formData.push({name: 'supplyRate', value: supplyRate_string});
-var baseErectionRate_string = cleanArray(baseErectionRate);
-formData.push({name: 'baseErectionRate', value: baseErectionRate_string});
-var erectionRate_string = cleanArray(erectionRate);
-formData.push({name: 'erectionRate', value: erectionRate_string});
-
-var supplyAmount_string = cleanArray(supplyAmount);
-formData.push({name: 'supplyAmount', value: supplyAmount_string});
-var erectionAmount_string = cleanArray(erectionAmount);
-formData.push({name: 'erectionAmount', value: erectionAmount_string});
-
-formData.push({name: 'venderName', value: $('[name="selectedVenderName"]').val()});
-formData.push({name: 'isOffer', value: 'true'});
-formData.push({name: 'sheetDetails', value: sheetDetails});
-
-var inquiryNameList = $('.offerRevisionSection')[0].options; 
-
-var revisionNo = 0;
-for(var k = 0; k < inquiryNameList.length; k++)
-{
-  if(inquiryNameList[k].value.startsWith('Inquiry_'+$('[name="inquiryName"]').val()))
-  {
-    revisionNo ++;
-    var optionVal = inquiryNameList[k].value;
-    console.log(optionVal);        
   }
 
-}
+  console.log('revisionNo is : '+revisionNo);
 
-console.log('revisionNo is : '+revisionNo);    
+  var inquiryName = '<option value="Inquiry_'+ $('[name="inquiryName"]').val() +'_R'+revisionNo+'">Inquiry_'+$('[name="inquiryName"]').val()+'_R'+revisionNo+'</option>';
+  $.ajax({
+   url: "generate",
+   data: formData,
+   type: 'post',
+   success: function(data) {
+    console.log("Appending "+inquiryName);
+    $('.offerRevisionSection').append(inquiryName);
+    alert('Inquiry has been generated successfully. Please check the Notification section to verify and send.');
+  }
+  });
 
-var inquiryName = '<option value="Inquiry_'+ $('[name="inquiryName"]').val() +'_R'+revisionNo+'">Inquiry_'+$('[name="inquiryName"]').val()+'_R'+revisionNo+'</option>';
-$.ajax({
- url: "generate",
- data: formData,
- type: 'post',
- success: function(data) {
-
-  console.log("Appending "+inquiryName);
-  $('.offerRevisionSection').append(inquiryName);
   hideLoading();
-
-  alert('Inquiry has been generated successfully. Please check the Notification section to verify and send.');
-}
-});
-
 }
 
 function cleanArray(actual)
@@ -668,89 +567,43 @@ function cleanArray(actual)
   return newArray;
 }
 
-
-
-
-
   function generatePO()
   { 
     showLoading();
     var length = $('#tableContentPOSec  input').length;
 
-    var line;
-    var i;
-    for(i=1;i<length;i++)
-    {
-     if($('#tableContentPOSec  input')[i].name == "inventoryName")
-     {
-      var temp = $('#tableContentPOSec  input')[i];
-      line = $(temp).clone();
-    } 
-    else if($('#tableContentPOSec  input')[i].name == "material")
-    {
-      var temp = $('#tableContentPOSec  input')[i];
-      line = $(temp).clone();
-    }
-    else if($('#tableContentPOSec  input')[i].name == "type")
-    {
-      var temp = $('#tableContentPOSec  input')[i];
-      line = $(temp).clone();
-    }
-    else if($('#tableContentPOSec  input')[i].name == "manifMetod")
-    {
-      var temp = $('#tableContentPOSec input')[i];
-      line = $(temp).clone();
-    }
-    else if($('#tableContentPOSec input')[i].name == "classOrGrade")
-    {
-      var temp = $('#tableContentPOSec input')[i];
-      line = $(temp).clone();
-    }
-    else if ($('#tableContentPOSec input')[i].name == "ends")
-    {
-      var temp = $('#tableContentPOSec input')[i];
-      line = $(temp).clone();
-    }
-    else if ($('#tableContentPOSec input')[i].name == "size")
-    {
-      var temp = $('#tableContentPOSec input')[i];
-      line = $(temp).clone();
-    }
-    else if ($('#tableContentPOSec input')[i].name == "quantity")
-    {
-      var temp = $('#tableContentPOSec input')[i];
-      line = $(temp).clone();
-    }
-    else if ($('#tableContentPOSec input')[i].name == "supplyRate")
-    {
-      if($('#tableContentPOSec input')[i].value === "")
+    var rowsToSubmit = $('#tableContentPOSec  input');
+    for(var r=0;r<rowsToSubmit.length;r++)
+    {      
+      if($('#tableContentPOSec  input')[r].name === 'supplyRate' && $('#tableContentPOSec  input')[r].value === '')
       {
-        alert('Please provide the supply Rates and retry.!!');
-        hideLoading();
+        alert ('Please enter SupplyRate and try again..!');
+        $('#generateOffer').html('');
         return;
       }
-      var temp = $('#tableContentPOSec input')[i];
+      
+      var temp = $('#tableContentPOSec  input')[r];
       line = $(temp).clone();
+      $('#generateOffer').append(line); 
     }
 
-    $('#generateOffer').append($(line));    
-  }
+    var temp1 = $('[name="projectId"]')[0];
+    line = $(temp1).clone();
+    $('#generateOffer').append($(line));
 
-  var temp = $('[name="projectId"]')[0];
-  line = $(temp).clone();
-  $('#generateOffer').append($(line));
-
-  $('#generateOffer').submit();
-  showLoading();
-}
-
-
+    $('#generateOffer').submit();
+    hideLoading();
+ }
 
   function toggleCreateBOQSec()
   {
    $('.createBOQ').toggle();
   }
 
+  function toggleDesignOfferSec()
+  {
+   $('.designOffer').toggle();
+  }
 
   function toggleImportSec()
   {
@@ -768,32 +621,34 @@ function cleanArray(actual)
     $('.generateBOQButton').css('display','block');
     $('.inventoryTableHeader').css('display','block');
 
-    var inventoryName = $('#inventoryName').children("option:selected").val();
-    var material = $('#material').children("option:selected").val();
-    var type = $('#type').children("option:selected").val();
-    var manifacturingMethod = $('#manifacturingMethod').children("option:selected").val();
-    var classOrGrade = $('#classOrGrade').children("option:selected").val();
-    var ends = $('#ends').children("option:selected").val();
+    var product = $('#product').val();
+    var moc = $('#moc').val();
+    var manufactureType = $('#manufactureType').val();
+    var classOrGrade = $('#classOrGrade').val();
+    var materialSpecs = $('#materialSpecs').val();
+    var standardType = $('#standardType').val();
+    var ends = $('#ends').val();
     var size = $('#size').val();
 
-    console.log(type);
+    console.log('product is : '+product);
 
-    var template = "<tr>"
-    + "    <td> <input type='button' onClick='removeItem($(this));' class='btn' value='&times;' ></td>"
-    + "    <td class='align-middle'> <input type='hidden' name='inventoryName' value='"+inventoryName+"'></input>"+inventoryName+"</td>"
-    + "    <td class='align-middle'> <input type='hidden' name='material' value='"+material+"'></input>"+material+"</td>"
-    + "    <td class='align-middle'> <input type='hidden' name='type' value='"+type+"'></input>"+type+"</td>"
-    + "    <td class='align-middle'> <input type='hidden' name='manifMetod' value='"+manifacturingMethod+"'></input>"+manifacturingMethod+"</td>"
-    + "    <td class='align-middle'> <input type='hidden' name='classOrGrade' value='"+classOrGrade+"'></input>"+classOrGrade+"</td>"
-    + "    <td class='align-middle'> <input type='hidden' name='ends' value='"+ends+"'></input>"+ends+"</td>"
-    + "    <td class='align-middle'> <input type='hidden' name='size' value='"+size+"'></input>"+size+"</td>"
-    + "    <td><input class='form-control' style='width:60px;' type='text' name='quantity' value=''></input></td>"
-    + "    <td><input class='form-control' style='width:60px;' type='text' onchange='updateSupplyRate($(this));' name='baseSupplyRate' value=''></input></td>"
-    + "    <td><input class='form-control' style='width:60px;' type='text' onchange='updateSupplyRate($(this));' name='supplyRate' value=''></input></td>"
-    + "    <td><input class='form-control' style='width:60px;' type='text' onchange='updateErectionRate($(this));' name='baseErectionRate' value=''></input></td>"
-    + "    <td><input class='form-control' style='width:60px;' type='text' onchange='updateErectionRate($(this));' name='erectionRate' value=''></input></td>"
-    + "    <td><input class='form-control' style='width:60px;' type='text' name='supplyAmount' value=''></input></td>"
-    + "    <td><input class='form-control' style='width:60px;' type='text' name='erectionAmount' value=''></input></td>";
+     var template = "<tr>"
+        + "    <td> <input type='button' onClick='removeItem($(this));' class='btn' value='&times;' ></td>"
+        + "    <td class='align-middle'> <input type='hidden' name='product' value='"+product+"'></input>"+product+"</td>"
+        + "    <td class='align-middle'> <input type='hidden' name='moc' value='"+moc+"'></input>"+moc+"</td>"
+        + "    <td class='align-middle'> <input type='hidden' name='manufactureType' value='"+manufactureType+"'></input>"+manufactureType+"</td>"
+        + "    <td class='align-middle'> <input type='hidden' name='classOrGrade' value='"+classOrGrade+"'></input>"+classOrGrade+"</td>"
+    	+ "    <td class='align-middle'> <input type='hidden' name='materialSpecs' value='"+materialSpecs+"'></input>"+materialSpecs+"</td>"
+        + "    <td class='align-middle'> <input type='hidden' name='standardType' value='"+standardType+"'></input>"+standardType+"</td>"
+    	+ "    <td class='align-middle'> <input type='hidden' name='ends' value='"+ends+"'></input>"+ends+"</td>"
+        + "    <td class='align-middle'> <input type='hidden' name='size' value='"+size+"'></input>"+size+"</td>"
+        + "    <td><input class='form-control' style='width:60px;' type='text' name='quantity' value=''></input></td>"
+        + "    <td><input class='form-control' style='width:60px;' type='text' onchange='updateSupplyRate($(this));' name='baseSupplyRate' value=''></input></td>"
+        + "    <td><input class='form-control' style='width:60px;' type='text' onchange='updateSupplyRate($(this));' name='supplyRate' value=''></input></td>"
+        + "    <td><input class='form-control' style='width:60px;' type='text' onchange='updateErectionRate($(this));' name='baseErectionRate' value=''></input></td>"
+        + "    <td><input class='form-control' style='width:60px;' type='text' onchange='updateErectionRate($(this));' name='erectionRate' value=''></input></td>"
+        + "    <td><input class='form-control' style='width:60px;' type='text' name='supplyAmount' value=''></input></td>"
+        + "    <td><input class='form-control' style='width:60px;' type='text' name='erectionAmount' value=''></input></td>";
 
     console.log(template);
     $('.inventoryDetails').css("display","block");            
@@ -813,10 +668,6 @@ function cleanArray(actual)
      $('#'+sheet).find('tbody#tableContentDetails').append(template);
     }
  }
-
-
-
-
 
   function appendAccessory() 
   {
@@ -1175,7 +1026,7 @@ function cleanArray(actual)
         var amountPrnding = parseFloat(totalAmount) - parseFloat(receivedAmount); 
         $('#paymentDetailsBody').append('<tr><th>'+idNum+'</th><th>'+receivedAmount+'</th><th>'+paymentMode+'</th><th>'+currentDate+'</th></tr>');
       }
-
+    alert('Payment details has been added successfully..!!');
     }
   });
     hideLoading();
@@ -1230,7 +1081,7 @@ function cleanArray(actual)
           var eleLength = 0;
 
 
-          eleLength = $('#'+sheetCount[i].value).find('tbody#tableContentDetails').find('input[name="inventoryName"]').length;
+          eleLength = $('#'+sheetCount[i].value).find('tbody#tableContentDetails').find('input[name="product"]').length;
 
           if(eleLength===0)
           {
@@ -1381,158 +1232,80 @@ function cleanArray(actual)
     newForm.submit();
   }
 
-
-
-
-
-
   function generateInvoice() 
   {
-    var CheckeleCount = $('#generateInvoiceTable input.checkbox').length;
 
-    var selectedElements = [];
-    var i;
+        var formData = $(this).serializeArray();
 
-    for(i=0; i < CheckeleCount; i++)
-    {
-      if($('#generateInvoiceTable input.checkbox')[i].checked)
-      {
-       selectedElements[i] = i;
-     }
-   }
+        var checkedRows = $('#generateInvoiceTable').find('input:checkbox:checked');
 
-   if(selectedElements.length === 0)
-   {
-    alert('Please select an element to generate the Invoice');
-    return;
-  }
+        var rows = [];
+          for(var i=0; i< checkedRows.length;i++)
+          {
+        	  rows[i]= $('#generateInvoiceTable').find('input:checkbox:checked').parent().parent()[i];
+          }
 
-  showLoading();
-  
-  var eleCount = $('#generateInvoiceTable input').length;
+          for(var l=0;l<$(rows).length;l++)
+          {
+        	var inputes = $(rows[l]).find('input');
+        	for(var k=0;k<$(inputes).length;k++)
+        	{
+        	  formData.push({name: $(inputes)[k].name, value: $(inputes)[k].value});
+        	}
+          }
 
-  var inventoryName        = [];
-  var material             = [];
-  var type                 = [];
-  var manifacturingMethod  = [];
-  var classOrGrade         = [];
-  var ends                 = [];
-  var size                 = [];
-  var purchaseRate       = [];
-  var receivedQuantity     = [];
-  var location         = [];
-  var receivedDate         = [];
+        var contactName          = $('[name="contactName"]')[0].value;
+        var mobileNo           = $('[name="mobileNo"]')[0].value;
+        var addressedto1         = $('[name="addressedto1"]')[0].value;
+        var orderDate          = $('[name="orderDate"]')[0].value;
+        var emailAddress       = $('[name="emailAddress"]')[0].value;
+        var invoiceType        = $('[name="invoiceType"]')[0].value;
+        var hsnOrSac         = $('[name="hsnOrSac"]')[0].value;
 
-  var contactName          = $('[name="contactName"]')[0].value;
-  var mobileNo           = $('[name="mobileNo"]')[0].value;
-  var addressedto1         = $('[name="addressedto1"]')[0].value;
-  var orderDate          = $('[name="orderDate"]')[0].value;
-  var emailAddress       = $('[name="emailAddress"]')[0].value;
-  var invoiceType        = $('[name="invoiceType"]')[0].value;
-  var hsnOrSac         = $('[name="hsnOrSac"]')[0].value;
+        formData.push({name: 'contactName', value: contactName});
+        formData.push({name: 'mobileNo', value: mobileNo});
+        formData.push({name: 'addressedto1', value: addressedto1});
+        formData.push({name: 'orderDate', value: orderDate});
+        formData.push({name: 'emailAddress', value: emailAddress});
+        formData.push({name: 'invoiceType', value: invoiceType});
+        formData.push({name: 'hsnOrSac', value: hsnOrSac});
+        formData.push({name: 'projectId', value:$('[name="projectId"]')[0].value})
 
-  var j;
-  var k = 0;
-  var n = 1;
-  for(k=0;k<selectedElements.length;k++)
-  {
+        $.ajax({
+         url: "generateInvoice",
+         data: formData,
+         type: 'post',
+         success: function(data)
+         {
+          var CheckeleCount1 = $('#generateInvoiceTable input.checkbox').length;
+          var selectedElements1 = [];
+          var j;
 
-   if(selectedElements[k] != undefined)
-   {
-    var start = 1 + 14*parseFloat(selectedElements[k]);
+          for(j=0; j < CheckeleCount1; j++)
+          {
+            if($('#generateInvoiceTable input.checkbox')[j].checked)
+            {
+                selectedElements1[j] = j;
+            }
+          }
 
-    inventoryName[k]      = $('#generateInvoiceTable input')[start++].value;
-    material[k]       = $('#generateInvoiceTable input')[start++].value;
-    type[k]         = $('#generateInvoiceTable input')[start++].value;
-    manifacturingMethod[k]  = $('#generateInvoiceTable input')[start++].value;
-    classOrGrade[k]     = $('#generateInvoiceTable input')[start++].value;
-    ends[k]         = $('#generateInvoiceTable input')[start++].value;
-    size[k]         = $('#generateInvoiceTable input')[start++].value;
-    purchaseRate[k]     = $('#generateInvoiceTable input')[start++].value;                    
-    receivedQuantity[k]   = $('#generateInvoiceTable input')[start++].value;
-    start++;     
-    location[k]       = $('#generateInvoiceTable input')[start++].value;
-    receivedDate[k]     = $('#generateInvoiceTable input')[start++].value;
+         var deleted = 0;
+         for(var d=0;d<selectedElements1.length;d++)
+         {
+           if(selectedElements1[d] != undefined)
+           {
+            $('#generateInvoiceTable tr')[d-deleted].remove();
+            deleted++;
+          }
+        }
+         alert('Invoice generated Successfully. Please check the Notification section to verify and send.');
+        },
+        error : function (error) {
+            alert('Error generating Invoice..!!');
+        }
+        });
 
-  } 
-}
-
-    var lastArray = 3 + 20*parseFloat(selectedElements[parseFloat(selectedElements.length) - 1]);
-
-
-    var formData = $(this).serializeArray();
-
-    formData.push({name: 'projectId', value: $('[name="projectId"]').val()});
-
-    var inventoryName_string = cleanArray(inventoryName);
-    formData.push({name: 'inventoryName', value: inventoryName_string});
-    var material_string = cleanArray(material);
-    formData.push({name: 'material', value: material_string});
-    var type_string = cleanArray(type);
-    formData.push({name: 'type', value: type_string});
-    var manifacturingMethod_string = cleanArray(manifacturingMethod);
-    formData.push({name: 'manifMetod', value: manifacturingMethod_string});
-    var classOrGrade_string = cleanArray(classOrGrade);
-    formData.push({name: 'classOrGrade', value: classOrGrade_string});
-    var ends_string = cleanArray(ends);
-    formData.push({name: 'ends', value: ends_string});
-    var size_string = cleanArray(size);
-    formData.push({name: 'size', value: size_string});
-    var purchaseRate_string = cleanArray(purchaseRate);
-    formData.push({name: 'purchaseRate', value: purchaseRate_string});
-    var receivedQuantity_string = cleanArray(receivedQuantity);
-    formData.push({name: 'receivedQuantity', value: receivedQuantity_string});
-    var location_string = cleanArray(location);
-    formData.push({name: 'location', value: location_string});
-    var receivedDate_string = cleanArray(receivedDate);
-    formData.push({name: 'receivedDate', value: receivedDate_string});
-
-    formData.push({name: 'contactName', value: contactName});
-    formData.push({name: 'mobileNo', value: mobileNo});
-    formData.push({name: 'addressedto1', value: addressedto1});
-    formData.push({name: 'orderDate', value: orderDate});
-    formData.push({name: 'emailAddress', value: emailAddress});
-    formData.push({name: 'invoiceType', value: invoiceType});
-    formData.push({name: 'hsnOrSac', value: hsnOrSac});
-
-    $.ajax({
-     url: "generateInvoice",
-     data: formData,
-     type: 'post',
-     success: function(data)
-     {
-
-      var CheckeleCount1 = $('#generateInvoiceTable input.checkbox').length;
-
-      var selectedElements1 = [];
-      var j;
-
-      for(j=0; j < CheckeleCount1; j++)
-      {
-        if($('#generateInvoiceTable input.checkbox')[j].checked)
-        {
-         selectedElements1[j] = j;
-       }
-
-
-     }
-
-     var deleted = 0;
-     for(var d=0;d<selectedElements1.length;d++)
-     {
-       if(selectedElements1[d] != undefined)
-       {
-        $('#generateInvoiceTable tr')[d-deleted].remove();
-        deleted++;
-      }
-    }
-     alert('Invoice generated Successfully. Please check the Notification section to verify and send.');
-    },
-    error : function (error) {
-        alert('Error generating Invoice..!!');
-    }
-    });
-hideLoading();
+        hideLoading();
 }
 
 function cleanArray(actual)
@@ -1569,8 +1342,6 @@ function cleanArray(actual)
 
   });
 
-
-
   function addNewSheet()
   {
     if($('[name="newSheetName"]').val()==="")
@@ -1582,8 +1353,15 @@ function cleanArray(actual)
     var tab = '<li class="nav-item"><a class="nav-link '+sheetName+'" href="#'+sheetName+'" role="tab" data-toggle="tab" aria-selected="true">'+sheetName+'<i class="fa fa-times pr-2" onClick="removeSheet('+sheetName+');" style="margin-left:5px;"></i></a></li>';
 
     $('#sheetListtableContentDetails').append(tab);
-
-    var tabPane = '<div class="tab-pane fade" id="'+sheetName+'" role="tabpanel"><div class="row" style="margin-top:2%;">     <div class="col-md-12 ">       <div class="table-responsive">                        <table class="table table-colored inventoryDetails inventoryTableHeader" style="display: none;">         <thead>           <tr>            <th>#</th>            <th>Invnt</th>            <th>Material</th>            <th>Type</th>            <th>Method</th>            <th>Grd/Cls</th>            <th>Ends</th>            <th>Size</th>            <th>Qty</th>            <th>Base Supply Rate</th>            <th>Supply Rate</th>            <th>Base Erection Rate</th>            <th>Erection Rate</th>            <th>Supply Amount</th>            <th>Erection Amount</th>          </tr>          <tr>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th><input type="text" style="width:45px;" name="supplyPrsnt" onChange="updateSupplyRate($(this));"/></th>            <th></th>            <th><input type="text" style="width:45px;" name="erectionPrsnt" onChange="updateErectionRate($(this));"/></th>            <th></th>            <th></th>            <th></th>          </tr>        </thead>        <tbody id="tableContentDetails">        </tbody>      </table>    </div>  </div></div><div class="separator clearfix"></div><p class="text-right"><strong>SubTotal :</strong> <span id="'+sheetName+'SupSubTotal">0.00</span> <span id="'+sheetName+'EreSubTotal">0.00</span></p></div>';
+    
+    var tabPane = '<div class="tab-pane fade" id="'+sheetName+'" role="tabpanel">'
+			+'<div class="row" style="margin-top:2%;">     <div class="col-md-12 ">'
+			+'<div class="table-responsive">'
+			+'<table class="table table-colored inventoryDetails inventoryTableHeader" style="display: none;">'
+			+'<thead>           <tr>'
+			+'<th>#</th><th>Product</th><th>MOC</th><th>Manif Type</th><th>Grd/Cls</th><th>Material Specs</th><th>Standard Type</th><th>Ends</th><th>Size</th><th>Qty</th><th>Base Supply Rate</th><th>Supply Rate</th><th>Base Erection Rate</th><th>Erection Rate</th><th>Supply Amount</th><th>Erection Amount</th></tr>'
+			+'<tr>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th><input type="text" style="width:45px;" name="supplyPrsnt" onChange="updateSupplyRate($(this));"/></th>            <th></th>            <th><input type="text" style="width:45px;" name="erectionPrsnt" onChange="updateErectionRate($(this));"/></th>            <th></th>            <th></th>            <th></th><th></th>          </tr>'
+			+'</thead>        <tbody id="tableContentDetails">        </tbody>      </table>    </div>  </div></div><div class="separator clearfix"></div><p class="text-right"><strong>SubTotal :</strong> <span id="'+sheetName+'SupSubTotal">0.00</span> <span id="'+sheetName+'EreSubTotal">0.00</span></p></div>';
 
     $($('.tab-content')[1]).append(tabPane); 
 
@@ -1615,7 +1393,7 @@ function cleanArray(actual)
      var venderName = vList[i];
 
      if(venderName != "")
-      $("[name='selectedVenderName']").append("<option value=" + venderName + ">" + venderName + "</option>");
+      $("[name='selectedVenderName']").append("<option value='" + venderName + "''>" + venderName + "</option>");
   }
 
 });
@@ -1679,3 +1457,70 @@ function cleanArray(actual)
   });
 
 
+//Design Offer JS
+
+      var scopeCount = 9;
+      function addScope()
+      {
+        var scopeTemplate =  '<br><div class="clearfix" id="scope'+scopeCount+'"> <input type="button" class="float-left mt-4 btn btn-info" value="x" onclick="$(\'#scope'+scopeCount+'\').remove();"><textarea class="form-control  float-right" id="scope'+scopeCount+'" name="scope" rows="3" style="width: 90%;"></textarea>' ;
+        $('#scopeList').append(scopeTemplate);
+        scopeCount++;
+      }
+
+      var deliverablesCount = 5;
+      function addDeliverables()
+      {
+        var template = '<div class="clearfix" id="delv'+deliverablesCount+'"><input type="button" class="float-left mt-3 btn btn-info" value="x" onclick="$(\'#delv'+deliverablesCount+'\').remove();"><textarea class="form-control float-right" id="delv'+deliverablesCount+'" name="deliverables" rows="2" style="width: 90%;"></textarea><br></div>';
+        $('#delvList').append(template);
+        deliverablesCount++;
+      }
+
+      var lineItemCount = 3;
+      function addLineItem()
+      {
+        $('#lineItemList').append('<div class="clearfix" id="lineItem'+lineItemCount+'"><input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$(\'#lineItem'+lineItemCount+'\').remove();"><div class="row" id="lineItem'+lineItemCount+'"> <div class="col-md-4"><input type="text" class="form-control" id="lineItemDesc" name="lineItemDesc" value=""></div> <div class="col-md-4"><input type="text" class="form-control" id="lineItemQty" name="lineItemQty" value=""></div> <div class="col-md-4"><input type="text" class="form-control" id="lineItemRate" name="lineItemRate" value=""></div></div>');
+        lineItem++;
+      }
+
+      var deliveryItemCount = 5;
+      function addDelivery()
+      {
+        $('#deliveryList').append('<div class="clearfix" id="delivery'+deliveryItemCount+'"> <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$(\'#delivery'+deliveryItemCount+'\').remove();"><input type="text" class="form-control float-right" id="delivery'+deliveryItemCount+'" name="delivery" value="" style="width:90%;"><br>');
+        deliveryItemCount++;
+
+      }
+
+      var payTermCount = 3;
+      function addPayTerm()
+      {
+        $('#payTermList').append('<div class="clearfix" id="payTerm'+payTermCount+'"><input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$(\'#payTerm'+payTermCount+'\').remove();"><input type="text" class="form-control float-right" style="width:90%;" id="payTerm'+payTermCount+'" name="payTerm" value=""><br></div>');
+        payTermCount++;
+      }
+
+      var termsAndConditionCount = 8;
+      function addTermsAndCondition()
+      {
+        $('#termsAndConditionList').append('<div class="clearfix" id="termsAndCondition'+termsAndConditionCount+'"><input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$(\'#termsAndCondition'+termsAndConditionCount+'\').remove();"><input type="text" class="form-control float-right" style="width : 90%;" id="termsAndCondition'+termsAndConditionCount+'" name="termsAndCondition" value=""> <br>');
+        termsAndConditionCount++;
+      }	  
+	  
+	  function downloadDesignOffer(offerId)
+	  {
+	  if(offerId!==undefined && offerId.trim()!=="")
+	  {
+		    var newForm = jQuery('<form>', {
+			  'action': 'downloadDesignOffer',
+			  'method': 'POST'
+			}).append(jQuery('<input>', {
+			  'name': 'projectId',
+			  'value': $('[name="projectId"]')[0].value,
+			  'type': 'hidden'
+			})).append(jQuery('<input>', {
+			  'name': 'docNumber',
+			  'value': offerId,
+			  'type': 'hidden'
+			}));
+			$(document.body).append(newForm);
+			newForm.submit();
+	  }
+	  }

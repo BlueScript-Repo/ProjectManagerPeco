@@ -3,6 +3,7 @@ package com.projectmanager.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpSession;
 import com.projectmanager.dao.TaxesDao;
 import com.projectmanager.entity.TaxesEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.view.AbstractView;
@@ -43,14 +46,14 @@ public class PurchaseOrderPDFView extends AbstractView {
 	TaxesDao taxesDao;
 
 	@Override
-	protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
+	public void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
 		PODetails poDetails = (PODetails) model.get("poDetails");
 		String poLineDetails = (String) model.get("poLineDetails");
 
 		String[] poLines = poLineDetails.split(";");
-System.out.println(poLines.length);
+        System.out.println(poLines.length);
 		String[] description = new String[poLines.length];
 		System.out.println(description.length);
 		String[] quantity = new String[poLines.length];
@@ -73,7 +76,8 @@ System.out.println(poLines.length);
 		// Save poDetails.getPoNumber() + ".pdf" in io.temp
 		try {
 			String userName = (String) model.get("userName");
-			String destination = System.getProperty("java.io.tmpdir") + "/" + userName + "/" + poDetails.getPoNumber()
+			String destination = System.getProperty("java.io.tmpdir") + "/" + userName + "/"
+                    + poDetails.getPoNumber().replace("/", "_")
 					+ ".pdf";
 
 			File fileToSave = new File(destination);
@@ -220,18 +224,13 @@ System.out.println(poLines.length);
             r2c3.setVerticalAlignment(Element.ALIGN_MIDDLE);
             
             r2c1.setFixedHeight(20);
-            
-          
 
             table2.addCell(r2c1);
             table2.addCell(r2c2);
             table2.addCell(r2c3);
             
             //Row3
-            
-            
-           // ph2.setAlignment(Element.ALIGN_MIDDLE);
-            
+
             PdfPCell shipToCell = createNewCell(120);
             shipToCell.addElement(new Paragraph("Billing to", blackCalibri9));
             shipToCell.addElement(new Paragraph("PECO Projects Pvt Ltd", boldBlackCalibri10));
@@ -260,25 +259,24 @@ System.out.println(poLines.length);
             
             PdfPCell shipToCell3 = createNewCell(120);
             shipToCell3.addElement(new Paragraph("Ship to", blackCalibri9));
-            shipToCell3.addElement(new Paragraph("Megha Engineering Infrastructure Ltd", boldBlackCalibri10));
+            shipToCell3.addElement(new Paragraph(venderName, boldBlackCalibri10));
             shipToCell3.addElement(new Paragraph("", blackCalibri11));
-            shipToCell3.addElement(new Paragraph("NK-CTF, ONGC, Chalasan(V), Jothana", blackCalibri9));
+            shipToCell3.addElement(new Paragraph(venderLocation, blackCalibri9));
             shipToCell3.addElement(new Paragraph("", blackCalibri9));
-            shipToCell3.addElement(new Paragraph("Mehsana - 384 001", blackCalibri9));
-            shipToCell3.addElement(new Paragraph("Gujarat.", blackCalibri9));
+            shipToCell3.addElement(new Paragraph("", blackCalibri9));
+            shipToCell3.addElement(new Paragraph(".", blackCalibri9));
             shipToCell3.setHorizontalAlignment(Element.ALIGN_CENTER);
             shipToCell3.setVerticalAlignment(Element.ALIGN_MIDDLE);
             
             shipToCell3.setFixedHeight(120);
-            
-          
+
 
             table2.addCell(shipToCell);
             table2.addCell(shipToCell2);
             table2.addCell(shipToCell3);
             
             document.add(table2);
-          //table3
+            //table3
             PdfPTable table3 = createNewTable(1);
             // Row4
             Paragraph ph5 = new Paragraph("Dear Sir, With reference to your above quotation, we request you to supply the\r\n" + 
@@ -635,7 +633,11 @@ System.out.println(poLines.length);
             
            try {
 
-                File file = ResourceUtils.getFile("classpath:PECO_Stamp.png");
+                //File file = ResourceUtils.getFile("stamp.png");
+                Resource resource = new ClassPathResource("stamp.png");
+
+                File file = resource.getFile();
+
                 // init array with file length
                 byte[] bytesArray = new byte[(int) file.length()];
 
@@ -776,13 +778,12 @@ System.out.println(poLines.length);
             document.add(table9);
             
 
-            File file = ResourceUtils.getFile("classpath:PECO Projects_FINAL Letter Head.jpg");
-            // init array with file length
-            byte[] bytesArray = new byte[(int) file.length()];
+            Resource resource = new ClassPathResource("background.jpg");
+            InputStream inputStream = resource.getInputStream();
 
-            FileInputStream fis = new FileInputStream(file);
-            fis.read(bytesArray); // read file into bytes[]
-            fis.close();
+            // init array with file length
+            byte[] bytesArray = new byte[inputStream.available()];
+            inputStream.read(bytesArray);
 
             Image background = Image.getInstance(bytesArray);
 

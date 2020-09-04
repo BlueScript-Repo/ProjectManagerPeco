@@ -26,7 +26,13 @@ public class InventorySpec implements Serializable {
 	
 	@Column(name="gradeOrClass")
 	public String gradeOrClass;
-	
+
+	@Column(name="materialSpecs")
+	public String materialSpecs;
+
+	@Column(name="standardType")
+	public String standardType;
+
 	@Column(name="size")
 	public String size;
 
@@ -45,7 +51,7 @@ public class InventorySpec implements Serializable {
 	}
 	
 	public InventorySpec(String inventoryName, String material, String type, String manifMethod, String gradeOrClass,
-			 String ends, String size, String assignedProject, String status) {
+			 String ends, String size, String assignedProject, String status,String materialSpecs, String standardType) {
 		super();
 		this.inventoryName = inventoryName;
 		this.material = material;
@@ -56,6 +62,8 @@ public class InventorySpec implements Serializable {
 		this.size = size;
 		this.status = status;
 		this.assignedProject = assignedProject;
+		this.materialSpecs = materialSpecs;
+		this.standardType = standardType;
 	}
 
 
@@ -75,6 +83,8 @@ public class InventorySpec implements Serializable {
 				&& Objects.equals(getType(), inv.getType())
 				&& Objects.equals(getGradeOrClass(), inv.getGradeOrClass())
 				&& Objects.equals(getManifMethod(), inv.getManifMethod())
+				&& Objects.equals(getMaterialSpecs(),inv.getMaterialSpecs())
+				&& Objects.equals(getStandardType(),inv.getStandardType())
 				&& Objects.equals(getSize(),inv.getSize())
 				&& Objects.equals(getAssignedProject(),inv.getAssignedProject())
 				&& Objects.equals(getStatus(),inv.getStatus());
@@ -156,6 +166,22 @@ public class InventorySpec implements Serializable {
 
 	public void setAssignedProject(String assignedProject) {
 		this.assignedProject = assignedProject;
+	}
+
+	public String getMaterialSpecs() {
+		return materialSpecs;
+	}
+
+	public void setMaterialSpecs(String materialSpecs) {
+		this.materialSpecs = materialSpecs;
+	}
+
+	public String getStandardType() {
+		return standardType;
+	}
+
+	public void setStandardType(String standardType) {
+		this.standardType = standardType;
 	}
 
 	@Override

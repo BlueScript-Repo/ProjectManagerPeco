@@ -6,8 +6,8 @@
             <table class="table table-colored table-bordered" style="margin-bottom:0rem;">
               <thead>
                 <tr style="background-color: #c2cdd1;border-color:#c2cdd1;">
-                  <th style="width:10%;text-align:center;background-color: #c2cdd1;border-color:#c2cdd1;"><img src="./images/img/nineThousand.jpg"></th>
-                  <th style="width:10%;text-align:center;background-color: #c2cdd1;border-color:#c2cdd1;"><img src="./images/img/fourteenThousand.jpg"></th>
+                  <th style="width:10%;text-align:center;background-color: #c2cdd1;border-color:#c2cdd1;"></th>
+                  <th style="width:10%;text-align:center;background-color: #c2cdd1;border-color:#c2cdd1;"></th>
                   <th style="width:60%;text-align:center;background-color: #c2cdd1;border-color:#c2cdd1;"></th>
                   <th style="width:20%;text-align:center;background-color: #c2cdd1;border-color:#c2cdd1;"><img src="./images/img/PECOLogo1.jpg"></th>
                 </tr>
@@ -83,7 +83,7 @@
               <tbody>
                 <tr>
                   <td class="font-weight-bold" colspan="3" style="width:60%;">GST Number: gstNo</td>
-                  <td class="font-weight-bold text-center" colspan="1">For Hamdule Industries</td>
+                  <td class="font-weight-bold text-center" colspan="1">For PECO Projects</td>
                 </tr>
                 <tr>
                   <td class="font-weight-bold" colspan="2" style="width:60%;"></td>
@@ -112,13 +112,13 @@
                   <td class="font-weight-bold text-center">Authorised Signatory</td>
                 </tr>
                 <tr>
-                  <td class="font-weight-bold text-center" style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Regd. Address : Shop # 3, Blgd C2,Manish Gardan, Udyam Nagar, Pimpri,Pune 411018</td>
+                  <td class="font-weight-bold text-center" style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4"><h3>PECO Projects Pvt. Ltd.</h3></td>
                 </tr>
                 <tr>
-                  <td class="font-weight-bold text-center" style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Works: Plot No. 55,Gat 55 &amp; 57, Chakan, Askhed, Tal. Khed, Pune - 410501</td>
+                  <td class="font-weight-bold text-center" style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Regd. Address : A-601, Silver Oaks, Gat No. 275, Borhadewadi, Moshi, Pune - 411 105</td>
                 </tr>
                 <tr>
-                  <td class="font-weight-bold text-center" style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Cell: +91 20 2750 2200 | Email:business@hamduleindustries.com | www.hamduleindustries.com</td></tr>
+                  <td class="font-weight-bold text-center" style="background-color: #c2cdd1;border-color:#c2cdd1;" colspan="4">Cell: +91 20 65300352 | Email:info@pecoprojects.com | www.pecoprojects.com</td></tr>
                 </tbody>
               </table>
             </div>

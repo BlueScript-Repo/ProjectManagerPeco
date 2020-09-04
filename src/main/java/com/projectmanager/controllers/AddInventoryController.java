@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.projectmanager.entity.*;
+import com.projectmanager.model.ProductDetailsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projectmanager.dao.MappingsDao;
 import com.projectmanager.dao.TaxesDao;
 import com.projectmanager.dao.ValvesDao;
-import com.projectmanager.entity.Mappings;
-import com.projectmanager.entity.TaxesEntity;
-import com.projectmanager.entity.Valves;
 import com.projectmanager.model.InventoryMappingModel;
 import com.projectmanager.model.InventoryValveModel;
+import com.projectmanager.dao.ProductDefinitionDao;
 
 @Controller
 @EnableWebMvc
@@ -41,82 +41,32 @@ public class AddInventoryController {
 	@Autowired
 	TaxesDao taxesDao;
 
+	@Autowired
+	ProductDefinitionDao productDefinitionDao;
+
 	@RequestMapping(value = "/inventoryDetails", method = RequestMethod.GET)
 	private ModelAndView inventoryDetails(){
 		ModelAndView modelAndView = new ModelAndView();
 
+		ArrayList<ProductDefinition> products = productDefinitionDao.getAllProductDefinition();
 
 		StringBuffer mappingDetails = new StringBuffer();
-
-
-		ArrayList<Mappings> mappingsList = mappingsDao.getAllMappinsData();
-
-		ArrayList<ArrayList<String>> inventoryMaterial = new ArrayList<ArrayList<String>>();
-
-		ArrayList<String> doneInventory = new ArrayList<String>();
-
-		//Populate inventoryMaterial
-		for(Mappings mapping : mappingsList)
-		{
-			ArrayList<String> tempList = new ArrayList<String>();
-			tempList.add(mapping.getInventoryName());
-			tempList.add(mapping.getMaterial());
-
-			inventoryMaterial.add(tempList);
-		}
-
-		ArrayList<String> type = new ArrayList<>();
-		ArrayList<String> classOrGrade = new ArrayList<>();
-		ArrayList<String> category = new ArrayList<>();
-
-		for(ArrayList<String> invMet : inventoryMaterial)
-		{
-			String inventory = invMet.get(0);
-			String material = invMet.get(1);
-
-			String typeStr = "";
-			String classOrGradeStr = "";
-			String categoryStr = "";
-
-			for(Mappings mapping : mappingsList)
-			{
-				if(inventory.equals(mapping.getInventoryName()) && material.equals(mapping.getMaterial()))
-				{
-					typeStr = typeStr  + mapping.getType() + ",";
-					classOrGradeStr = classOrGradeStr  + mapping.getClassOrGrade() + ",";
-					categoryStr = categoryStr  + mapping.getCatogory()+ ",";
-				}
-
-			}
-
-			type.add(typeStr);
-			classOrGrade.add(classOrGradeStr);
-			category.add(categoryStr);
-		}
-
-		int index = 0;
 		int indexToDisplay = 0;
-		ArrayList<String> done = new ArrayList<>();
-
-		for(ArrayList<String> invMet : inventoryMaterial)
+		for(ProductDefinition definition : products)
 		{
-			if(!(done.contains(invMet.get(0)+invMet.get(1))))
-			{
-				done.add(invMet.get(0)+invMet.get(1));
-				mappingDetails.append("<tr class='lazy' >");
-				mappingDetails.append("<td><input type='hidden' class='form-control' value='" + indexToDisplay + "' name='ItemId'  >" + indexToDisplay + "</td>");
-				mappingDetails.append("<td><input type='checkbox' class='chkView' ></td>");
-				mappingDetails.append("<td><input type='text'  class='form-control' value='" + invMet.get(0) + "' name='inventoryName'  ></td>");
-				mappingDetails.append("<td><input type='text'  class='form-control' value='" + invMet.get(1) + "' name='material' ></td>");
-				mappingDetails.append("<td><input type='text'  class='form-control' value='" + type.get(index) + "' name='type' disabled ></td>");
-				mappingDetails.append("<td><input type='text'  class='form-control' value='" + classOrGrade.get(index) + "' name='classOrGrade' disabled ></td>");
-				mappingDetails.append("<td><input type='text'  class='form-control' value='" + category.get(index) + "' name='catogory' disabled ></td>");
-				mappingDetails.append("</tr>");
+			mappingDetails.append("<tr class='lazy' >");
+			mappingDetails.append("<td><input type='hidden' class='form-control' value='" + indexToDisplay + "' name='ItemId'  >" + indexToDisplay + "</td>");
+			mappingDetails.append("<td><input type='checkbox' class='chkView' ></td>");
+			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getProductId().getProduct() 				 + "' name='product'  ></td>");
+			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getProductId().getMaterialOfConstruction() + "' name='materialOfConstruction' ></td>");
+			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getProductId().getManufactureMethod() 		 + "' name='manufactureMethod'  ></td>");
+			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getClassOrGrade() 							 + "' name='classOrGrade'  ></td>");
+			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getMaterialSpecs() 						 + "' name='materialSpecs'  ></td>");
+			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getStandardType() 						 + "' name='standardType'  ></td>");
+			mappingDetails.append("</tr>");
 
-				indexToDisplay++;
-			}
-			index++;
 		}
+
 	
 		ArrayList<Valves> valvesData = valvesDao.getValveDetails();
 		
@@ -172,9 +122,7 @@ public class AddInventoryController {
 	public ArrayList<String> GetUniqueData(boolean IsModified,List<String> ArraryfromDb, List<String> ArrayfromInput)
 	{
 		ArrayList<String> ResultArray = new ArrayList<String>();
-		
-		
-		
+
 		if(IsModified)
 		{
 			int LengthOfArraryfromDb = ArraryfromDb.size();
@@ -251,10 +199,28 @@ public class AddInventoryController {
 	      return NewlyAddedValue;
 	      
 	}
-	
-	
-	//public InventoryMappingModel ModifiedMapping() 
-	
+
+	@PostMapping("/updateProductDetails")
+	public @ResponseBody String updateProductDetails(@RequestBody String dataArrayToSend) throws UnsupportedEncodingException, JsonMappingException, JsonProcessingException
+	{
+		String decodedJson = java.net.URLDecoder.decode(dataArrayToSend, "UTF-8");
+		ObjectMapper jacksonObjectMapper = new ObjectMapper(); // This is Jackson
+		List<ProductDetailsModel> userRolesGUIBeans =  jacksonObjectMapper.readValue(decodedJson, new TypeReference<List<ProductDetailsModel>>(){});
+
+		for(ProductDetailsModel productDetails: userRolesGUIBeans)
+		{
+			ProductDefinition productDefinition = new ProductDefinition();
+			productDefinition.setClassOrGrade(productDetails.getClassOrSch());
+			productDefinition.setMaterialSpecs(productDetails.getMaterialSpec());
+			productDefinition.setStandardType(productDetails.getStandardType());
+			productDefinition.setProductId(new ProductId(productDetails.getProduct(), productDetails.getMaterialOfConstruct(), productDetails.getConstructType()));
+
+			productDefinitionDao.saveProductDefinition(productDefinition);
+		}
+
+		return "";
+	}
+
 	@PostMapping("/updateMappingDetails")
 	public @ResponseBody String updateMappingDetails(@RequestBody String dataArrayToSend) throws UnsupportedEncodingException, JsonMappingException, JsonProcessingException{
 		

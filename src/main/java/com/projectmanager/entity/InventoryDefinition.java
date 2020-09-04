@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "inventorydefinition")
 public class InventoryDefinition 
 {
 	@EmbeddedId

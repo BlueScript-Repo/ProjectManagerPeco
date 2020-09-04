@@ -14,18 +14,16 @@ public class VendorDetails
     private String contactNumber;
     private String vendorGst;
     private String vendorPan;
-    
-    
+
     @Override
 	public String toString() {
-		return "VendorDetails [vendorName=" + vendorName + ", vendorAddress="
-				+ vendorAddress + ", contactName=" + contactName
-				+ ", contactEmail=" + contactEmail + ", contactNumber="
-				+ contactNumber + ", vendorGst=" + vendorGst + ", vendorPan="
+		return "VendorDetails [vendorName=" + vendorName + ": vendorAddress="
+				+ vendorAddress + ": contactName=" + contactName
+				+ ": contactEmail=" + contactEmail + ": contactNumber="
+				+ contactNumber + ": vendorGst=" + vendorGst + ": vendorPan="
 				+ vendorPan + "]";
 	}
-    
-    
+
 
     public VendorDetails()
     {
