@@ -510,7 +510,7 @@ public class BOQController {
     }
 
     @RequestMapping(value = "generateDesign", method = RequestMethod.POST)
-    public @ResponseBody void generateDesignOffer(HttpServletResponse response, String docNumber, String contactName, String clientCompany, String address, String city, String pinCode, String subject, String utility, String lineItemMainDesc, String[] scope, String[] deliverables, String[] delivery, String[] payTerm, String[] lineItemDesc, String[] lineItemQty, String[] lineItemRate, String[] termsAndCondition, String projectId) {
+    public @ResponseBody void generateDesignOffer(HttpServletResponse response, String docNumber, String contactName, String clientCompany, String address, String city, String pinCode, String subject, String utility, String lineItemMainDesc, String[] scope, String[] deliverables, String[] delivery, String[] payTerm, String[] lineItemDesc, String[] lineItemQty, String[] lineItemRate, String[] termsAndCondition, String[] validity, String projectId) {
 
         StringBuilder scopeStr = new StringBuilder();
         StringBuilder deliverablesStr = new StringBuilder();
@@ -520,6 +520,7 @@ public class BOQController {
         StringBuilder lineItemQtyStr = new StringBuilder();
         StringBuilder lineItemRateStr = new StringBuilder();
         StringBuilder termsAndConditionStr = new StringBuilder();
+        StringBuilder validityStr = new StringBuilder();
 
         for (String value : scope) {
             scopeStr.append(value + "&*&*");
@@ -553,6 +554,10 @@ public class BOQController {
             termsAndConditionStr.append(value + "&*&*");
         }
 
+        for (String value : validity) {
+            validityStr.append(value + "&*&*");
+        }
+
         ArrayList<String> designOfferVersions = designOfferDao.getLatestAssociatedDocNo(docNumber);
 
         String version = "_R0";
@@ -569,7 +574,7 @@ public class BOQController {
 
         docNumber = docNumber + version;
 
-        DesignOffer designOffer = new DesignOffer(docNumber, contactName, clientCompany, address, city, pinCode, subject, utility, lineItemMainDesc, scopeStr.toString(), deliverablesStr.toString(), deliveryStr.toString(), payTermStr.toString(), lineItemDescStr.toString(), lineItemQtyStr.toString(), lineItemRateStr.toString(), termsAndConditionStr.toString(), new Date(), projectId);
+        DesignOffer designOffer = new DesignOffer(docNumber, contactName, clientCompany, address, city, pinCode, subject, utility, lineItemMainDesc, scopeStr.toString(), deliverablesStr.toString(), deliveryStr.toString(), payTermStr.toString(), lineItemDescStr.toString(), lineItemQtyStr.toString(), lineItemRateStr.toString(), termsAndConditionStr.toString(), validityStr.toString(), new Date(), projectId);
 
         byte[] designOfferBytes = writer.createDesignOffer(designOffer);
 

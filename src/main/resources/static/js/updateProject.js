@@ -1234,7 +1234,6 @@ function cleanArray(actual)
 
   function generateInvoice() 
   {
-
         var formData = $(this).serializeArray();
 
         var checkedRows = $('#generateInvoiceTable').find('input:checkbox:checked');
@@ -1462,7 +1461,7 @@ function cleanArray(actual)
       var scopeCount = 9;
       function addScope()
       {
-        var scopeTemplate =  '<br><div class="clearfix" id="scope'+scopeCount+'"> <input type="button" class="float-left mt-4 btn btn-info" value="x" onclick="$(\'#scope'+scopeCount+'\').remove();"><textarea class="form-control  float-right" id="scope'+scopeCount+'" name="scope" rows="3" style="width: 90%;"></textarea>' ;
+        var scopeTemplate =  '<br><div class="clearfix ml-5" id="scope'+scopeCount+'"><a class="float-left mt-4 fa fa-times" value="x" onclick="$(\'#scope'+scopeCount+'\').remove();"></a><textarea class="form-control  float-right" id="scope'+scopeCount+'" name="scope" rows="3" style="width: 90%;"></textarea>' ;
         $('#scopeList').append(scopeTemplate);
         scopeCount++;
       }
@@ -1470,7 +1469,7 @@ function cleanArray(actual)
       var deliverablesCount = 5;
       function addDeliverables()
       {
-        var template = '<div class="clearfix" id="delv'+deliverablesCount+'"><input type="button" class="float-left mt-3 btn btn-info" value="x" onclick="$(\'#delv'+deliverablesCount+'\').remove();"><textarea class="form-control float-right" id="delv'+deliverablesCount+'" name="deliverables" rows="2" style="width: 90%;"></textarea><br></div>';
+        var template = '<div class="clearfix ml-5" id="delv'+deliverablesCount+'"><a class="float-left mt-3 fa fa-times" value="x" onclick="$(\'#delv'+deliverablesCount+'\').remove();"></a></a><h4 class="float-left mt-3 mx-3"><input type="text" class="form-control" name="deliverablesHeader" /></h4><textarea class="form-control float-right" id="delv'+deliverablesCount+'" name="deliverables" rows="2" style="width: 80%;"></textarea><br></div>';
         $('#delvList').append(template);
         deliverablesCount++;
       }
@@ -1478,14 +1477,14 @@ function cleanArray(actual)
       var lineItemCount = 3;
       function addLineItem()
       {
-        $('#lineItemList').append('<div class="clearfix" id="lineItem'+lineItemCount+'"><input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$(\'#lineItem'+lineItemCount+'\').remove();"><div class="row" id="lineItem'+lineItemCount+'"> <div class="col-md-4"><input type="text" class="form-control" id="lineItemDesc" name="lineItemDesc" value=""></div> <div class="col-md-4"><input type="text" class="form-control" id="lineItemQty" name="lineItemQty" value=""></div> <div class="col-md-4"><input type="text" class="form-control" id="lineItemRate" name="lineItemRate" value=""></div></div>');
+        $('#lineItemList').append('<div class="clearfix ml-5" id="lineItem'+lineItemCount+'"><a class="float-left mt-1 fa fa-times" value="x" onclick="$(\'#lineItem'+lineItemCount+'\').remove();"></a><div class="row" id="lineItem'+lineItemCount+'"> <div class="col-md-4"><input type="text" class="form-control" id="lineItemDesc" name="lineItemDesc" value=""></div> <div class="col-md-4"><input type="text" class="form-control" id="lineItemQty" name="lineItemQty" value=""></div> <div class="col-md-4"><input type="text" class="form-control" id="lineItemRate" name="lineItemRate" value=""></div></div>');
         lineItem++;
       }
 
       var deliveryItemCount = 5;
       function addDelivery()
       {
-        $('#deliveryList').append('<div class="clearfix" id="delivery'+deliveryItemCount+'"> <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$(\'#delivery'+deliveryItemCount+'\').remove();"><input type="text" class="form-control float-right" id="delivery'+deliveryItemCount+'" name="delivery" value="" style="width:90%;"><br>');
+        $('#deliveryList').append('<div class="clearfix ml-5" id="delivery'+deliveryItemCount+'"> <a class="float-left mt-1 fa fa-times" value="x" onclick="$(\'#delivery'+deliveryItemCount+'\').remove();"></a><input type="text" class="form-control float-right" id="delivery'+deliveryItemCount+'" name="delivery" value="" style="width:90%;"><br>');
         deliveryItemCount++;
 
       }
@@ -1493,34 +1492,57 @@ function cleanArray(actual)
       var payTermCount = 3;
       function addPayTerm()
       {
-        $('#payTermList').append('<div class="clearfix" id="payTerm'+payTermCount+'"><input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$(\'#payTerm'+payTermCount+'\').remove();"><input type="text" class="form-control float-right" style="width:90%;" id="payTerm'+payTermCount+'" name="payTerm" value=""><br></div>');
+        $('#payTermList').append('<div class="clearfix  ml-5" id="payTerm'+payTermCount+'"><a class="float-left mt-1 fa fa-times" value="x" onclick="$(\'#payTerm'+payTermCount+'\').remove();"></a><input type="text" class="form-control float-right" style="width:90%;" id="payTerm'+payTermCount+'" name="payTerm" value=""><br></div>');
         payTermCount++;
+      }
+
+      var validityCount = 2;
+      function addValidity()
+      {
+        $('#validityList').append('<div class="clearfix ml-5" id="validity'+validityCount+'"><a class="float-left mt-1 fa fa-times" value="x" onclick="$(\'#validity'+validityCount+'\').remove();"></a><input type="text" class="form-control float-right" style="width:90%;" id="validity'+validityCount+'" name="validity" value=""><br></div>');
+        validityCount++;
       }
 
       var termsAndConditionCount = 8;
       function addTermsAndCondition()
       {
-        $('#termsAndConditionList').append('<div class="clearfix" id="termsAndCondition'+termsAndConditionCount+'"><input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$(\'#termsAndCondition'+termsAndConditionCount+'\').remove();"><input type="text" class="form-control float-right" style="width : 90%;" id="termsAndCondition'+termsAndConditionCount+'" name="termsAndCondition" value=""> <br>');
+        $('#termsAndConditionList').append('<div class="clearfix" id="termsAndCondition'+termsAndConditionCount+'"><a class="float-left mt-1 fa fa-times" value="x" onclick="$(\'#termsAndCondition'+termsAndConditionCount+'\').remove();"></a><input type="text" class="form-control float-right" style="width : 90%;" id="termsAndCondition'+termsAndConditionCount+'" name="termsAndCondition" value=""> <br>');
         termsAndConditionCount++;
       }	  
 	  
 	  function downloadDesignOffer(offerId)
 	  {
-	  if(offerId!==undefined && offerId.trim()!=="")
+          if(offerId!==undefined && offerId.trim()!=="")
+          {
+                var newForm = jQuery('<form>', {
+                  'action': 'downloadDesignOffer',
+                  'method': 'POST'
+                }).append(jQuery('<input>', {
+                  'name': 'projectId',
+                  'value': $('[name="projectId"]')[0].value,
+                  'type': 'hidden'
+                })).append(jQuery('<input>', {
+                  'name': 'docNumber',
+                  'value': offerId,
+                  'type': 'hidden'
+                }));
+                $(document.body).append(newForm);
+                newForm.submit();
+          }
+	  }
+
+	  function appendGst(gst)
 	  {
-		    var newForm = jQuery('<form>', {
-			  'action': 'downloadDesignOffer',
-			  'method': 'POST'
-			}).append(jQuery('<input>', {
-			  'name': 'projectId',
-			  'value': $('[name="projectId"]')[0].value,
-			  'type': 'hidden'
-			})).append(jQuery('<input>', {
-			  'name': 'docNumber',
-			  'value': offerId,
-			  'type': 'hidden'
-			}));
-			$(document.body).append(newForm);
-			newForm.submit();
+        $('#payTermGST').attr('value','GST Extra, applicable on total amount - '+gst);
 	  }
-	  }
+
+	  function appendPaymentType(term)
+      {
+           $('#payType').attr('value','Payment Term - '+term);
+      }
+
+      $( function() {
+          $( ".datepicker" ).datepicker({
+            dateFormat: 'dd/mm/yy'
+          });
+      } );

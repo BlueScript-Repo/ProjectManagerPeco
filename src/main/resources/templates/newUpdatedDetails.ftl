@@ -38,6 +38,7 @@
 
     <!-- Custom css -->
     <link href="css/custom.css" rel="stylesheet">
+    <link href="css/jquery-ui.css" rel="stylesheet">
 </head>
 <body class="" cz-shortcut-listen="true">
 
@@ -129,17 +130,17 @@
                                             <div class="col-md-3 ">
                                                 <div class="ph-20 feature-box text-center object-non-visible animated object-visible fadeInDownSmall"
                                                 data-animation-effect="fadeInDownSmall" data-effect-delay="100">
-                                                <div class="form-group has-feedback">
-                                                    <label style="margin-left: -80%;">PO Date</label>
-                                                    <input type="text" name="poDate" class="form-control" value="" required>
-                                                </div>
+                                                <label style="margin-left: -75%;">PO Number</label>
+                                                <input type="text" name="poNumber" class="form-control" value="" required>
                                             </div>
                                         </div>
                                         <div class="col-md-3 ">
                                             <div class="ph-20 feature-box text-center object-non-visible animated object-visible fadeInDownSmall"
                                             data-animation-effect="fadeInDownSmall" data-effect-delay="100">
-                                            <label style="margin-left: -75%;">PO Number</label>
-                                            <input type="text" name="poNumber" class="form-control" value="" required>
+                                            <div class="form-group has-feedback">
+                                                <label style="margin-left: -80%;">PO Date</label>
+                                                <input type="text" name="poDate" class="form-control datepicker" value="" required>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3 ">
@@ -349,10 +350,10 @@ style="display: none;">
     <select class="form-control" onchange="hideOthers(this.value)"
     style="width: 100%;">
     <option></option>
-    <option value="item1">Add Pipes & Fittings</option>
-    <option value="valve1">Add Valves</option>
+    <option value="item1">Add New Product</option>
+    <!-- <option value="valve1">Add Valves</option> -->
     <option value="accessory1">Add Accessories & Equipments</option>
-    <option value="accessory1">Add Fabrication works</option>
+    <!-- <option value="accessory1">Add Fabrication works</option> -->
 </select>
 </div>
 </div>
@@ -363,284 +364,349 @@ style="display: none;">
     </div>
 </div>
 </form>
-
 <div class="designOffer pl-5" style="display: none;">
- <div class="clearfix">
-<h1 class="page-title float-left">Design Order</h1>
-<span class="float-right mb-3">
-    <h3 style="margin-left: -15%;">Download Design offers</h3>
-    <select class="form-control" id="designOfferVersions" onchange="downloadDesignOffer(this.value)">
-        <option></option>
-        ${designOfferVersions}
-    </select>
-</span>
+   <div class="clearfix">
+    <h1 class="page-title float-left">Design Order</h1>
+    <span class="float-right mb-3">
+        <h3 style="margin-left: -15%;">Download Design offers</h3>
+        <select class="form-control" id="designOfferVersions" onchange="downloadDesignOffer(this.value)">
+            <option></option>
+            ${designOfferVersions}
+        </select>
+    </span>
 </div>
- <div class="separator-2"></div>
- <form method="POST" action="generateDesign">
-    <input type="hidden" name="projectId" value="${projectId}">
-    <div class="row">
+<div class="separator-2"></div>
+<form method="POST" action="generateDesign">
+    <i class="fa fa-plus" aria-hidden="true"></i>
+    <h3 class="collapsed" style="display: inline-block;" data-toggle="collapse" data-target="#headeras" aria-expanded="false" aria-controls="headeras">
+        Header
+    </h3>
+    <div id="headeras" class="collapse" >
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group has-feedback">
+              <label>Doc No</label>
+              <input type="text" class="form-control" name="docNumber" data-slug-id="doc-no" data-category="user-data">
+          </div>
+      </div>
       <div class="col-md-3">
         <div class="form-group has-feedback">
-          <label>Doc No</label>
-          <input type="text" class="form-control" name="docNumber">
+          <label>Contact Name</label>
+          <input type="text" class="form-control" name="contactName" data-slug-id="contact-name" data-category="user-data">
       </div>
   </div>
   <div class="col-md-3">
     <div class="form-group has-feedback">
-      <label>Contact Name</label>
-      <input type="text" class="form-control" name="contactName">
-  </div>
-</div>
-<div class="col-md-3">
-    <div class="form-group has-feedback">
       <label>Company</label>
-      <input type="text" class="form-control" name="clientCompany">
+      <input type="text" class="form-control" name="clientCompany" data-slug-id="company" data-category="user-data">
   </div>
 </div>
 <div class="col-md-3">
     <div class="form-group has-feedback">
       <label>Address</label>
-      <input type="text" class="form-control" name="address">
+      <input type="text" class="form-control" name="address" data-slug-id="address" data-category="user-data">
   </div>
 </div>
 </div>
 <div class="row">
-  <div class="col-md-2">
+  <div class="col-md-3">
     <div class="form-group has-feedback">
       <label>City</label>
-      <input type="text" class="form-control" name="city">
+      <input type="text" class="form-control" name="city" data-slug-id="city" data-category="user-data">
   </div>
 </div>
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group has-feedback">
       <label>Pincode</label>
-      <input type="text" class="form-control" name="pinCode">
+      <input type="text" class="form-control" name="pinCode" data-slug-id="pincode" data-category="user-data">
   </div>
 </div>
-<div class="col-md-4">
+<div class="col-md-3">
     <div class="form-group has-feedback">
       <label>Subject</label>
-      <input type="text" class="form-control" name="subject">
+      <input type="text" class="form-control" name="subject" data-slug-id="subject" data-category="user-data">
   </div>
 </div>
-<div class="col-md-4">
+<div class="col-md-3">
     <div class="form-group has-feedback">
       <label>Uitlity</label>
-      <input type="text" class="form-control" name="utility">
+      <input type="text" class="form-control" name="utility" data-slug-id="uitlity" data-category="user-data">
   </div>
 </div>
 </div>
-<div class="row">
-  <div class="col-md-6" >
-    <h2 class="page-title">Scope</h2>
-      <div class="separator-2"></div>
-      <div id="scopeList">
-        <div class="clearfix" id="scope1">
-          <input type="button" class="float-left mt-4 btn btn-info" value="x" onclick="$('#scope1').remove();">
+</div>
+<div class="separator"></div>
+<i class="fa fa-plus" aria-hidden="true"></i>
+<h3 class="collapsed" style="display: inline-block;" data-toggle="collapse" data-target="#scope" aria-expanded="false" aria-controls="scope">
+    Scope
+</h3>
+<div id="scope" class="collapse" >
+    <div id="scopeList">
+        <div class="clearfix ml-5" id="scope1">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#scope1').remove();"></a>
           <textarea class="form-control float-right" name="scope" rows="3" style="width: 90%;"> * Study of Existing piping Scheme of CHW & CA:- A detailed study shall conduct on existing Piping network, from generators to consumers, including Pump stations, Receivers/Storage, Distribution network analysis, Piping supports, & Insulation.</textarea>
       </div>
       <br/>
-      <div class="clearfix" id="scope2">
-          <input type="button" class="float-left mt-4 btn btn-info" value="x" onclick="$('#scope2').remove();">
+      <div class="clearfix ml-5" id="scope2">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#scope2').remove();"></a>
           <textarea class="form-control float-right" name="scope" rows="3" style="width: 90%;">* Identifying any concerns within present system:-  The Operational and Maintenance related issues shall be addressed during the study of existing network, identifying pressure and temperature issues, evaluation of supply versus return flows of Utilities.</textarea> 
       </div>
       <br>
-      <div class="clearfix" id="scope3">
-          <input type="button" class="float-left mt-4 btn btn-info" value="x" onclick="$('#scope3').remove();">
+      <div class="clearfix ml-5" id="scope3">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#scope3').remove();"></a>
           <textarea class="form-control float-right" name="scope" rows="3" style="width: 90%;">* Input data of actual load of all utility consumers (evaluation): - As a part of process of fresh designing of the Utility networks, the complete loads of consumers shall be estimated/evaluated basis on the OEM data, buffer required during the load fluctuations, peak loads identification, and required pressure and temperatures for the better quality of the product.</textarea> 
       </div>
       <br>
-      <div class="clearfix" id="scope4">
-          <input type="button" class="float-left mt-4 btn btn-info" value="x" onclick="$('#scope4').remove();">
+      <div class="clearfix ml-5" id="scope4">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#scope4').remove();"></a>
           <textarea class="form-control float-right" name="scope" rows="3" style="width: 90%;">* Design of new P&ID considering future expansion factor:- Basis on the input data collection, the new Utility Piping networks shall be designed from the source to consumers. Each machine, header, sub-headers, pumps suction & discharges line sizes shall be calculated, pressure drops of the individual network shall be estimated, necessary instrumentation scheme will be incorporated, Monitoring parameters list shall be identified.</textarea> 
       </div>
       <br>
-      <div class="clearfix" id="scope5">
-          <input type="button" class="float-left mt-4 btn btn-info" value="x" onclick="$('#scope5').remove();">
+      <div class="clearfix ml-5" id="scope5">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#scope5').remove();"></a>
           <textarea class="form-control float-right"  name="scope" rows="3" style="width: 90%;"> * Preparation of Piping Layout and Isometrics:-  Implementing the Good Engineering Practices, the new Piping networks shall be designed as Operation and Maintenance friendly systems. The Piping systems, Storages Tanks, Isolation Valves, Flow Meters, Control Valves to locate in safe locations for quick access. The complete piping networks shall be shown in the plan-view by superimposing the piping and key-equipment in the plant plot-plan.</textarea> 
       </div>
       <br>
-      <div class="clearfix" id="scope6">
-          <input type="button" class="float-left mt-4 btn btn-info" value="x" onclick="$('#scope6').remove();">
+      <div class="clearfix ml-5" id="scope6">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#scope6').remove();"></a>
           <textarea class="form-control float-right"  name="scope" rows="3" style="width: 90%;">Isometric drawings shall be generated considering the piping layout as input, the isometrics shall give 3dimentional routing clarity, actual measurement of spool pieces, prefabrication numbering terminology based on each tapping/piping/spool, support location, fabrication and installation details for welding and flange joints.</textarea> 
       </div>
       <br>
-      <div class="clearfix" id="scope7">
-          <input type="button" class="float-left mt-4 btn btn-info" value="x" onclick="$('#scope7').remove();">
+      <div class="clearfix ml-5" id="scope7">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#scope7').remove();"></a>
           <textarea class="form-control float-right"  name="scope" rows="3" style="width: 90%;">* Generation of Material Specification along with quantities:- Pipes, Fittings, Accessories and other specific products detailed specification shall be generated as per ASME B 31.3 codes and its respective standards as applicable. The specification is a global level platform.</textarea> 
       </div>
       <br>
-      <div class="clearfix" id="scope8">
-          <input type="button" class="float-left mt-4 btn btn-info" value="x" onclick="$('#scope8').remove();">
+      <div class="clearfix ml-5" id="scope8">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#scope8').remove();"></a>
           <textarea class="form-control float-right"  name="scope" rows="3" style="width: 90%;">* Design Concept note:- The complete Piping networks design basis shall be submitted, including the inputs, peak loads, selection criteria, key instrumentation logic, safe operation practice, etc. The Design Concept Report will be a detailed narrative report of the P&IDs of its respective Utility.</textarea>
       </div>
   </div>
   <input type="button" class="btn btn-default" value="Add" onclick="addScope();">
-</div>            
-<div class="col-md-6" >
-  <div id="delvList">
-    <h2 class="page-title">Deliverables</h2>
-    <div class="separator-2"></div>
-    <div class="clearfix" id="delv1">
-      <input type="button" class="float-left mt-3 btn btn-info" value="x" onclick="$('#delv1').remove();">
-      <textarea class="form-control float-right" id="delv1" name="deliverables" rows="2" style="width: 90%;">* Piping & Instrumentation Diagram &#13;&#10;(Line size, Pressure drops, Selection of equipments & pumps, network/Hook-ups)</textarea> 
-  </div>
-  <br>                
-  <div class="clearfix" id="delv2">
-      <input type="button" class="float-left mt-3 btn btn-info" value="x" onclick="$('#delv2').remove();">
-      <textarea class="form-control float-right" id="delv2" name="deliverables" rows="3" style="width: 90%;">* Piping Layouts&#13;&#10;(Detailed Plan view of total piping network, Section views for elevation changes and piping pitch arrangements, & Cut-outs, Foundations)</textarea>
-  </div>
-  <br>
-  <div class="clearfix" id="delv3">
-      <input type="button" class="float-left mt-3 btn btn-info" value="x" onclick="$('#delv3').remove();">
-      <textarea class="form-control float-right" id="delv3" name="deliverables" rows="2" style="width: 90%;">* Isometric Drawings&#13;&#10;(3Dimensional view of Pipe routing, detailed hook-ups, line crossings Etc)</textarea>
-  </div>
-  <br>
-  <div class="clearfix" id="delv4">
-      <input type="button" class="float-left mt-3 btn btn-info" value="x" onclick="$('#delv4').remove();">
-      <textarea class="form-control float-right" id="delv4" name="deliverables" rows="2" style="width: 90%;">* BOQ/BOM&#13;&#10;(Final Bill Of Quantities for all pipes, fittings & accessories for all piping networks)</textarea>
-  </div>                
-  <br>
+</div>
+<div class="separator"></div>
+<i class="fa fa-plus" aria-hidden="true"></i>
+<h3 class="collapsed" style="display: inline-block;" data-toggle="collapse" data-target="#deliverables" aria-expanded="false" aria-controls="deliverables">
+    Deliverables
+</h3>
+<div id="deliverables" class="collapse" >
+    <div id="delvList">
+        <div class="clearfix ml-5" id="delv1">
+          <a type="button" class="float-left mt-3 fa fa-times" value="x" onclick="$('#delv1').remove();"></a>
+          <h4 class="float-left mt-3 mx-3">
+            <p>Existing P&amp;ID</p>
+        </h4>
+        <textarea class="form-control float-right" id="delv1" name="deliverables" rows="2" style="width: 80%;">* Piping & Instrumentation Diagram &#13;&#10;(Line size, Pressure drops, Selection of equipments & pumps, network/Hook-ups)</textarea> 
+    </div>
+    <br>                
+    <div class="clearfix ml-5" id="delv2">
+      <a class="float-left mt-3 fa fa-times" value="x" onclick="$('#delv2').remove();"></a>
+      <h4 class="float-left mt-3 mx-3">
+        <p>P&amp;ID</p>
+    </h4>
+    <textarea class="form-control float-right" id="delv2" name="deliverables" rows="2" style="width: 80%;">* Piping & Instrumentation Diagram &#13;&#10;(Line size, Pressure drops, Selection of equipments & pumps, network/Hook-ups)</textarea>
+</div>
+<br>
+<div class="clearfix ml-5" id="delv2">
+  <a class="float-left mt-3 fa fa-times" value="x" onclick="$('#delv2').remove();"></a>
+  <h4 class="float-left mt-3 mx-3">
+    <p>Piping layout</p>
+</h4>
+<textarea class="form-control float-right" id="delv2" name="deliverables" rows="2" style="width: 80%;">* Piping Layouts&#13;&#10;(Detailed Plan view of total piping network, Section views for elevation changes and piping pitch arrangements, & Cut-outs, Foundations)</textarea>
+</div>
+<br>
+<div class="clearfix ml-5" id="delv3">
+  <a class="float-left mt-3 fa fa-times" value="x" onclick="$('#delv3').remove();"></a>
+  <h4 class="float-left mt-3 mx-3">
+    <p>ISO 3D Model</p>
+</h4>
+<textarea class="form-control float-right" id="delv3" name="deliverables" rows="2" style="width: 80%;">* Isometric Drawings&#13;&#10;(3Dimensional view of Pipe routing, detailed hook-ups, line crossings Etc)</textarea>
+</div>
+<br>
+<div class="clearfix ml-5" id="delv4">
+  <a class="float-left mt-3 fa fa-times" value="x" onclick="$('#delv4').remove();"></a>
+  <h4 class="float-left mt-3 mx-3">
+    <p>Specification & BOQ</p>
+</h4>
+<textarea class="form-control float-right" id="delv4" name="deliverables" rows="2" style="width: 80%;">* BOQ/BOM&#13;&#10;(Final Bill Of Quantities for all pipes, fittings & accessories for all piping networks)</textarea>
+</div>                
+<br>
 </div>
 <input type="button" class="btn btn-default" value="Add" onclick="addDeliverables();">
-<div class="separator-2"></div>
-<div id="deliveryList">
-    <br>
-    <h2 class="page-title">Delivery</h2>
-    <div class="separator-2"></div>
-    <br>
-    <div class="clearfix" id="delivery1">
-      <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#delivery1').remove();">
-      <input type="text" class="form-control float-right" id="delivery1" name="delivery" style="width: 90%;" value="Existing Schematic drawings shall be submitted at site.">
-  </div>
-  <br>
-  <div class="clearfix" id="delivery2">
-      <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#delivery2').remove();">
-      <input type="text" class="form-control float-right" id="delivery2" name="delivery" style="width: 90%;" value="Proposed P&ID scheme shall be defined at Site.">
-  </div>
-  <br>
-  <div class="clearfix" id="delivery3">
-      <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#delivery3').remove();">
-      <input type="text" class="form-control float-right" id="delivery3" name="delivery" style="width: 90%;" value="Piping Layout & Isometrics 4Weeks after Site visit.">
-  </div>
-  <br>
-  <div class="clearfix" id="delivery4">
-      <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#delivery4').remove();">
-      <input type="text" class="form-control float-right" id="delivery4" name="delivery" style="width: 90%;" value="Detailed Specification along with Quantities 2weeks from the date of Isometrics Submission.">
-  </div>
-  <br>                
 </div>
-<input type="button" class="btn btn-default" value="Add" onclick="addDelivery();">
-<div class="separator-2"></div>
-</div>
-</div>
-<div class="separator-2"></div>
-<br>
-<div class="row">
-    <div class="col-md-6">
-      <div class="row">
-        <div class="col-md-12">
-          <h2 class="page-title">Payment Terms</h2>
-          <div class="separator-2"></div>
-          <br>
-          <div id="payTermList">
-            <div class="clearfix" id="payTerm1">
-              <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#payTerm1').remove();">
-              <input type="text" class="form-control float-right" style="width:90%;" name="payTerm" value="50% Advance along with PO.">
-              <br>
-          </div>
-          <div class="clearfix" id="payTerm2">
-              <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#payTerm2').remove();">
-              <input type="text" class="form-control float-right" style="width:90%;" id="payTerm2" name="payTerm" value="50% Against Readiness of Piping Layout & Isometrics (Before Submission).">
-              <br>
-          </div>
+<div class="separator"></div>
+<i class="fa fa-plus" aria-hidden="true"></i>
+<h3 class="collapsed" style="display: inline-block;" data-toggle="collapse" data-target="#delivery" aria-expanded="false" aria-controls="delivery">
+    Delivery
+</h3>
+<div id="delivery" class="collapse" >
+    <div id="deliveryList">
+        <div class="clearfix ml-5" id="delivery1">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#delivery1').remove();"></a>
+          <input type="text" class="form-control float-right" id="delivery1" name="delivery" style="width: 90%;" value="Existing Schematic drawings shall be submitted at site.">
       </div>
-      <input type="button" class="btn btn-default" value="Add" onclick="addPayTerm();">
-  </div>
-</div>
-<div class="separator-2"></div>
-<br>
-<div class="row">
-    <div class="col-md-12">
-      <h2 class="page-title">Line Items</h2>
-      <div class="separator-2"></div>
-      <label>Description</label>
-      <input type="text" class="form-control" id="lineItemMainDesc" name="lineItemMainDesc" value="Charges for Basic and Detail Engineering Services for ">
       <br>
-      <div id="lineItemList">
-        <div class="row">
-          <div class="col-md-4"><label>Item</label></div>
-          <div class="col-md-4"><label>Quantity</label></div>
-          <div class="col-md-4"><label>Rate</label></div>
-      </div>  
-      <div class="clearfix" id="lineItem1">
-          <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#lineItem1').remove();">
-          <div class="row">
-            <div class="col-md-4"><input type="text" class="form-control" id="lineItemDesc" name="lineItemDesc" value="Site Visit"></div>
-            <div class="col-md-4"><input type="text" class="form-control" id="lineItemQty" name="lineItemQty" value=""></div>
-            <div class="col-md-4"><input type="text" class="form-control" id="lineItemRate" name="lineItemRate" value=""></div>
-        </div>
-        <br>
-    </div>
-    <div class="clearfix" id="lineItem2">
-      <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#lineItem2').remove();">
-      <div class="row" >
-        <div class="col-md-4"><input type="text" class="form-control" id="lineItemDesc" name="lineItemDesc" value="Detailed Engineering Services"></div>
+      <div class="clearfix ml-5" id="delivery2">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#delivery2').remove();"></a>
+          <input type="text" class="form-control float-right" id="delivery2" name="delivery" style="width: 90%;" value="Proposed P&ID scheme shall be defined at Site.">
+      </div>
+      <br>
+      <div class="clearfix ml-5" id="delivery3">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#delivery3').remove();"></a>
+          <input type="text" class="form-control float-right" id="delivery3" name="delivery" style="width: 90%;" value="Piping Layout & Isometrics 4Weeks after Site visit.">
+      </div>
+      <br>
+      <div class="clearfix ml-5" id="delivery4">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#delivery4').remove();"></a>
+          <input type="text" class="form-control float-right" id="delivery4" name="delivery" style="width: 90%;" value="Detailed Specification along with Quantities 2weeks from the date of Isometrics Submission.">
+      </div>
+      <br>                
+  </div>
+  <input type="button" class="btn btn-default" value="Add" onclick="addDelivery();">
+</div>
+<div class="separator"></div>
+<i class="fa fa-plus" aria-hidden="true"></i>
+<h3 class="collapsed" style="display: inline-block;" data-toggle="collapse" data-target="#termsandconditions" aria-expanded="false" aria-controls="termsandconditions">
+    Terms & Conditions
+</h3>
+<div id="termsandconditions" class="collapse" >
+    <div id="termsAndConditionList">                
+        <div class="clearfix ml-5" id="termsAndCondition1">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#termsAndCondition1').remove();"></a>
+          <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition1" name="termsAndCondition" value="Site visit plan to confirm, 2 weeks in advance.">          
+      </div>
+      <br>
+      <div class="clearfix ml-5" id="termsAndCondition2">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#termsAndCondition2').remove();"></a>
+          <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition2" name="termsAndCondition" value="Day-wise charge & Travel cost will be applicable on departure from Pune(HO).">
+      </div>
+      <br>
+      <div class="clearfix ml-5" id="termsAndCondition3">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#termsAndCondition3').remove();"></a>
+          <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition3" name="termsAndCondition" value="Travel Expenses from Pune to Site location, Accommodation, Food, and Local conveyance in your scope.">
+      </div>
+      <br>
+      <div class="clearfix ml-5" id="termsAndCondition4">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#termsAndCondition4').remove();"></a>
+          <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition4" name="termsAndCondition" value="Visa and other formalities if any shall be done by PetStream.">
+      </div>
+      <br>
+      <div class="clearfix ml-5" id="termsAndCondition5">
+          <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#termsAndCondition5').remove();"></a>
+          <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition5" name="termsAndCondition" value="Layout and Isometrics submission shall depend upon piping quantity.">
+      </div>
+      <br>
+      <div class="clearfix ml-5" id="termsAndCondition6">
+          <a class="float-left mt-4 fa fa-times" onclick="$('#termsAndCondition6').remove();"></a>
+          <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition6" name="termsAndCondition" value="PO and Advance shall release along with the site visit confirmation (2Week before departure).">
+      </div>
+      <br>
+      <div class="clearfix ml-5" id="termsAndCondition7">
+          <a class="float-left mt-4 fa fa-times" onclick="$('#termsAndCondition7').remove();"></a>
+          <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition7" name="termsAndCondition" value="3D Modelling costing will submitted in separate offer, by tentative estimation on Piping Network size.">
+      </div>
+      <br>
+  </div>
+  <input type="button" class="btn btn-default" value="Add" onclick="addTermsAndCondition();">
+</div>
+<div class="separator"></div>
+<i class="fa fa-plus" aria-hidden="true"></i>
+<h3 class="collapsed" style="display: inline-block;" data-toggle="collapse" data-target="#paymentterms" aria-expanded="false" aria-controls="paymentterms">
+    Payment Terms
+</h3>
+<div id="paymentterms" class="collapse" >
+  <div id="payTermList">
+    <div class="clearfix ml-5" id="payTerm1">
+      <a class="float-left mt-3 fa fa-times" value="x" onclick="$('#payTerm1').remove();"></a>
+      <input type="text" class="form-control float-right" style="width:90%;" name="payTerm" value="50% Advance along with PO.">
+  </div>
+  <br>
+  <div class="clearfix ml-5" id="payTerm2">
+      <a class="float-left mt-3 fa fa-times" value="x" onclick="$('#payTerm2').remove();"></a>
+      <input type="text" class="form-control float-right" style="width:90%;" id="payTerm2" name="payTerm" value="50% Against Readiness of Piping Layout & Isometrics (Before Submission).">
+  </div>
+  <br>
+  <div class="clearfix ml-5" id="payTerm3">
+      <span class="clearfix float-right" style="width:90%;">
+          <select id="payTypeVal" class="form-control float-left" style="width:5%;" onchange="appendPaymentType(this.value)">
+            <option value="">-</option>
+            <option value="Advance">Advance</option> 
+            <option value="Running bills">Running bills</option>
+            <option value="Against proforma before delivery">Against proforma before delivery</option>
+            <option value="Against deliverable after submission of work">Against deliverable after submission of work</option>
+        </select>
+        <input type="text" class="form-control float-right" style="width:90%;" id="payType" name="payTerm" value="">
+    </span>
+</div>
+<br>
+<div class="clearfix ml-5" id="payTerm2">
+  <!-- <a class="float-left mt-3 fa fa-times" value="x" onclick="$('#payTerm3').remove();"></a> -->
+  <span class="clearfix float-right" style="width:90%;">
+      <select id="gstVal" class="form-control float-left" style="width:5%;" onchange="appendGst(this.value)">
+          <option value="">-</option>
+          <option value="5%">5%</option>
+          <option value="12%">12%</option>
+          <option value="18%">18%</option>
+          <option value="28%">28%</option>
+      </select>
+      <input type="text" class="form-control float-right" style="width:90%;" id="payTermGST" name="payTerm" value="">
+  </span>
+</div>
+<br>
+</div>
+<input type="button" class="btn btn-default" value="Add" onclick="addPayTerm();">
+</div>
+<div class="separator"></div>
+<i class="fa fa-plus" aria-hidden="true"></i>
+<h3 class="collapsed" style="display: inline-block;" data-toggle="collapse" data-target="#lineitems" aria-expanded="false" aria-controls="lineitems">
+    Line Items
+</h3>
+<div id="lineitems" class="collapse" >
+  <label>Description</label>
+  <input type="text" class="form-control" id="lineItemMainDesc" name="lineItemMainDesc" value="Charges for Basic and Detail Engineering Services for ">
+  <div id="lineItemList">
+    <div class="row">
+      <div class="col-md-4"><label>Item</label></div>
+      <div class="col-md-4"><label>Quantity</label></div>
+      <div class="col-md-4"><label>Rate</label></div>
+  </div>  
+  <div class="clearfix" id="lineItem1">
+      <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#lineItem1').remove();"></a>
+      <div class="row">
+        <div class="col-md-4"><input type="text" class="form-control" id="lineItemDesc" name="lineItemDesc" value="Site Visit"></div>
         <div class="col-md-4"><input type="text" class="form-control" id="lineItemQty" name="lineItemQty" value=""></div>
         <div class="col-md-4"><input type="text" class="form-control" id="lineItemRate" name="lineItemRate" value=""></div>
     </div>
     <br>
 </div>
+<div class="clearfix" id="lineItem2">
+  <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#lineItem2').remove();"></a>
+  <div class="row" >
+    <div class="col-md-4"><input type="text" class="form-control" id="lineItemDesc" name="lineItemDesc" value="Detailed Engineering Services"></div>
+    <div class="col-md-4"><input type="text" class="form-control" id="lineItemQty" name="lineItemQty" value=""></div>
+    <div class="col-md-4"><input type="text" class="form-control" id="lineItemRate" name="lineItemRate" value=""></div>
+</div>
+<br>
+</div>
 </div>
 <input type="button" class="btn btn-default" value="Add" onclick="addLineItem();">
-<div class="separator-2"></div> 
 </div>
-</div>  
-</div>
-<div class="col-md-6">
-  <h2 class="page-title">Terms & Conditions</h2>
-  <div class="separator-2"></div>
+<div class="separator"></div>
+<i class="fa fa-plus" aria-hidden="true"></i>
+<h3 class="collapsed" style="display: inline-block;" data-toggle="collapse" data-target="#validity" aria-expanded="false" aria-controls="validity">
+    Validity
+</h3>
+<div id="validity" class="collapse" >
+  <div id="validityList">
+    <div class="clearfix ml-5" id="validity1">
+      <a class="float-left mt-4 fa fa-times" value="x" onclick="$('#validity1').remove();"></a>
+      <input type="text" class="form-control float-right" style="width:90%;" name="validity" value="This offer is valid for 15 days.">
+  </div>
   <br>
-  <div id="termsAndConditionList">                
-    <div class="clearfix" id="termsAndCondition1">
-      <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#termsAndCondition1').remove();">
-      <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition1" name="termsAndCondition" value="Site visit plan to confirm, 2 weeks in advance.">
-      <br>
-  </div>
-  <div class="clearfix" id="termsAndCondition2">
-      <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#termsAndCondition2').remove();">
-      <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition2" name="termsAndCondition" value="Day-wise charge & Travel cost will be applicable on departure from Pune(HO).">
-      <br>
-  </div>
-  <div class="clearfix" id="termsAndCondition3">
-      <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#termsAndCondition3').remove();">
-      <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition3" name="termsAndCondition" value="Travel Expenses from Pune to Site location, Accommodation, Food, and Local conveyance in your scope.">
-      <br>
-  </div>
-  <div class="clearfix" id="termsAndCondition4">
-      <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#termsAndCondition4').remove();">
-      <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition4" name="termsAndCondition" value="Visa and other formalities if any shall be done by PetStream.">
-      <br>
-  </div>
-  <div class="clearfix" id="termsAndCondition5">
-      <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#termsAndCondition5').remove();">
-      <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition5" name="termsAndCondition" value="Layout and Isometrics submission shall depend upon piping quantity.">
-      <br>
-  </div>
-  <div class="clearfix" id="termsAndCondition6">
-      <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#termsAndCondition6').remove();">
-      <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition6" name="termsAndCondition" value="PO and Advance shall release along with the site visit confirmation (2Week before departure).">
-      <br>
-  </div>
-  <div class="clearfix" id="termsAndCondition7">
-      <input type="button" class="float-left mt-1 btn btn-info" value="x" onclick="$('#termsAndCondition7').remove();">
-      <input type="text" class="form-control float-right" style="width: 90%;" id="termsAndCondition7" name="termsAndCondition" value="3D Modelling costing will submitted in separate offer, by tentative estimation on Piping Network size.">
-      <br>
-  </div>
 </div>
-<input type="button" class="btn btn-default" value="Add" onclick="addTermsAndCondition();">
+<input type="button" class="btn btn-default" value="Add" onclick="addValidity();">
 </div>
-</div>
+<div class="separator"></div>
 <button type="submit" class="btn btn-default">Submit</button>
 </form>
 </div>
@@ -679,26 +745,26 @@ style="display: none;">
                             <option></option>
                         </select>
                     </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <select class="form-control" name="manufactureType"
+                        id="manufactureType" onchange="myFunction('classOrGrade');">
+                        <option></option>                    
+                    </select>
+                </div>
             </td>
             <td>
                 <div class="form-group">
-                    <select class="form-control" name="manufactureType"
-                    id="manufactureType" onchange="myFunction('classOrGrade');">
-                    <option></option>                    
+                    <select class="form-control" name="classOrGrade"
+                    id="classOrGrade" onchange="myFunction('materialSpecs');">
+                    <option></option>
                 </select>
             </div>
         </td>
         <td>
             <div class="form-group">
-                <select class="form-control" name="classOrGrade"
-                id="classOrGrade" onchange="myFunction('materialSpecs');">
-                <option></option>
-            </select>
-        </div>
-    </td>
-    <td>
-        <div class="form-group">
-            <select class="form-control" name="materialSpecs"
+                <select class="form-control" name="materialSpecs"
                 id="materialSpecs" onchange="myFunction('standardType');">
                 <option></option>
             </select>
@@ -707,48 +773,48 @@ style="display: none;">
     <td>
         <div class="form-group">
             <select class="form-control" name="standardType"
-                id="standardType">
-                <option></option>
-            </select>
-        </div>
-    </td>
-    <td>
-        <div class="form-group">
-            <select class="form-control" name="ends" id="ends">
-                <option></option>
-                <option>Buttweld</option>
-                <option>Socket-Weld</option>
-                <option>Threaded</option>
-                <option>Plain-End</option>
-            </select>
-        </div>
-    </td>
-    <td>
-        <div class="form-group">
-            <select class="form-control" name="size" id="size">
-                <option value='15NB-1/2"'>15NB-1/2"</option>
-                <option value='20NB-3/4"'>20NB-3/4"</option>
-                <option value='25NB-1"'>25NB-1"</option>
-                <option value='32NB-1:1/4"'>32NB-1:1/4"</option>
-                <option value='40NB-1:1/2"'>40NB-1:1/2"</option>
-                <option value='50NB-2"'>50NB-2"</option>
-                <option value='65NB-2:1/2"'>65NB-2:1/2"</option>
-                <option value='80NB-3"'>80NB-3"</option>
-                <option value='100NB-4"'>100NB-4"</option>
-                <option value='125NB-5"'>125NB-5"</option>
-                <option value='150NB-6"'>150NB-6"</option>
-                <option value='200NB-8"'>200NB-8"</option>
-                <option value='250NB-10"'>250NB-10"</option>
-                <option value='300NB-12"'>300NB-12"</option>
-                <option value='350NB-14"'>350NB-14"</option>
-                <option value='400NB-16"'>400NB-16"</option>
-                <option value='450NB-18"'>450NB-18"</option>
-                <option value='500NB-20"'>500NB-20"</option>
-                <option value='550NB-22"'>550NB-22"</option>
-                <option value='600NB-24"'>600NB-24"</option>
-            </select>
-        </div>
-    </td>
+            id="standardType">
+            <option></option>
+        </select>
+    </div>
+</td>
+<td>
+    <div class="form-group">
+        <select class="form-control" name="ends" id="ends">
+            <option></option>
+            <option>Buttweld</option>
+            <option>Socket-Weld</option>
+            <option>Threaded</option>
+            <option>Plain-End</option>
+        </select>
+    </div>
+</td>
+<td>
+    <div class="form-group">
+        <select class="form-control" name="size" id="size">
+            <option value='15NB-1/2"'>15NB-1/2"</option>
+            <option value='20NB-3/4"'>20NB-3/4"</option>
+            <option value='25NB-1"'>25NB-1"</option>
+            <option value='32NB-1:1/4"'>32NB-1:1/4"</option>
+            <option value='40NB-1:1/2"'>40NB-1:1/2"</option>
+            <option value='50NB-2"'>50NB-2"</option>
+            <option value='65NB-2:1/2"'>65NB-2:1/2"</option>
+            <option value='80NB-3"'>80NB-3"</option>
+            <option value='100NB-4"'>100NB-4"</option>
+            <option value='125NB-5"'>125NB-5"</option>
+            <option value='150NB-6"'>150NB-6"</option>
+            <option value='200NB-8"'>200NB-8"</option>
+            <option value='250NB-10"'>250NB-10"</option>
+            <option value='300NB-12"'>300NB-12"</option>
+            <option value='350NB-14"'>350NB-14"</option>
+            <option value='400NB-16"'>400NB-16"</option>
+            <option value='450NB-18"'>450NB-18"</option>
+            <option value='500NB-20"'>500NB-20"</option>
+            <option value='550NB-22"'>550NB-22"</option>
+            <option value='600NB-24"'>600NB-24"</option>
+        </select>
+    </div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -785,23 +851,23 @@ style="display: none;">
             <tbody>
                 <tr>
                     <td><input class="form-control" type="text" name="accessoryName"
-                     id="accessoryName"/></td>
-                     <td><input class="form-control" type="text" name="desc1" id="desc1"/>
-                     </td>
-                     <td><input class="form-control" type="text" name="desc2" id="desc2"/>
-                     </td>
-                     <td><input class="form-control" type="text" name="desc3" id="desc3"/>
-                     </td>
-                     <td><input class="form-control" type="text" name="desc4" id="desc4"/>
-                     </td>
-                     <td><input class="form-control" type="text" name="desc5" id="desc5"/>
-                     </td>
-                 </tr>
-             </tbody>
-         </table>
-     </div>
- </div>
- <div class="row createBOQ" style="display: none;">
+                       id="accessoryName"/></td>
+                       <td><input class="form-control" type="text" name="desc1" id="desc1"/>
+                       </td>
+                       <td><input class="form-control" type="text" name="desc2" id="desc2"/>
+                       </td>
+                       <td><input class="form-control" type="text" name="desc3" id="desc3"/>
+                       </td>
+                       <td><input class="form-control" type="text" name="desc4" id="desc4"/>
+                       </td>
+                       <td><input class="form-control" type="text" name="desc5" id="desc5"/>
+                       </td>
+                   </tr>
+               </tbody>
+           </table>
+       </div>
+   </div>
+   <div class="row createBOQ" style="display: none;">
     <div class="col-md-2">
         <div class="ph-20 feature-box text-center object-non-visible animated object-visible fadeInDownSmall"
         data-animation-effect="fadeInDownSmall" data-effect-delay="100">
@@ -1413,6 +1479,7 @@ style="display: none;">
 </div>
 
 <script src="plugins/jquery.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
 
 <script src="plugins/jquery.blockUI.js"></script>
 

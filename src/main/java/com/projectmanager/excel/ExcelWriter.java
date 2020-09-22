@@ -648,7 +648,7 @@ public class ExcelWriter {
         try {
             Workbook workBook = null;
 
-            Resource resource = new ClassPathResource("classpath:DesignOfferTemplate.xls");
+            Resource resource = new ClassPathResource("DesignOfferTemplate.xls");
             InputStream inputStream = resource.getInputStream();
 
             workBook = WorkbookFactory.create(inputStream);
@@ -732,9 +732,15 @@ public class ExcelWriter {
 			String[] termsAndCondition = designOffer.getTermsAndCondition().split(seperater);
 			for(int i=0; i<termsAndCondition.length; i++)
 			{
-				sheet.getRow(50 + i).getCell(1).setCellValue(termsAndCondition[i]);
+				sheet.getRow(53 + i).getCell(1).setCellValue(termsAndCondition[i]);
 			}
 
+            //Validity
+            String[] validity = designOffer.getValidity().split(seperater);
+            for(int i=0; i<validity.length; i++)
+            {
+                sheet.getRow(61 + i).getCell(1).setCellValue(validity[i]);
+            }
 
 			FormulaEvaluator evaluator1 = workBook.getCreationHelper().createFormulaEvaluator();
 

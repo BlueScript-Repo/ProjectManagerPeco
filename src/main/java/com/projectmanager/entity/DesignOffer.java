@@ -36,6 +36,8 @@ public class DesignOffer
     String lineItemRate ;
     @Column(columnDefinition = "Text")
     String termsAndCondition;
+    @Column(columnDefinition = "Text")
+    String validity;
 
     Date creationDate;
 
@@ -46,7 +48,8 @@ public class DesignOffer
 
     }
 
-    public DesignOffer(String docNumber, String contactName, String clientCompany, String address, String city, String pinCode, String subject, String utility, String lineItemMainDesc, String scope, String deliverables, String delivery, String payTerm, String lineItemDesc, String lineItemQty, String lineItemRate, String termsAndCondition, Date creationDate, String projectId) {
+    public DesignOffer(String docNumber, String contactName, String clientCompany, String address, String city, String pinCode, String subject, String utility, String lineItemMainDesc, String scope, String deliverables, String delivery, String payTerm, String lineItemDesc, String lineItemQty, String lineItemRate, String termsAndCondition, String validity, Date creationDate, String projectId)
+    {
         this.docNumber = docNumber;
         this.contactName = contactName;
         this.clientCompany = clientCompany;
@@ -64,6 +67,7 @@ public class DesignOffer
         this.lineItemQty = lineItemQty;
         this.lineItemRate = lineItemRate;
         this.termsAndCondition = termsAndCondition;
+        this.validity = validity;
         this.creationDate = creationDate;
         this.projectId = projectId;
     }
@@ -218,5 +222,13 @@ public class DesignOffer
 
     public void setProjectId(String projectId) {
         this.projectId = projectId;
+    }
+
+    public String getValidity() {
+        return validity;
+    }
+
+    public void setValidity(String validity) {
+        this.validity = validity;
     }
 }
