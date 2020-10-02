@@ -263,7 +263,7 @@ public class BOQController {
     protected void generateBOQ(String docNameToDownload, String projectId, boolean isOffer, HttpServletResponse response) {
         byte[] excelByts = null;
 
-        ArrayList<BOQLineData> boqlineData = new ArrayList<BOQLineData>();
+        ArrayList<BOQLineData> boqlineData = null;
 
         ArrayList<BOQDetails> itemDetails = boqDetailsDao.getBOQFromName(docNameToDownload, projectId);
 
@@ -307,7 +307,7 @@ public class BOQController {
         boqlineData = getBOQLineDataList(material, ends, classOrGrade, inventoryName, manifMetod, materialSpecs, standardType);
 
         try {
-            excelByts = writer.writeExcel(null, boqlineData, size, quantity, supplyRate, erectionRate, supplyAmount,
+            excelByts = writer.writeExcel(boqlineData, size, quantity, supplyRate, erectionRate, supplyAmount,
                     erectionAmount, "", header, isOffer, false);
             response.setHeader("Content-disposition", "attachment; filename=" + docNameToDownload + ".xls");
 
@@ -403,7 +403,7 @@ public class BOQController {
                 supplyAmount = new String[]{};
                 erectionAmount = new String[]{};
             }
-            excelByts = writer.writeExcel(null, boqInventoryDetails, size, quantity, supplyRate, erectionRate, supplyAmount,
+            excelByts = writer.writeExcel(boqInventoryDetails, size, quantity, supplyRate, erectionRate, supplyAmount,
                     erectionAmount, boqNameRevisionStr, header, Boolean.valueOf(isOffer), false);
 
             ArrayList<BOQDetails> boqInventoryDetailsList = new ArrayList<BOQDetails>();
@@ -510,7 +510,10 @@ public class BOQController {
     }
 
     @RequestMapping(value = "generateDesign", method = RequestMethod.POST)
-    public @ResponseBody void generateDesignOffer(HttpServletResponse response, String docNumber, String contactName, String clientCompany, String address, String city, String pinCode, String subject, String utility, String lineItemMainDesc, String[] scope, String[] deliverables, String[] delivery, String[] payTerm, String[] lineItemDesc, String[] lineItemQty, String[] lineItemRate, String[] termsAndCondition, String[] validity, String projectId) {
+    public @ResponseBody void generateDesignOffer(HttpServletResponse response, String docNumber, String contactName, String clientCompany, String address, String city,
+                                                  String pinCode, String subject, String utility, String lineItemMainDesc, String[] scope, String[] deliverables,
+                                                  String[] delivery, String[] payTerm, String[] lineItemDesc, String[] lineItemQty, String[] lineItemRate,
+                                                  String[] termsAndCondition, String[] validity, String projectId) {
 
         StringBuilder scopeStr = new StringBuilder();
         StringBuilder deliverablesStr = new StringBuilder();

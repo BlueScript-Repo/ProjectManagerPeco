@@ -39,7 +39,7 @@ import com.projectmanager.entity.BOQLineData;
 @ManagedBean
 public class ExcelWriter {
 
-    public byte[] writeExcel(ArrayList<BOQLineData> boqDetailsList, ArrayList<BOQLineData> boqLineDataDetails, String[] size, String[] quantity,
+    public byte[] writeExcel(ArrayList<BOQLineData> boqLineDataDetails, String[] size, String[] quantity,
                              String[] supplyRate, String[] erectionRate, String[] supplyAmount, String[] erectionAmount,
                              String boqNameRevisionStr, BOQHeader header, boolean isOffer, boolean isInvoiceAnnexture) throws IOException {
 
@@ -216,25 +216,10 @@ public class ExcelWriter {
             double supplyAmountTotal = 0;
             double erectionAmountTotal = 0;
 
-            boolean isAnnexure = false;
-
-            if(boqDetailsList!=null && boqDetailsList.size()>0)
-            {
-                isAnnexure = true;
-            }
 
             for (int invIndx = startIndex; invIndx < lastIndex; invIndx++) {
 
-                BOQLineData inventory = null;
-
-                if(boqDetailsList!=null && boqDetailsList.size()>0)
-                {
-                     inventory = boqDetailsList.get(invIndx);
-                }
-                else
-                {
-                     inventory = boqLineDataDetails.get(invIndx);
-                }
+                BOQLineData inventory = boqLineDataDetails.get(invIndx);
 
                 int presentIndex = processedInventory.indexOf(inventory);
                 // Reset pushBy to 0
@@ -262,17 +247,8 @@ public class ExcelWriter {
 
                     Cell cellToUpdate5 = sheet.getRow(row).getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 
-                    if(isAnnexure) {
-                        if (boqDetailsList.get(index).equals(boqLineDataDetails.get(index))) {
-                            cellToUpdate5.setCellValue(quantity[index]);
-                        } else {
-                            cellToUpdate5.setCellValue(0);
-                        }
-                    }
-                    else
-                    {
-                        cellToUpdate5.setCellValue(quantity[index]);
-                    }
+
+                    cellToUpdate5.setCellValue(quantity[index]);
 
                     cellToUpdate5.setCellStyle(whiteBackGroundTextCenter);
 
@@ -675,7 +651,7 @@ public class ExcelWriter {
 			sheet.getRow(7).getCell(0).setCellValue(designOffer.getCity()+" - "+designOffer.getPinCode());
 
 			//Subject
-			sheet.getRow(10).getCell(1).setCellValue(designOffer.getSubject());
+			sheet.getRow(10).getCell(1).setCellValue(designOffer.getSubject() + " : " + designOffer.getUtility());
 
 			//Main Description
 			sheet.getRow(15).getCell(1).setCellValue(designOffer.getLineItemMainDesc());

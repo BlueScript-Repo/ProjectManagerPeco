@@ -8,18 +8,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import com.itextpdf.text.pdf.*;
 import com.projectmanager.dao.TaxesDao;
-import com.projectmanager.entity.TaxesEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.view.AbstractView;
 
 import com.projectmanager.entity.PODetails;
@@ -29,9 +26,6 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
 @Component("purchaseOrderView")
 public class PurchaseOrderPDFView extends AbstractView {
@@ -85,7 +79,7 @@ public class PurchaseOrderPDFView extends AbstractView {
 
 			FileOutputStream fOut = new FileOutputStream(fileToSave);
 
-			generatePO("27440913446-V", "27AEBPH1001B1ZM", poDetails.getPoNumber(), poDetails.getPoDate(),
+			generatePO("-", "27AEBPH1001B1ZM", poDetails.getPoNumber(), poDetails.getPoDate(),
 					poDetails.getVendorName(), "", poDetails.getContactName(), poDetails.getContactNumber(),
 					poDetails.getContactEmail(),
 					poDetails.getVendorGst(), poDetails.getVendorPan(),make, description, quantity, unitPrice, terms, response, fOut);
@@ -105,6 +99,9 @@ public class PurchaseOrderPDFView extends AbstractView {
 			Document document = new Document();
 
 			PdfWriter writer = PdfWriter.getInstance(document, fOut);
+
+            writer.setPageEvent(new BackgroundImageHelper());
+
 			document.open();
 
 			ArrayList<String[]> descriptionList = new ArrayList<>();
@@ -172,7 +169,6 @@ public class PurchaseOrderPDFView extends AbstractView {
 			String[] description, String[] unitPrice, String[] quantity, String[] make, String[] term,
 			PdfWriter writer) {
 		try {
-            document.add(new Paragraph(70, "\u00a0"));
 
             //table1
             PdfPTable table = createNewTable(1);
@@ -548,11 +544,9 @@ public class PurchaseOrderPDFView extends AbstractView {
             table6.addCell(r11c1);
             table6.addCell(r11c2);
 
-            
             document.add(table6);
             
             //table7
-            
             PdfPTable table7 = createNewTable(1);
 
             String amountInWords = "";
@@ -566,17 +560,11 @@ public class PurchaseOrderPDFView extends AbstractView {
             Paragraph ph8 = new Paragraph("Total Amount (In Words) :-    "   + amountInWords, blackCalibri9);
            
             PdfPCell r12c1 = createNewCell(ph8);
-           
 
             r12c1.setFixedHeight(20);
-            
-          
-
-			
 
             table7.addCell(r12c1);
-       
-            
+
             //row13
             Paragraph ph9 = new Paragraph("A. Payment Terms:-", boldBlackCalibri10);
             PdfPCell r13c1 = createNewCell(ph9);
@@ -609,9 +597,7 @@ public class PurchaseOrderPDFView extends AbstractView {
             shipTo14Cell2.addElement(new Paragraph("CST        " +     		"   27251164635C", blackCalibri9));
             shipTo14Cell2.addElement(new Paragraph("SERVICE TAX" +  		"   AAICP1433DSD001", blackCalibri9));
             shipTo14Cell2.addElement(new Paragraph("PAN        " +          "   AAICP1433D", blackCalibri9));
-            
-           
-            
+
             shipTo14Cell2.setFixedHeight(80);
             table8.addCell(ship14ToCell1);
             table8.addCell(shipTo14Cell2);
@@ -668,7 +654,6 @@ public class PurchaseOrderPDFView extends AbstractView {
 
             // Row1
             Paragraph ph14 = new Paragraph("E. Terms & Conditions:-", boldBlackCalibri10);
-            
 
             PdfPCell r17c1 = createNewCell(ph14);
             r17c1.setFixedHeight(20);
@@ -683,10 +668,8 @@ public class PurchaseOrderPDFView extends AbstractView {
             shipTo18Cell2.addElement(new Paragraph("2. Drinking Water & Toiltes facilities shall be arranged by end client.", blackCalibri9));
             shipTo18Cell2.addElement(new Paragraph("3. All required machinery, tools & tackles shall be provided by Client.", blackCalibri9));
             shipTo18Cell2.addElement(new Paragraph("4. All the workers shall be completed with Police Verification for site premises entry.", blackCalibri9));
-          
 
-           
-           shipTo18Cell2.setFixedHeight(80);
+            shipTo18Cell2.setFixedHeight(80);
 
             table9.addCell(shipTo18Cell2);
             
@@ -699,14 +682,11 @@ public class PurchaseOrderPDFView extends AbstractView {
             shipTo19Cell2.addElement(new Paragraph("2. The price of any item mentioned in this order should not exceed the accepted price. The quantity/no. of item may vary in the order without any change in the accepted price. ", blackCalibri9));
             shipTo19Cell2.addElement(new Paragraph("3. Failure to  comply  with specifications,  terms and conditions of this order, or accepted  delivery schedule shall be sufficient grounds for cancellation of order by purchaser without  being liable  for paying any compensation to the supplier. ", blackCalibri9));
             shipTo19Cell2.addElement(new Paragraph("4. In case of delay in supply, liquidated damage at the rate of 0.5% on value of the purchase order per week, or part thereof, will be recovered. ", blackCalibri9));
-          
 
-           
             shipTo19Cell2.setFixedHeight(150);
 
             table9.addCell(shipTo19Cell2);
 
-            
             Paragraph ph17 = new Paragraph("", boldBlackCalibri10);
             
             PdfPCell r20c1 = createNewCell(ph17);
@@ -736,15 +716,13 @@ public class PurchaseOrderPDFView extends AbstractView {
             shipTo22Cell2.addElement(new Paragraph("2. The Supplies should be accompanied by suppliers own detailed inspection report in duplicate.", blackCalibri9));
             shipTo22Cell2.addElement(new Paragraph("3. All materials will be subjected to our final inspection and approval at our Works before acceptance.", blackCalibri9));
             shipTo22Cell2.addElement(new Paragraph("4. Samples where required must be submitted as per given schedule along with inspection report.", blackCalibri9));
-          
 
-           
             shipTo22Cell2.setFixedHeight(90);
 
             table9.addCell(shipTo22Cell2);
             
             PdfPCell shipTo23Cell2 = createNewCell(120);
-            Paragraph ph20 = new Paragraph("G. Delivery:-", boldBlackCalibri10);
+            Paragraph ph20 = new Paragraph(70,"G. Delivery:-", boldBlackCalibri10);
            
             shipTo23Cell2.addElement(ph20);
             shipTo23Cell2.addElement(new Paragraph("1. Delivery is essence of this order and the supplies must be made as per the schedules given failing which the company reserve the right to cancel the order without notice and refuse all subsequent deliveries. ", blackCalibri9));
@@ -753,7 +731,6 @@ public class PurchaseOrderPDFView extends AbstractView {
             shipTo23Cell2.addElement(new Paragraph("4. Supplies in excess of the given schedule must not be made without prior written consent failing which excess will not be accepted.", blackCalibri9));
             shipTo23Cell2.addElement(new Paragraph("5. Company reserve the right to amend/postpone delivery schedule as per the requirement without any liability arising in us therein.", blackCalibri9));
 
-           
             shipTo23Cell2.setFixedHeight(150);
 
             table9.addCell(shipTo23Cell2);
@@ -774,23 +751,8 @@ public class PurchaseOrderPDFView extends AbstractView {
 
             table9.addCell(r25c1);
 
-                    
             document.add(table9);
-            
 
-            Resource resource = new ClassPathResource("background.jpg");
-            InputStream inputStream = resource.getInputStream();
-
-            // init array with file length
-            byte[] bytesArray = new byte[inputStream.available()];
-            inputStream.read(bytesArray);
-
-            Image background = Image.getInstance(bytesArray);
-
-            float width = document.getPageSize().getWidth();
-            float height = document.getPageSize().getHeight();
-            writer.getDirectContentUnder().addImage(background, width, 0, 0, height, 0, 0);
-            
             document.close();
             writer.close();
            // fOut.close();
@@ -807,11 +769,53 @@ public class PurchaseOrderPDFView extends AbstractView {
 	}
 
 	public static final Font boldBlackCalibri12 = new Font(Font.getFamily("Calibri"), 12, Font.BOLD, BaseColor.BLACK);
-	 public static final Font boldBlackCalibri11 = new Font(Font.getFamily("Calibri"), 11, Font.BOLD, BaseColor.BLACK);
+	public static final Font boldBlackCalibri11 = new Font(Font.getFamily("Calibri"), 11, Font.BOLD, BaseColor.BLACK);
 	public static final Font blackCalibri14 = new Font(Font.getFamily("Calibri"), 14, Font.BOLD, BaseColor.BLACK);
     public static final Font blackCalibri9 = new Font(Font.getFamily("Calibri"), 9, Font.NORMAL, BaseColor.BLACK);
 	public static final Font blackCalibri10 = new Font(Font.getFamily("Calibri"), 10, Font.NORMAL, BaseColor.BLACK);
 	public static final Font blackCalibri11 = new Font(Font.getFamily("Calibri"), 11, Font.NORMAL, BaseColor.BLACK);
 	public static final Font boldBlackCalibri10 = new Font(Font.getFamily("Calibri"), 10, Font.BOLD, BaseColor.BLACK);
 	public static final Font arial = new Font(Font.getFamily("arial"), 12, Font.BOLD, BaseColor.BLACK);
+}
+
+class BackgroundImageHelper extends PdfPageEventHelper
+{
+    @Override
+    public void onStartPage(PdfWriter writer, Document document)
+    {
+        try {
+            document.add(new Paragraph(70, "\u00a0"));
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onEndPage(PdfWriter writer, Document document) {
+
+        try
+        {
+            Resource resource = new ClassPathResource("background.jpg");
+            InputStream inputStream = resource.getInputStream();
+
+            // init array with file length
+            byte[] bytesArray = new byte[inputStream.available()];
+            inputStream.read(bytesArray);
+
+            Image background = Image.getInstance(bytesArray);
+
+            float width = document.getPageSize().getWidth();
+            float height = document.getPageSize().getHeight();
+
+            writer.getDirectContentUnder().addImage(background, width, 0, 0, height, 0, 0);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
+
 }

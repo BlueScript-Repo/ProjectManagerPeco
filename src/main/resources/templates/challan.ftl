@@ -64,9 +64,11 @@
                             </th>
                         </tr>
                         <tr>
-                            <th colspan="4" style="background-color: #c2cdd1;border-color:#c2cdd1;"><b><h3
-                                    class="text-center text-light font-weight-bold" style="margin-top: 1%;">SALES
-                                CHALLAN</h3></b></th>
+                            <th colspan="4" style="background-color: #c2cdd1;border-color:#c2cdd1;">
+                                <b>
+                                    <h3 class="text-center text-light font-weight-bold" style="margin-top: 1%;">DELIVERY CHALAN</h3>
+                                </b>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>

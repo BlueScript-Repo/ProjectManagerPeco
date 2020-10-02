@@ -1490,9 +1490,24 @@ function cleanArray(actual)
       }
 
       var payTermCount = 3;
-      function addPayTerm()
+      function addPayTerm(payTerm)
       {
-        $('#payTermList').append('<div class="clearfix  ml-5" id="payTerm'+payTermCount+'"><a class="float-left mt-1 fa fa-times" value="x" onclick="$(\'#payTerm'+payTermCount+'\').remove();"></a><input type="text" class="form-control float-right" style="width:90%;" id="payTerm'+payTermCount+'" name="payTerm" value=""><br></div>');
+        console.log("payTerm is : "+payTerm);
+        var textVal = "";
+
+        switch (payTerm){
+        case "advance":
+            textVal = '<input type="text" class="form-control float-right mb-3" style="width:90%;" id="payTerm'+payTermCount+'" name="payTerm" value="Advance 50%"><br></div><br>';
+            break;
+        case "onSubmission":
+            textVal = '<input type="text" class="form-control float-right mb-3" style="width:90%;" id="payTerm'+payTermCount+'" name="payTerm" value="Initial Design - 15%"><br><input type="text" class="form-control float-right mb-3" style="width:90%;" id="payTerm'+payTermCount+'" name="payTerm" value="Final docket submission - 15%"><br></div><br>';
+            break;
+        case "runningBills":
+            textVal = '<input type="text" class="form-control float-right mb-3" style="width:90%;" id="payTerm'+payTermCount+'" name="payTerm" value="Running bills 20%"><br></div><br>';
+            break;
+        }
+
+        $('#payTermList').append('<div class="clearfix  ml-5" id="payTerm'+payTermCount+'"><a class="float-left mt-1 fa fa-times" value="x" onclick="$(\'#payTerm'+payTermCount+'\').remove();"></a>'+textVal);
         payTermCount++;
       }
 

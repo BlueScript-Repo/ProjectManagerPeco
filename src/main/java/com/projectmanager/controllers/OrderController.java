@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import com.projectmanager.dao.*;
+import com.projectmanager.util.HTMLElements;
 import com.projectmanager.util.NotificationUtil;
 import com.projectmanager.util.PurchaseOrderPDFView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,11 +126,6 @@ public class OrderController {
 
 		Collections.sort(vendorSpecificPoList);
 
-		System.out.println("Sorted Vendor specific LR list is : ");
-		for (String poStr : vendorSpecificPoList) {
-			System.out.println(poStr);
-		}
-
 		if (vendorSpecificPoList.size() > 0) {
 			lastPoNo = vendorSpecificPoList.get(vendorSpecificPoList.size() - 1);
 			lastPoNo = lastPoNo.substring(lastPoNo.lastIndexOf("/") + 1);
@@ -160,11 +156,6 @@ public class OrderController {
 		System.out.println(poDetails.getLineItem().length());
 
 		poDetailsDao.savePO(poDetails);
-
-		/*
-		 * mav.addObject("lineItems", poDetails.getLineItem());
-		 * mav.addObject("lineItemSimple", lineItemSimple); return mav;
-		 */
 
 		String lineItemSimpleStr = poDetails.getLineItemNoHtml();
 
@@ -269,7 +260,7 @@ public class OrderController {
 			String[] lineItems = pODetails.getLineItemNoHtml().split(";");
 
 			for (String line : lineItems) {
-				String itemsStr = poDetailsRow;
+				String itemsStr = HTMLElements.PO_DETAILS_ROW;
 
 				String words[] = line.split(",");
 
@@ -319,7 +310,7 @@ public class OrderController {
 			for (Inventory receivedInventory : receivedInvListNoInvoice) {
 
 				InventorySpec invSpec = receivedInventory.getInventorySpec();
-				String itemsStr = noInvoiceInventoryRow;
+				String itemsStr = HTMLElements.NO_INVOICE_INVENTORY_ROW;
 				itemsStr = itemsStr.replace("productVal", invSpec.getInventoryName());
 				itemsStr = itemsStr.replace("mocVal", invSpec.getMaterial());
 				itemsStr = itemsStr.replace("manufactureTypeVal", invSpec.getManifMethod());
@@ -407,38 +398,6 @@ public class OrderController {
 		return stringToReturn;
 	}
 
-	private static final String poDetailsRow = "	   <tr>"
-			+ "    <td> <input type='button' value='X' onClick='removeRow($(this));'></td>"
-			+ "    <td> <input type='hidden' name='product' value='productVal'></input> productVal </td>"
-			+ "    <td> <input type='hidden' name='moc' value='mocVal'></input>mocVal</td>"
-			+ "    <td> <input type='hidden' name='manufactureType' value='manufactureTypeVal'></input>manufactureTypeVal</td>"
-			+ "    <td> <input type='hidden' name='gradeOrClass' value='gradeOrClassVal'></input>gradeOrClassVal</td>"
-			+ "    <td> <input type='hidden' name='materialSpecs' value='materialSpecsVal'></input>materialSpecsVal</td>"
-			+ "    <td> <input type='hidden' name='standardType' value='standardTypeVal'></input>standardTypeVal</td>"
-			+ "    <td> <input type='hidden' name='ends' value='endsVal'></input>endsVal</td>"
-			+ "    <td> <input type='hidden' name='size' value='sizeVal'></input>sizeVal</td>"
-			+ "	   <td> <input type='hidden' name='purchaseRate' value='purchaseRateVal'></input> purchaseRateVal </td>"
-			+ "	   <td> poQuantity </td>"
-			+ "	   <td><input type='text' class='form-control' name='quantity' value=''></input><input type='hidden' name='projectName' id='projectNm' value='projectNameVal'></td>"
-			+ "	   <td><input type='text' class='form-control' name='location' value=''></input></td>"
-			+ "	   <input type='hidden' name='status' value='assigned'>" + "    </tr>";
 
-	private static final String noInvoiceInventoryRow = "	   <tr>"
-			+ "    <td> <input type=\"checkbox\" name=\"checkbox\" class=\"checkbox\" /></td>"
-			+ "    <td> <input type='hidden' name='product' value='productVal'></input> productVal </td>"
-			+ "    <td> <input type='hidden' name='moc' value='mocVal'></input>mocVal</td>"
-			+ "    <td> <input type='hidden' name='manufactureType' value='manufactureTypeVal'></input>manufactureTypeVal</td>"
-			+ "    <td> <input type='hidden' name='gradeOrClass' value='gradeOrClassVal'></input>gradeOrClassVal</td>"
-			+ "    <td> <input type='hidden' name='materialSpecs' value='materialSpecsVal'></input>materialSpecsVal</td>"
-			+ "    <td> <input type='hidden' name='standardType' value='standardTypeVal'></input>standardTypeVal</td>"
-			+ "    <td> <input type='hidden' name='ends' value='endsVal'></input>endsVal</td>"
-			+ "    <td> <input type='hidden' name='size' value='sizeVal'></input>sizeVal</td>"
-			+ "	   <td> <input type='hidden' name='purchaseRate' value='purchaseRateVal'></input> purchaseRateVal </td>"
-			+ "	   <td> <input type='hidden' name='receivedQuantity' value='receivedQuantityVal'></input>"
-			+ "			receivedQuantityVal <input type='hidden' name='projectName' id='projectNm' value='projectNameVal'></td>"
-			+ "	   <td> <input type='hidden' name='location' value='locationVal'></input>locationVal</td>"
-			+ "	   <td style='width:10%;'> <input type='hidden' name='receivedDate'  value='receivedDateVal'></input>receivedDateVal</td>"
-			+ "	   <input type='hidden' name='status' value='assigned'>"
-			+ "    </tr>";
 
 }

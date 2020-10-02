@@ -617,44 +617,16 @@ style="display: none;">
 <div id="paymentterms" class="collapse" >
   <div id="payTermList">
     <div class="clearfix ml-5" id="payTerm1">
-      <a class="float-left mt-3 fa fa-times" value="x" onclick="$('#payTerm1').remove();"></a>
-      <input type="text" class="form-control float-right" style="width:90%;" name="payTerm" value="50% Advance along with PO.">
-  </div>
-  <br>
-  <div class="clearfix ml-5" id="payTerm2">
-      <a class="float-left mt-3 fa fa-times" value="x" onclick="$('#payTerm2').remove();"></a>
-      <input type="text" class="form-control float-right" style="width:90%;" id="payTerm2" name="payTerm" value="50% Against Readiness of Piping Layout & Isometrics (Before Submission).">
-  </div>
-  <br>
-  <div class="clearfix ml-5" id="payTerm3">
-      <span class="clearfix float-right" style="width:90%;">
-          <select id="payTypeVal" class="form-control float-left" style="width:5%;" onchange="appendPaymentType(this.value)">
-            <option value="">-</option>
-            <option value="Advance">Advance</option> 
-            <option value="Running bills">Running bills</option>
-            <option value="Against proforma before delivery">Against proforma before delivery</option>
-            <option value="Against deliverable after submission of work">Against deliverable after submission of work</option>
-        </select>
-        <input type="text" class="form-control float-right" style="width:90%;" id="payType" name="payTerm" value="">
-    </span>
-</div>
-<br>
-<div class="clearfix ml-5" id="payTerm2">
-  <!-- <a class="float-left mt-3 fa fa-times" value="x" onclick="$('#payTerm3').remove();"></a> -->
-  <span class="clearfix float-right" style="width:90%;">
-      <select id="gstVal" class="form-control float-left" style="width:5%;" onchange="appendGst(this.value)">
-          <option value="">-</option>
-          <option value="5%">5%</option>
-          <option value="12%">12%</option>
-          <option value="18%">18%</option>
-          <option value="28%">28%</option>
+      <select class="form-control float-left" id="payTermOption">
+          <option value="advance">Advance</option>
+          <option value="runningBills">Running bills</option>
+          <option value="onSubmission">On Submission</option>
       </select>
-      <input type="text" class="form-control float-right" style="width:90%;" id="payTermGST" name="payTerm" value="">
-  </span>
+      <input type="button" class="btn btn-default float-right" value="Add" onclick="addPayTerm($('#payTermOption').val());">
+    </div>
+  <br>
 </div>
-<br>
-</div>
-<input type="button" class="btn btn-default" value="Add" onclick="addPayTerm();">
+
 </div>
 <div class="separator"></div>
 <i class="fa fa-plus" aria-hidden="true"></i>

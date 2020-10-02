@@ -155,7 +155,9 @@ public class InventoryController {
 
         //Calclate number of sub-challan need to be reated
 
-        int noOfChallan = Math.round(inventorySpec.size() / 14) + 1;
+        // Math.round(inventorySpec.size() / 14) + 1;
+
+        int noOfChallan = 2;
 
         ArrayList<StringBuffer> lineItemDataList = new ArrayList<>();
 
@@ -640,18 +642,13 @@ public class InventoryController {
 
         BOQHeader header = boqHeaderDao.getBOQHeaderFromName(docNameToDownload, projectId);
 
-        ArrayList<BOQDetails> boqDetailsList = boqDetailsDao.getBOQFromName(docNameToDownload, projectId);
-
-        ArrayList<BOQLineData> existingBoqLineDataList = boqController.getBOQLineDataList(boqDetailsList);
-
         //Set correct sheetDetails here
-
-        //header.setSheetDetails();
-
+        
+        
         boqlineData = boqController.getBOQLineDataList(mocIn, endsIn, classOrGradeIn, productIn, manufactureMethodIn, materialSpecsIn, standardTypeIn);
 
         try {
-            excelByts = writer.writeExcel(existingBoqLineDataList, boqlineData, size, quantity, supplyRate, erectionRate, supplyAmount,
+            excelByts = writer.writeExcel(boqlineData, size, quantity, supplyRate, erectionRate, supplyAmount,
                     erectionAmount, "", header, false, true);
 
             File fileToSave = new File(destination);

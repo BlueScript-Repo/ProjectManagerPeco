@@ -306,10 +306,6 @@ public class InventoryUtils {
 				stringToadd = stringToadd.replace("vheicleNumber",challanDetails.getVheicleNumber());
 				stringToadd = stringToadd.replace("gstNo",challanDetails.getGstNo());
 
-
-
-
-
 				challanHTMLBuffer.append(stringToadd);
 			}
 

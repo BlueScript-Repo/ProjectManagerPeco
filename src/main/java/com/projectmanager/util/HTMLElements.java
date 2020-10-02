@@ -23,4 +23,39 @@ public class HTMLElements {
             + " </div>   "
             + "</div>"
             + "</form>";
+
+	public static final String PO_DETAILS_ROW = "	   <tr>"
+			+ "    <td> <input type='button' value='X' onClick='removeRow($(this));'></td>"
+			+ "    <td> <input type='hidden' name='product' value='productVal'></input> productVal </td>"
+			+ "    <td> <input type='hidden' name='moc' value='mocVal'></input>mocVal</td>"
+			+ "    <td> <input type='hidden' name='manufactureType' value='manufactureTypeVal'></input>manufactureTypeVal</td>"
+			+ "    <td> <input type='hidden' name='gradeOrClass' value='gradeOrClassVal'></input>gradeOrClassVal</td>"
+			+ "    <td> <input type='hidden' name='materialSpecs' value='materialSpecsVal'></input>materialSpecsVal</td>"
+			+ "    <td> <input type='hidden' name='standardType' value='standardTypeVal'></input>standardTypeVal</td>"
+			+ "    <td> <input type='hidden' name='ends' value='endsVal'></input>endsVal</td>"
+			+ "    <td> <input type='hidden' name='size' value='sizeVal'></input>sizeVal</td>"
+			+ "	   <td> <input type='hidden' name='purchaseRate' value='purchaseRateVal'></input> purchaseRateVal </td>"
+			+ "	   <td> poQuantity </td>"
+			+ "	   <td><input type='text' class='form-control' name='quantity' value=''></input><input type='hidden' name='projectName' id='projectNm' value='projectNameVal'></td>"
+			+ "	   <td><input type='text' class='form-control' name='location' value=''></input></td>"
+			+ "	   <input type='hidden' name='status' value='assigned'>" + "    </tr>";
+
+	public static final String NO_INVOICE_INVENTORY_ROW =
+			  "	   <tr>"
+			+ "    <td> <input type=\"checkbox\" name=\"checkbox\" class=\"checkbox\" /></td>"
+			+ "    <td> <input type='hidden' name='product' value='productVal'></input> productVal </td>"
+			+ "    <td> <input type='hidden' name='moc' value='mocVal'></input>mocVal</td>"
+			+ "    <td> <input type='hidden' name='manufactureType' value='manufactureTypeVal'></input>manufactureTypeVal</td>"
+			+ "    <td> <input type='hidden' name='gradeOrClass' value='gradeOrClassVal'></input>gradeOrClassVal</td>"
+			+ "    <td> <input type='hidden' name='materialSpecs' value='materialSpecsVal'></input>materialSpecsVal</td>"
+			+ "    <td> <input type='hidden' name='standardType' value='standardTypeVal'></input>standardTypeVal</td>"
+			+ "    <td> <input type='hidden' name='ends' value='endsVal'></input>endsVal</td>"
+			+ "    <td> <input type='hidden' name='size' value='sizeVal'></input>sizeVal</td>"
+			+ "	   <td> <input type='hidden' name='purchaseRate' value='purchaseRateVal'></input> purchaseRateVal </td>"
+			+ "	   <td> <input type='hidden' name='receivedQuantity' value='receivedQuantityVal'></input>"
+			+ "			receivedQuantityVal <input type='hidden' name='projectName' id='projectNm' value='projectNameVal'></td>"
+			+ "	   <td> <input type='hidden' name='location' value='locationVal'></input>locationVal</td>"
+			+ "	   <td style='width:10%;'> <input type='hidden' name='receivedDate'  value='receivedDateVal'></input>receivedDateVal</td>"
+			+ "	   <input type='hidden' name='status' value='assigned'>"
+			+ "    </tr>";
 }
