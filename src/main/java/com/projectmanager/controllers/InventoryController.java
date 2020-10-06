@@ -6,10 +6,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -172,7 +169,7 @@ public class InventoryController {
             inventory.setQuantity(quantity[i]);
             inventory.setLocation(location[i]);
 
-            inventory.setReceivedDate(new SimpleDateFormat("dd/mm/yyyy").format(new Date()));
+            inventory.setReceivedDate(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 
             // Inventory present without TaxInvoice
             int inventoryRowId = inventoryDao.isEntityPresent(inventory, status[i], true);
@@ -643,12 +640,12 @@ public class InventoryController {
         BOQHeader header = boqHeaderDao.getBOQHeaderFromName(docNameToDownload, projectId);
 
         //Set correct sheetDetails here
-        
+        header.setSheetDetails("Details,"+productIn.length);
         
         boqlineData = boqController.getBOQLineDataList(mocIn, endsIn, classOrGradeIn, productIn, manufactureMethodIn, materialSpecsIn, standardTypeIn);
 
         try {
-            excelByts = writer.writeExcel(boqlineData, size, quantity, supplyRate, erectionRate, supplyAmount,
+            excelByts = writer.writeExcel(boqlineData, sizeIn, Arrays.stream(billedQty).mapToObj(String::valueOf).toArray(String[]::new), supplyRate, erectionRate, supplyAmount,
                     erectionAmount, "", header, false, true);
 
             File fileToSave = new File(destination);

@@ -24,8 +24,7 @@ public class TestHibernate {
 
 		try
 		{
-			Resource resource = new ClassPathResource("classpath:BOQ_Template.xls");
-			System.out.println("Finished");
+			System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 		} catch (EncryptedDocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

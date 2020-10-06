@@ -301,7 +301,7 @@ public class OrderController {
 
 	@RequestMapping(value = "/getNoInvoiceInventory", method = RequestMethod.POST)
 	public @ResponseBody String getNoInvoiceInventory(int projectId) throws Exception {
-		String rowToReturn = "<tr><td colspan=\"13\" class=\"text-center\">No inventory to BILL..!!<t d=\"\"></t></td></tr>";
+		String rowToReturn = "";
 
 		Project project = projectDao.getProject(projectId);
 		ArrayList<Inventory> receivedInvListNoInvoice = inventoryDao.getNoInvoiceInventory(project.getProjectName());
@@ -329,6 +329,10 @@ public class OrderController {
 
 				rowToReturn = rowToReturn + itemsStr;
 			}
+		}
+		else
+		{
+			rowToReturn = "<tr><td colspan=\"13\" class=\"text-center\">No inventory to BILL..!!<t d=\"\"></t></td></tr>";
 		}
 
 		return rowToReturn;

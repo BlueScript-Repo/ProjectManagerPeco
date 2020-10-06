@@ -1284,11 +1284,11 @@ function cleanArray(actual)
           {
             if($('#generateInvoiceTable input.checkbox')[j].checked)
             {
-                selectedElements1[j] = j;
+                $('#generateInvoiceTable input.checkbox')[j].remove();
             }
           }
 
-         var deleted = 0;
+         /*var deleted = 0;
          for(var d=0;d<selectedElements1.length;d++)
          {
            if(selectedElements1[d] != undefined)
@@ -1296,7 +1296,7 @@ function cleanArray(actual)
             $('#generateInvoiceTable tr')[d-deleted].remove();
             deleted++;
           }
-        }
+        }*/
          alert('Invoice generated Successfully. Please check the Notification section to verify and send.');
         },
         error : function (error) {
