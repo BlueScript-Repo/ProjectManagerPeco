@@ -240,7 +240,7 @@
         data-animation-effect="fadeIn" data-effect-delay="100"></div>
     </div>
 </div>
-<form name="generateBOQ" action="generateNew" class="createBOQ" method="POST"
+<form name="generateBOQ" action="generateNew" class="createBOQ" method="POST" id="generateBOQ"
 style="display: none;">
 <div class="row" style="margin-left: 8%;">
     <div class="col-md-3 col-sm-3">
@@ -258,13 +258,15 @@ style="display: none;">
     <input type="text" name="site" class="form-control" value="" required>
 </div>
 </div>
-<div class="col-md-3 col-sm-3">
-    <label class="createBOQ" style="margin-top: 1%; display: none;">BOQ Name
-    : </label>
-    <input class="createBOQ form-control" style="display: none;" type="text"
-    id="boqName" name="boqName" value="" project="" required>
-    <input type="hidden" name="projectId" value="${projectId}"/>
+
+  <div class="col-md-3 col-sm-3" style="margin-left: 0%;">
+    <div class="animated object-visible fadeInDownSmall"
+    data-animation-effect="fadeInDownSmall" data-effect-delay="100">
+    <label>Class</label>
+    <input type="text" name="classVariable" class="form-control" value="" >
 </div>
+</div>
+
 <div class="col-md-3 col-sm-3">
     <div class="animated object-visible fadeInDownSmall"
     data-animation-effect="fadeInDownSmall" data-effect-delay="100">
@@ -280,13 +282,16 @@ style="display: none;">
         data-animation-effect="fadeInDownSmall" data-effect-delay="100">
         <label>Doc Name</label>
         <input type="text" name="dName" class="form-control" value="" >
+   		
     </div>
 </div>
+  <input type="hidden" name="projectId" value="${projectId}"/>
 <div class="col-md-3 col-sm-3">
     <div class="animated object-visible fadeInDownSmall"
     data-animation-effect="fadeInDownSmall" data-effect-delay="100">
     <label>Doc Number</label>
-    <input type="text" class="form-control" name="dNo" value="" >
+    <input type="text" class="form-control" name="dNo" value="" required>
+    
 </div>
 </div>
 <div class="col-md-3 col-sm-3">
@@ -311,6 +316,9 @@ style="display: none;">
         <textarea name="paymentTerms" class="form-control">FOR SUPPLY: &#10; &#10;FOR LABOR:  </textarea>
         <small>Add max 4 terms each</small>
     </div>
+    
+  
+
 </div>
 <div class="row">
     <div class="col-md-12 pl-5">
@@ -337,6 +345,15 @@ style="display: none;">
         class="btn btn-default generateBOQButton">Generate Quotation
     </button>
 </div>
+
+  <div class="col-md-2" align="center">
+        <button type="submit" name="createBOQButton"
+        class="btn btn-default CreateBOQButton">Generate BOQ
+    </button>
+</div>
+ 
+    
+
 <div class="col-md-2" align="center">
     <small>Enter sheet name and click "Add New Sheet"</small>
     <input type="text" class="form-control" style="margin-top: 5px;width: 150px;"
@@ -715,6 +732,7 @@ style="display: none;">
                             <select class="form-control" name="moc" id="moc"
                             onchange="myFunction('manufactureType');">
                             <option></option>
+                           
                         </select>
                     </div>
                 </td>
@@ -722,8 +740,8 @@ style="display: none;">
                     <div class="form-group">
                         <select class="form-control" name="manufactureType"
                         id="manufactureType" onchange="myFunction('classOrGrade');">
-                        <option></option>                    
-                    </select>
+                        <option></option>
+                        </select>
                 </div>
             </td>
             <td>
@@ -731,7 +749,7 @@ style="display: none;">
                     <select class="form-control" name="classOrGrade"
                     id="classOrGrade" onchange="myFunction('materialSpecs');">
                     <option></option>
-                </select>
+                     </select>
             </div>
         </td>
         <td>
@@ -739,7 +757,7 @@ style="display: none;">
                 <select class="form-control" name="materialSpecs"
                 id="materialSpecs" onchange="myFunction('standardType');">
                 <option></option>
-            </select>
+                 </select>
         </div>
     </td>
     <td>
@@ -747,7 +765,7 @@ style="display: none;">
             <select class="form-control" name="standardType"
             id="standardType">
             <option></option>
-        </select>
+            </select>
     </div>
 </td>
 <td>

@@ -403,5 +403,23 @@ public class OrderController {
 	}
 
 
+	private static final String poDetailsRow = "	   <tr>"
+			+ "    <td> <input type='button' value='X' onClick='removeRow($(this));'></td>"
+			+ "    <td> <input type='hidden' name='product' value='productVal'></input> productVal </td>"
+			+ "    <td> <input type='hidden' name='moc' value='mocVal'></input>mocVal</td>"
+			+ "    <td> <input type='hidden' name='manufactureType' value='manufactureTypeVal'></input>manufactureTypeVal</td>"
+			+ "    <td> <input type='hidden' name='gradeOrClass' value='gradeOrClassVal'></input>gradeOrClassVal</td>"
+			+ "    <td> <input type='hidden' name='materialSpecs' value='materialSpecsVal'></input>materialSpecsVal</td>"
+			+ "    <td> <input type='hidden' name='standardType' value='standardTypeVal'></input>standardTypeVal</td>"
+			+ "    <td> <input type='hidden' name='ends' value='endsVal'></input>endsVal</td>"
+			+ "    <td> <input type='hidden' name='size' value='sizeVal'></input>sizeVal</td>"
+			+ "	   <td> <input type='hidden' name='purchaseRate' value='purchaseRateVal'></input> purchaseRateVal </td>"
+			+ "	   <td> poQuantity </td>"
+			+ "	   <td><input type='text' class='form-control' id='receivedQuantity' name='quantity' onChange='exceedInventory($(this));' value=''></input><input type='hidden' name='projectName' id='projectNm' value='projectNameVal'></td>"
+			+ "	   <td><input type='text' class='form-control' name='location' value=''></input></td>"
+			+ "	   <td><input type='text' class='form-control' name='comment' value=''></input></td>"			
+			+ "	   <input type='hidden' name='status' value='assigned'>" + "    </tr>";
+
+
 
 }

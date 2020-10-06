@@ -33,9 +33,11 @@ public class Inventory implements Serializable, BOQData {
 	private String invoiceNo;
 
 	private String receivedDate;
+	
+	String comment;
 
 	public Inventory(InventorySpec inventorySpec, String purchaseRate, int quantity, String location, String invoiceNo,
-			String receivedDate) {
+			String receivedDate, String comment) {
 		super();
 		this.inventorySpec = inventorySpec;
 		this.purchaseRate = purchaseRate;
@@ -43,10 +45,21 @@ public class Inventory implements Serializable, BOQData {
 		this.location = location;
 		this.invoiceNo = invoiceNo;
 		this.receivedDate = receivedDate;
+		this.comment = comment;
 	}
 
 	public Inventory() {
 
+	}
+	
+	
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public int getInventoryRowId() {
@@ -116,11 +129,14 @@ public class Inventory implements Serializable, BOQData {
 
 		return toBeReturned;
 	}
+	
 
 	@Override
 	public String toString() {
-		return "Inventory [inventorySpec=" + inventorySpec + ", inventoryRowId=" + inventoryRowId + ", purchaseRate="
-				+ purchaseRate + ", quantity=" + quantity + ", location=" + location + ", invoiceNo=" + invoiceNo
-				+ ", receivedDate=" + receivedDate + "]";
+		return "Inventory [inventoryRowId=" + inventoryRowId
+				+ ", inventorySpec=" + inventorySpec + ", purchaseRate="
+				+ purchaseRate + ", quantity=" + quantity + ", location="
+				+ location + ", invoiceNo=" + invoiceNo + ", receivedDate="
+				+ receivedDate + ", comment=" + comment + "]";
 	}
 }

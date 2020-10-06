@@ -93,7 +93,7 @@ public class EmailUtils {
 	public void sendInquiry(String sender, String recipient, byte[] fileBytes, String inquiryName, File file) {
 		String subject = "PECO Projects : Inventory Inquiry";
 
-		String text = "Greeting of thr day from PECO . Please find attached the Inventory requirment. PLeaase update the same and respond.";
+		String text = "Greeting of thr day from PECO . Please find attached the Inventory requirment. Pleaase update the same and respond.";
 
 		FileOutputStream fos;
 		try {
@@ -131,6 +131,7 @@ public class EmailUtils {
 			message.setSubject(subject, "UTF-8");
 			message.setFrom(new InternetAddress(sender));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse("admin@pecoprojects.com"));
 
 			// Create a multipart/alternative child container.
 			MimeMultipart msg_body = new MimeMultipart("alternative");

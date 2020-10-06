@@ -92,15 +92,20 @@
           </div>
           <form action="createProject" method="POST">
             <div class="modal-body">
+             <input type="hidden" style="color:#000000;width:100% !important;" class="form-control" name="projectId" value= ${projectId}>
               <p>Project Name</p>
-              <input type="text" style="color:#000000;width:100% !important;" class="form-control" placeholder="Type a project Name Here" name="projectName" required>
+              <input type="text" style="color:#000000;width:100% !important;" class="form-control" id="ProjectName" placeholder="Type a project Name Here" name="projectName" required>
               <br/>
               <p>Company Name</p>
               <input type="text" style="color:#000000;width:100% !important;" class="form-control" placeholder="Enter Company Name Here" name="companyName" required>
               <br/>
-              <p>Project Description</p>
+              <p>Utility</p>
               <input type="text" style="color:#000000;width:100% !important;" class="form-control" placeholder="Type in the description Here" name="projectDesc">
-            </div>
+              <br/>
+              <p>Project Number</p>
+              <input type="text" style="color:#000000;width:100% !important;" class="form-control" id="ProjectNumber" placeholder="Project Number" name="projectNumber">
+           
+             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-sm btn-dark" data-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-sm btn-default">Create</button>
@@ -124,7 +129,7 @@
               <p>Company Name</p>
               <input type="text" style="color:#000000" class="form-control" placeholder="Enter Company Name Here" name="companyName">
               <br/>
-              <p>Project Description</p>
+              <p>Utility</p>
               <input type="text" style="color:#000000" class="form-control" placeholder="Type in the description Here" name="projectDesc">
             </div>
             <div class="modal-footer">
@@ -293,6 +298,34 @@
 <script src="./js/custom.js"></script>
 <script src="plugins/jquery.blockUI.js"></script>
 <script>
+$('input[type="text"]').change(function() {
+
+var projectN = $('input[name="projectName"]').val();
+var companyN = $('input[name="companyName"]').val();
+var utility = $('input[name="projectDesc"]').val();
+var projectId = parseInt($('[name="projectId"]')[0].value)+1;  
+console.log(projectId);
+ 
+
+if(utility != null){
+
+var arrayOfString = utility.split(" ");
+console.log(arrayOfString[0].charAt(0).toUpperCase());
+console.log(arrayOfString[1].charAt(0).toUpperCase());
+var projN = (arrayOfString[0].charAt(0).toUpperCase()+arrayOfString[1].charAt(0).toUpperCase()+arrayOfString[2].charAt(0).toUpperCase());
+
+}
+if(companyN != null){
+var arrayOfString1 = companyN.split(" ");
+var compN = (arrayOfString1[0].charAt(0).toUpperCase()+arrayOfString1[1].charAt(0).toUpperCase());
+}
+
+$('#ProjectNumber').val("PP-"+compN+"-"+projectId+"-"+projN);
+});
+
+</script>
+<script>
+
   function showLoading()
   {
     $.blockUI({ css: { 

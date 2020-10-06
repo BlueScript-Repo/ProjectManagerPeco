@@ -410,14 +410,14 @@
       $('.inventoryTableHeader').css('display','block');  
     }    
     
-    $('[name="boqName"]')[0].value = name.substring(0, name.length-3);
+    $('[name="dNo"]')[0].value = name.substring(0, name.length-3);
     
     var projectId = $('[name="projectId"]')[0].value;  
 
     var formData = $(this).serializeArray();
 
     formData.push({name: 'projectId', value: projectId});
-    formData.push({name: 'boqName', value: name});
+    formData.push({name: 'dNo', value: name});
 
 
     $.ajax({
@@ -492,7 +492,7 @@ function createInquiry()
   var formData = $(this).serializeArray();
 
   formData.push({name: 'projectId', value: $('[name="projectId"]').val()});
-  formData.push({name: 'boqName', value: $('[name="inquiryName"]').val()});
+  formData.push({name: 'dNo', value: $('[name="inquiryName"]').val()});
 
     var tabs = $('.tab-pane');
     var sheetDetails = "";
@@ -1123,7 +1123,7 @@ function cleanArray(actual)
       var revisionNo = 0;
       for(var k = 0; k < boqList.length; k++)
       {
-        if(boqList[k].value.startsWith($('[name="boqName"]').val()))
+        if(boqList[k].value.startsWith($('[name="dNo"]').val()))
         {
           revisionNo ++;
           var optionVal = boqList[k].value;
@@ -1134,11 +1134,11 @@ function cleanArray(actual)
 
       console.log('revisionNo is : '+revisionNo);
 
-      var boqNameToAppend = '<option value="'+ $('[name="boqName"]').val() +'_R'+revisionNo+'">'+$('[name="boqName"]').val()+'_R'+revisionNo+'</option>';
+      var dNoToAppend = '<option value="'+ $('[name="dNo"]').val() +'_R'+revisionNo+'">'+$('[name="dNo"]').val()+'_R'+revisionNo+'</option>';
 
-      console.log("boqNameToAppend is : "+boqNameToAppend);
+      console.log("dNoToAppend is : "+dNoToAppend);
 
-      $('.revisionSection').append(boqNameToAppend);
+      $('.revisionSection').append(dNoToAppend);
 
     });
   });
@@ -1190,6 +1190,111 @@ function cleanArray(actual)
   }
 
 
+  $(function() {
+	  
+	  $('button[name=createBOQButton]').click(function(e) {
+	      e.preventDefault();
+
+	      if($('[name="sheetDetails"]').length===0)
+	      {
+	        alert('Please add atleast 1 sheet with Inventory Details and try again..!!');
+	        return;
+	      }
+
+	      var ele1 = $('[name="quantity"]');
+	      var length = $('#tableContentDetails').find(ele1).length;
+	      var stopNow = false;
+
+	      var sheetCount = $('[name="sheetDetails"]');
+	      
+	      try
+	      {
+	        for(var i=0;i<sheetCount.length;i++)
+	        {
+	          var eleLength = 0;
+
+
+	          eleLength = $('#'+sheetCount[i].value).find('tbody#tableContentDetails').find('input[name="product"]').length;
+
+	          if(eleLength===0)
+	          {
+	            alert('Please remove the blank sheet and try again..!!');
+	            return;
+	          }
+
+	          $('#'+sheetCount[i].value).find('tbody#tableContentDetails').find('input[name="sheetDetails"]').attr('value',sheetCount[i].value.split(',')[0]+','+eleLength);
+	        }
+	      }
+	      catch(e)
+	      {
+	        console.log(e);
+	      }
+
+	      for(var i=0; i < length; i++)
+	      {
+	        if($('#tableContentDetails').find(ele1)[i].value === "")
+	        {
+	          alert('Please enter Quantity for each element in BOQ');
+	          stopNow = true; 
+	          break;
+	        }
+	      }
+	      try{
+	        if(!stopNow)
+	        {
+	          $('[name="generateBOQ"]').validate();
+	          $('[name="generateBOQ"]').submit();
+	        }
+	      }
+	      catch(err)
+	      {
+	        console.log('Error occured while generating BOQ : '+err);
+	      }
+	      
+	      var formElement = $('[name="generateBOQ"]').clone();
+			
+			formElement.append(jQuery('<input>', {
+		      'name': 'isBoq',
+		      'value': true,
+		      'type': 'hidden'
+		    })).append(jQuery('<input>', {
+		      'name': 'isOffer',
+		      'value': false,
+		      'type': 'hidden'
+		    }));
+			 $(document.body).append(formElement);
+			formElement.submit();
+
+	      var boqList = $('.revisionSection')[0].options; 
+
+	      var revisionNo = 0;
+	      for(var k = 0; k < boqList.length; k++)
+	      {
+	        if(boqList[k].value.startsWith($('[name="dNo"]').val()))
+	        {
+	          revisionNo ++;
+	          var optionVal = boqList[k].value;
+	          console.log(optionVal);        
+	        }
+
+	      }
+
+	      console.log('revisionNo is : '+revisionNo);
+
+	      var dNoToAppend = '<option value="'+ $('[name="dNo"]').val() +'_R'+revisionNo+'">'+$('[name="dNo"]').val()+'_R'+revisionNo+'</option>';
+
+	      console.log("dNoToAppend is : "+dNoToAppend);
+
+	      $('.revisionSection').append(dNoToAppend);
+
+	    });
+	
+
+	  
+	
+  });
+
+
 
 
   function deleteRevision(docType)
@@ -1207,13 +1312,13 @@ function cleanArray(actual)
     }
     else if(docType==='boq')
     {
-      if($('#boqName')[0].value==='')
+      if($('#dNo')[0].value==='')
       {
         alert('Please select the BOQ to delete');
         return;
       }
 
-      fileToDownloadName = $('#boqName')[0].value;
+      fileToDownloadName = $('#dNo')[0].value;
     }
 
     var newForm = jQuery('<form>', {
@@ -1358,8 +1463,8 @@ function cleanArray(actual)
 			+'<div class="table-responsive">'
 			+'<table class="table table-colored inventoryDetails inventoryTableHeader" style="display: none;">'
 			+'<thead>           <tr>'
-			+'<th>#</th><th>Product</th><th>MOC</th><th>Manif Type</th><th>Grd/Cls</th><th>Material Specs</th><th>Standard Type</th><th>Ends</th><th>Size</th><th>Qty</th><th>Base Supply Rate</th><th>Supply Rate</th><th>Base Erection Rate</th><th>Erection Rate</th><th>Supply Amount</th><th>Erection Amount</th></tr>'
-			+'<tr>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th><input type="text" style="width:45px;" name="supplyPrsnt" onChange="updateSupplyRate($(this));"/></th>            <th></th>            <th><input type="text" style="width:45px;" name="erectionPrsnt" onChange="updateErectionRate($(this));"/></th>            <th></th>            <th></th>            <th></th><th></th>          </tr>'
+			+'<th>#</th><th>Product</th><th>MOC</th><th>Manif Type</th><th>Grd/Cls</th><th>Material Specs</th><th>Standard Type</th><th>Ends</th><th>Size</th><th>Qty</th><th>Base Supply Rate</th><th>Supply Rate</th><th>Base Labour Rate</th><th>Labour Rate</th><th>Supply Amount</th><th>Labour Amount</th></tr>'
+			+'<tr>      <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>  <th><input type="text" style="width:45px;" name="supplyPrsnt" onChange="updateSupplyRate($(this));"/></th>            <th></th>            <th><input type="text" style="width:45px;" name="erectionPrsnt" onChange="updateErectionRate($(this));"/></th>            <th></th>            <th></th>            <th></th><th></th>          </tr>'
 			+'</thead>        <tbody id="tableContentDetails">        </tbody>      </table>    </div>  </div></div><div class="separator clearfix"></div><p class="text-right"><strong>SubTotal :</strong> <span id="'+sheetName+'SupSubTotal">0.00</span> <span id="'+sheetName+'EreSubTotal">0.00</span></p></div>';
 
     $($('.tab-content')[1]).append(tabPane); 

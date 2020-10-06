@@ -18,6 +18,7 @@ public class PODetails {
     String contactEmail;
     String vendorGst;
     String vendorPan;
+    String comment;
     
     @Column(length = 2046)
     String[] term;
@@ -32,7 +33,15 @@ public class PODetails {
     String projectId;
         
     
-    public String getPoNumber() {
+    public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public String getPoNumber() {
         return poNumber;
     }
 
@@ -147,7 +156,7 @@ public class PODetails {
 	public PODetails(String poNumber, String vendorName, String location,
 			String contactName, String contactNumber, String contactEmail,
 			String vendorGst, String vendorPan, String[] term, String lineItem,
-			String lineItemNoHtml, String poDate, String projectId) {
+			String lineItemNoHtml, String poDate, String projectId, String comment) {
 		super();
 		this.poNumber = poNumber;
 		this.vendorName = vendorName;
@@ -162,16 +171,20 @@ public class PODetails {
 		this.lineItemNoHtml = lineItemNoHtml;
 		this.poDate = poDate;
 		this.projectId = projectId;
+		this.comment = comment;
 	}
+	
+	
 
 	@Override
 	public String toString() {
-		return "PODetails [poNumber=" + poNumber + ": vendorName=" + vendorName
-				+ ": location=" + location + ", contactName=" + contactName
-				+ ": contactNumber=" + contactNumber + ": contactEmail="
-				+ contactEmail + ": vendorGst=" + vendorGst + ": vendorPan="
-				+ vendorPan + ": term=" + Arrays.toString(term) + ": lineItem="
-				+ lineItem + ": lineItemNoHtml=" + lineItemNoHtml + ": poDate="
-				+ poDate + ": projectId=" + projectId + "]";
+		return "PODetails [poNumber=" + poNumber + ", vendorName=" + vendorName
+				+ ", location=" + location + ", contactName=" + contactName
+				+ ", contactNumber=" + contactNumber + ", contactEmail="
+				+ contactEmail + ", vendorGst=" + vendorGst + ", vendorPan="
+				+ vendorPan + ", comment=" + comment + ", term="
+				+ Arrays.toString(term) + ", lineItem=" + lineItem
+				+ ", lineItemNoHtml=" + lineItemNoHtml + ", poDate=" + poDate
+				+ ", projectId=" + projectId + "]";
 	}
 }

@@ -105,6 +105,7 @@
                                 <th>PO Quantity</th>
                                 <th>Received Quantity</th>
                                 <th>Location</th>
+                                <th>Comment</th>
                             </tr>
                             </thead>
                             <tbody id="poDetailsTable">
@@ -251,6 +252,16 @@
     <script src="js/template.js"></script>
     <!-- Custom Scripts -->
     <script src="js/custom.js"></script>
+    
+    <script>
+		function exceedInventory(thisObj){
+  			var quantity = $(thisObj).parent().prev()[0].innerHTML.trim();
+ 		    var receivedQuantity = $("#receivedQuantity")[0].value;
+  			if(receivedQuantity>quantity){
+  				alert("Received Inventory maximum than order.");
+  				}
+  		}
+	</script>
 
     <script type="text/javascript">
       $(document).ready(function(){

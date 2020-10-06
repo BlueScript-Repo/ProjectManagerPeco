@@ -41,7 +41,7 @@ public class ExcelWriter {
 
     public byte[] writeExcel(ArrayList<BOQLineData> boqLineDataDetails, String[] size, String[] quantity,
                              String[] supplyRate, String[] erectionRate, String[] supplyAmount, String[] erectionAmount,
-                             String boqNameRevisionStr, BOQHeader header, boolean isOffer, boolean isInvoiceAnnexture) throws IOException {
+                             String boqNameRevisionStr, BOQHeader header, boolean isOffer, boolean isInvoiceAnnexture, boolean isBOQ) throws IOException {
 
         Workbook workBook = null;
         InputStream inputStream = null;
@@ -194,7 +194,7 @@ public class ExcelWriter {
             // Sort the list
             if (header != null) {
                 sheet.getRow(2).getCell(5).setCellValue(header.getClient());
-                sheet.getRow(6).getCell(3).setCellValue(header.getUtility());
+                sheet.getRow(6).getCell(1).setCellValue(header.getUtility());
 
                 sheet.getRow(3).getCell(5).setCellValue(header.getSite());
                 sheet.getRow(6).getCell(4).setCellValue(header.getPressure());
@@ -204,6 +204,7 @@ public class ExcelWriter {
 
                 sheet.getRow(5).getCell(1).setCellValue(header.getdName());
                 sheet.getRow(5).getCell(4).setCellValue(header.getdNo());
+                sheet.getRow(4).getCell(4).setCellValue(header.getClassVariable());
             }
 
             int nextRow = 10;
@@ -215,6 +216,15 @@ public class ExcelWriter {
 
             double supplyAmountTotal = 0;
             double erectionAmountTotal = 0;
+            double Total = 0;
+
+
+//            boolean isAnnexure = false;
+//
+//            if(boqLineDataDetails!=null && boqLineDataDetails.size()>0)
+//            {
+//                isAnnexure = false;//true
+//            }
 
 
             for (int invIndx = startIndex; invIndx < lastIndex; invIndx++) {
@@ -261,7 +271,7 @@ public class ExcelWriter {
                     }
                     cellToUpdate6.setCellStyle(whiteBackGroundTextCenter);
 
-                    Cell cellToUpdate9 = sheet.getRow(row).getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    Cell cellToUpdate9 = sheet.getRow(row).getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 
                     if (supplyAmount.length > 0) {
                         cellToUpdate9.setCellValue(supplyAmount[index]);
@@ -272,7 +282,7 @@ public class ExcelWriter {
                     }
                     cellToUpdate9.setCellStyle(whiteBackGroundTextCenter);
 
-                    Cell cellToUpdate8 = sheet.getRow(row).getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    Cell cellToUpdate8 = sheet.getRow(row).getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     if (erectionRate.length > 0) {
                         cellToUpdate8.setCellValue(erectionRate[index]);
 
@@ -352,13 +362,13 @@ public class ExcelWriter {
                     }
                     cellToUpdate6.setCellStyle(whiteBackGroundTextCenter);
 
-                    Cell cellToUpdate9 = sheet.getRow(nextRow).getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    Cell cellToUpdate9 = sheet.getRow(nextRow).getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 
                     if (supplyAmount.length > 0)
                         cellToUpdate9.setCellValue(supplyAmount[index]);
                     cellToUpdate9.setCellStyle(whiteBackGroundTextCenter);
 
-                    Cell cellToUpdate8 = sheet.getRow(nextRow).getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    Cell cellToUpdate8 = sheet.getRow(nextRow).getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 
                     if (erectionRate.length > 0) {
                         cellToUpdate8.setCellValue(erectionRate[index]);
@@ -481,15 +491,38 @@ public class ExcelWriter {
                 System.out.println("Next start index is : " + startIndex);
             }
 
-            sheet.createRow(nextRow - 2);
+           sheet.createRow(nextRow - 2);
 
             sheet.getRow(nextRow - 2).getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue("SubTotal");
-            sheet.getRow(nextRow - 2).getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
+            sheet.getRow(nextRow - 2).getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
                     .setCellValue(supplyAmountTotal);
             sheet.getRow(nextRow - 2).getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
                     .setCellValue(erectionAmountTotal);
+            
+           sheet.createRow(nextRow - 1);
+        //   sheet.addMergedRegion(new CellRangeAddress(1, 19, 3, 19));
+          //Row lastRow = sheet.createRow(nextRow - 1);
+//            Cell lastTotal =  sheet.getRow(nextRow - 1).getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+//            Cell lastTotal1 = sheet.getRow(nextRow - 1).getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); 
+//            lastTotal.setCellValue("Total");
+//            lastTotal1.setCellValue(erectionAmountTotal+supplyAmountTotal);
+          // sheet.addMergedRegion(new CellRangeAddress(1, 2, 3, 0));
+          
+            sheet.getRow(nextRow - 1).getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue("Total");
+           sheet.getRow(nextRow - 1).getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(erectionAmountTotal+supplyAmountTotal);
+           //sheet.getRow(nextRow - 1).getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellStyle(whiteBackGround);
+            //sheet.getRow(nextRow - 1).getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellStyle(whiteBackGround);
+            sheet.getRow(nextRow - 1).getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellStyle(whiteBackGroundBaseLineRight);
+         sheet.getRow(nextRow - 1).getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellStyle(whiteBackGroundBaseLineRight);
+         sheet.getRow(nextRow - 1).getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellStyle(whiteBackGroundBaseLineRight);
+         sheet.getRow(nextRow - 1).getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellStyle(whiteBackGroundBaseLineRight);
+         sheet.getRow(nextRow - 1).getCell(4, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellStyle(whiteBackGroundBaseLineRight);
+         sheet.getRow(nextRow - 1).getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellStyle(whiteBackGroundBaseLineRight);
+         sheet.getRow(nextRow - 1).getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellStyle(whiteBackGroundBaseLineRight);
+         sheet.getRow(nextRow - 1).getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellStyle(whiteBackGroundBaseLineRight);
+           
 
-            Sheet annexture = workBook.getSheetAt(1);
+            Sheet annexture = workBook.getSheetAt(0);
 
             annexture.getRow(4 + s).getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(s);
             annexture.getRow(4 + s).getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
@@ -537,12 +570,15 @@ public class ExcelWriter {
         {
             workBook.removeSheetAt(0);
             workBook.removeSheetAt(1);
-        } else if (isOffer)
+        }
+        else if (isOffer || isBOQ)
         {
             workBook.removeSheetAt(0);
             workBook.removeSheetAt(0);
             workBook.removeSheetAt(0);
-        } else {
+        }  
+                
+        else {
 
             Sheet cover = workBook.getSheetAt(0);
 

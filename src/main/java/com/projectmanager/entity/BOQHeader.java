@@ -22,6 +22,8 @@ public class BOQHeader implements BOQData {
 	private String temp;
 	private String dNo;
 	private String sheetDetails;
+	private String classVariable;
+	
 
 	@Column(columnDefinition = "TEXT")
 	private String paymentTerms;
@@ -31,7 +33,7 @@ public class BOQHeader implements BOQData {
 	}
 
 	public BOQHeader(String projectId, String client, String site, String project, String dName, String utility, String pressure,
-			String temp, String dNo, String boqName, String sheetDetails, String paymentTerms) {
+			String temp, String dNo, String boqName, String sheetDetails, String paymentTerms, String classVariable) {
 		super();
 		this.projectId = projectId;
 		this.boqName = boqName;
@@ -45,6 +47,19 @@ public class BOQHeader implements BOQData {
 		this.dNo = dNo;
 		this.sheetDetails = sheetDetails;
 		this.paymentTerms = paymentTerms;
+		this.classVariable = classVariable;
+	}
+
+	
+	
+	
+
+	public String getClassVariable() {
+		return classVariable;
+	}
+
+	public void setClassVariable(String classVariable) {
+		this.classVariable = classVariable;
 	}
 
 	public int getId() {

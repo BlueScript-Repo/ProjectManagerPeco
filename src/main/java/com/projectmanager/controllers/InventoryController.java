@@ -123,13 +123,14 @@ public class InventoryController {
                                            String[] gradeOrClass, String[] materialSpecs, String[] standardType, String[] ends, String[] size,
                                            int[] quantity, String[] purchaseRate, String[] project, String[] location, String[] status,
                                            String invoiceType, BillDetails billDetails, AccessoryDetails accessoryDetails, String generateChallan,
-                                           String generateInvoice, String addAccessory, String addBillDetails, HttpSession session) {
+                                           String generateInvoice, String addAccessory, String addBillDetails, HttpSession session, String comment) {
 
         System.out.println("generateChallan is " + generateChallan);
         System.out.println("generateInvoice is " + generateInvoice);
         System.out.println("addAccessory is " + addAccessory);
         System.out.println("addBillDetails is " + addBillDetails);
 
+        System.out.println("Quantity is " + quantity);
         ModelAndView view = null;
 
         if (!(generateChallan.equals("1"))) {
@@ -168,6 +169,7 @@ public class InventoryController {
             inventory.setPurchaseRate(String.valueOf(Double.parseDouble(purchaseRate[i])));
             inventory.setQuantity(quantity[i]);
             inventory.setLocation(location[i]);
+            inventory.setComment(comment);
 
             inventory.setReceivedDate(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 
@@ -300,7 +302,7 @@ public class InventoryController {
     String generateInvoice(int projectId, String[] product, String[] moc, String[] manufactureType,
                            String[] gradeOrClass, String[] materialSpecs, String[] standardType, String[] ends, String[] size, String[] purchaseRate,
                            int[] receivedQuantity, String[] location, String[] receivedDate, TaxInvoiceDetails taxInvoiceDetails,
-                           HttpSession session) {
+                           HttpSession session, String comment) {
         taxInvoiceDetails.setProjectId(projectId);
 
         String lasttaxInvoiceNo = taxInvoiceDetailsDao.getLastTaxIvoiceNo();
@@ -385,7 +387,7 @@ public class InventoryController {
                 Inventory inventory = new Inventory(
                         new InventorySpec(product[i], moc[i], "", manufactureType[i], gradeOrClass[i],
                                 ends[i], size[i], projectName, "consumed", materialSpecs[i], standardType[i]),
-                        purchaseRate[i], receivedQuantity[i], location[i], "", "");
+                        purchaseRate[i], receivedQuantity[i], location[i], comment,"", "");
 
                 try {
                     // Check if exists get the inventoryRow Id
@@ -427,9 +429,9 @@ public class InventoryController {
     private ModelAndView releaseInventory(String inventoryStr, String materialStr, String typeStr,
                                           String manifMethodStr, String gradeOrClassStr, String endsStr, String sizeStr, String purchaseRateStr,
                                           String projectStr, String locationStr, String quantity, String projectId, String projectName,
-                                          String projectDesc, String statusTo, String materialSpecs, String standardType, RedirectAttributes redirectAttributes) {
+                                          String projectDesc, String statusTo, String materialSpecs, String standardType, RedirectAttributes redirectAttributes, String comment) {
         Inventory inventory = new Inventory(new InventorySpec(inventoryStr, materialStr, typeStr, manifMethodStr,
-                gradeOrClassStr, endsStr, sizeStr, projectStr, "assigned", materialSpecs, standardType), purchaseRateStr, 0, locationStr, null, null);
+                gradeOrClassStr, endsStr, sizeStr, projectStr, "assigned", materialSpecs, standardType), purchaseRateStr, 0, locationStr, null, null, comment);
 
         int assignedQty = inventoryDao.getQuantityByStatus(inventory, "assigned", true);
 
@@ -646,7 +648,8 @@ public class InventoryController {
 
         try {
             excelByts = writer.writeExcel(boqlineData, sizeIn, Arrays.stream(billedQty).mapToObj(String::valueOf).toArray(String[]::new), supplyRate, erectionRate, supplyAmount,
-                    erectionAmount, "", header, false, true);
+                    erectionAmount, "", header, false, true, false);
+
 
             File fileToSave = new File(destination);
             fileToSave.getParentFile().mkdirs();

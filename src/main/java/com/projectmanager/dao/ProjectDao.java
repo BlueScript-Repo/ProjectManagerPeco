@@ -28,6 +28,7 @@ public class ProjectDao {
 		Session session = sessionFactory.getCurrentSession();
 
 		projectId = (int) session.save(proj);
+		System.out.println(projectId);
 
 		return projectId;
 	}
@@ -39,7 +40,7 @@ public class ProjectDao {
 		try {
 			Session session = sessionFactory.getCurrentSession();
 
-			session.delete(new Project(Integer.parseInt(projectId), "", "", ""));
+			session.delete(new Project(Integer.parseInt(projectId), "", "", "",""));
 		}
 		catch(Exception ex)
 		{
@@ -111,5 +112,27 @@ public class ProjectDao {
 		}
 
 		return projectId;
+	}
+	
+	@Transactional
+	public int getProjectId() {
+		int projectId = 0;
+
+		Session session = sessionFactory.getCurrentSession();
+
+		String hql = "Select projectId FROM Project ORDER BY projectId DESC";
+		
+
+		Query query = session.createQuery(hql);
+		query.setMaxResults(1);
+		int result = (int) query.getSingleResult();
+
+		//Iterator itr = results.iterator();
+		System.out.println(result);
+//		while (itr.hasNext()) {
+//			projectId = ((int) itr.next());
+//		}
+//System.out.println(projectId);
+		return result;
 	}
 }

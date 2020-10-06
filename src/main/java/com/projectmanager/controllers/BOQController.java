@@ -137,10 +137,10 @@ public class BOQController {
 
     @RequestMapping(value = "/downloadBoq", method = RequestMethod.GET)
     protected @ResponseBody
-    String downloadBOQ(String boqName, String projectId) {
-        ArrayList<BOQDetails> boqDetails = boqDao.getBOQFromName(boqName, projectId);
+    String downloadBOQ(String dNo, String projectId) {
+        ArrayList<BOQDetails> boqDetails = boqDao.getBOQFromName(dNo, projectId);
 
-        BOQHeader header = boqHeaderDao.getBOQHeaderFromName(boqName, projectId);
+        BOQHeader header = boqHeaderDao.getBOQHeaderFromName(dNo, projectId);
 
         String sheetDetails = header.getSheetDetails();
         String[] sheetDetailsArray = sheetDetails.split(",");
@@ -260,7 +260,7 @@ public class BOQController {
     }
 
     @RequestMapping(value = {"/download"}, method = RequestMethod.POST)
-    protected void generateBOQ(String docNameToDownload, String projectId, boolean isOffer, HttpServletResponse response) {
+    protected void generateBOQ(String docNameToDownload, String projectId, boolean isOffer, HttpServletResponse response, boolean isBoq) {
         byte[] excelByts = null;
 
         ArrayList<BOQLineData> boqlineData = null;
@@ -307,8 +307,10 @@ public class BOQController {
         boqlineData = getBOQLineDataList(material, ends, classOrGrade, inventoryName, manifMetod, materialSpecs, standardType);
 
         try {
+
             excelByts = writer.writeExcel(boqlineData, size, quantity, supplyRate, erectionRate, supplyAmount,
-                    erectionAmount, "", header, isOffer, false);
+                    erectionAmount, "", header, isOffer, false, isBoq);
+
             response.setHeader("Content-disposition", "attachment; filename=" + docNameToDownload + ".xls");
 
             OutputStream out = response.getOutputStream();
@@ -334,7 +336,7 @@ public class BOQController {
                                String[] desc3, String[] desc4, String[] desc5, String[] model, String[] materialVal, String[] typeVal,
                                String[] pressureRatings, String[] endVal, String isOffer, String[] client, String[] site, String[] project,
                                String[] dName, String[] utility, String[] pressure, String[] temperature, String[] dNo, String[] sheetDetails,
-                               String[] paymentTerms,
+                               String[] paymentTerms, String isBoq,String[] classVariable,
                                String venderName, RedirectAttributes redirectAttributes, HttpServletResponse response, HttpSession session)  throws IOException {
         StringBuilder sheetdetailsStr = new StringBuilder();
 
@@ -354,12 +356,16 @@ public class BOQController {
                 inventoryUtils.blankIfNull(dName, accessIndex), inventoryUtils.blankIfNull(utility, accessIndex),
                 inventoryUtils.blankIfNull(pressure, accessIndex), inventoryUtils.blankIfNull(temperature, accessIndex),
                 inventoryUtils.blankIfNull(dNo, accessIndex), boqName, sheetdetailsStr.toString(),
-                inventoryUtils.blankIfNull(paymentTerms, accessIndex));
+                inventoryUtils.blankIfNull(paymentTerms, accessIndex),inventoryUtils.blankIfNull(classVariable, accessIndex));
 
         System.out.println("Sheet Details are : " + header.getSheetDetails());
 
-        ArrayList<String> boqRevisions = boqDao.getMatchingBOQNames(boqName + "_R", projectId);
-        ArrayList<String> quotationRevisions = boqDao.getMatchingBOQNames("Inquiry_" + boqName + "_R", projectId);
+        String docNumber  = "";
+       for(int i=0; i<dNo.length; i++)
+    	   docNumber = dNo[i];
+        System.out.println("Boq generate name : " + docNumber);
+        ArrayList<String> boqRevisions = boqDao.getMatchingBOQNames(docNumber + "_R", projectId);
+        ArrayList<String> quotationRevisions = boqDao.getMatchingBOQNames("Inquiry_" + docNumber + "_R", projectId);
 
         String boqNameRevisionStr = "";
         ArrayList<String> boqNames = new ArrayList<String>();
@@ -367,7 +373,7 @@ public class BOQController {
 
         if (!Boolean.valueOf(isOffer)) {
             for (int i = 0; i < 50; i++) {
-                boqNameRevisionStr = boqName + "_R" + String.valueOf(i);
+                boqNameRevisionStr = docNumber + "_R" + String.valueOf(i);
                 if (boqRevisions.contains(boqNameRevisionStr)) {
                 }
                 else
@@ -375,7 +381,7 @@ public class BOQController {
             }
         } else {
             for (int i = 0; i < 20; i++) {
-                boqNameRevisionStr = "Inquiry_" + boqName + "_R" + String.valueOf(i);
+                boqNameRevisionStr = "Inquiry_" + docNumber + "_R" + String.valueOf(i);
                 if (quotationRevisions.contains(boqNameRevisionStr)) {
                 }
                 else
@@ -383,8 +389,8 @@ public class BOQController {
             }
         }
 
-        if (boqName.endsWith("_final")) {
-            boqNameRevisionStr = boqName;
+        if (docNumber.endsWith("_final")) {
+            boqNameRevisionStr = docNumber;
         }
 
         System.out.println("Saving BOQ with name : " + boqNameRevisionStr);
@@ -403,8 +409,9 @@ public class BOQController {
                 supplyAmount = new String[]{};
                 erectionAmount = new String[]{};
             }
+
             excelByts = writer.writeExcel(boqInventoryDetails, size, quantity, supplyRate, erectionRate, supplyAmount,
-                    erectionAmount, boqNameRevisionStr, header, Boolean.valueOf(isOffer), false);
+                    erectionAmount, boqNameRevisionStr, header, Boolean.valueOf(isOffer), false, Boolean.valueOf(isBoq));
 
             ArrayList<BOQDetails> boqInventoryDetailsList = new ArrayList<BOQDetails>();
             if (product != null) {
@@ -441,8 +448,10 @@ public class BOQController {
                 boqDao.saveBOQ(boqDetails);
             }
 
+       
             // Save BOQ header
             header.setBoqName(boqNameRevisionStr);
+           // header.setProjectId(new Integer(proId).toString());
             boqHeaderDao.saveBOQHeader(header);
 
             // Save Valve details
@@ -1076,7 +1085,7 @@ public class BOQController {
                             new InventorySpec(boqDetails.getInventoryName(), boqDetails.getMaterial(),
                                     boqDetails.getType(), boqDetails.getManufacturingMethod(),
                                     boqDetails.getClassOrGrade(), boqDetails.getEnds(), boqDetails.getSize(), "", "", boqDetails.getMaterialSpecs(), boqDetails.getStandardType()),
-                            "", Integer.parseInt(boqDetails.getQuantity()), "", "", ""));
+                            "", Integer.parseInt(boqDetails.getQuantity()), "", "", "",""));
         }
         return inventoryList;
     }
