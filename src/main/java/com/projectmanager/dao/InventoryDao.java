@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.projectmanager.entity.Inventory;
+import com.projectmanager.entity.InventoryMuster;
 import com.projectmanager.entity.InventorySpec;
 
 @Repository
@@ -301,5 +302,41 @@ public class InventoryDao {
 			throw hibernateException;
 		}
 		return results;
+	}
+
+	@Transactional
+	public ArrayList<InventoryMuster> getReceivedInventory() {
+		Session session = sessionFactory.getCurrentSession();
+		ArrayList<InventoryMuster> assignedInventory = new ArrayList<InventoryMuster>();
+		
+		try {
+			String queryStr = " from InventoryMuster";
+
+			Query query = session.createQuery(queryStr);
+			//query.setParameter("projectId", projectName);
+			
+			assignedInventory = (ArrayList<InventoryMuster>) query.getResultList();
+
+		} catch (Exception hibernateException) {
+			throw hibernateException;
+		}
+		return assignedInventory;
+	}
+	
+	@Transactional
+	public int saveReveivedInventory(InventoryMuster inventoryMuster) throws Exception {
+		Session session = sessionFactory.getCurrentSession();
+
+		try {
+			 System.out.println("Before calling save");
+			 session.save(inventoryMuster);
+			 System.out.println("After calling save");
+			// session.flush();
+		} catch (Exception hibernateException) 
+		{
+			hibernateException.printStackTrace();
+			throw hibernateException;
+		}
+		return inventoryMuster.getId();
 	}
 }

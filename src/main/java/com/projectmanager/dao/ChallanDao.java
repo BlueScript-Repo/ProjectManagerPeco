@@ -29,6 +29,7 @@ public class ChallanDao {
 
 	    saved = true;
 	} catch (Exception ex) {
+		System.out.println(ex);
 
 	}
 

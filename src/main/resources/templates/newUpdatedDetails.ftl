@@ -1378,6 +1378,14 @@ style="display: none;">
         data-target="#consumedInventory">Show Consumed Item
     </button>
 </div>
+ <div class="col-md-3" align="center">
+        <br>
+        <button type="button" class="btn btn-default" onClick="hideOthers1('mitem')"
+        style="margin-left:6%;" data-toggle="collapse"
+        data-target="#receivedInventory">Show Received Item
+    </button>
+    </div>
+</div>
 </div>
 <div class="container collapse" id="aitem" style="max-width:98%;" id="assignedInventory">
     <div class="col-md-12 ">
@@ -1437,6 +1445,37 @@ style="display: none;">
         </div>
     </div>
 </div>
+<div class="container collapse" id="mitem" style="max-width:98%;" id="receivedInventory">
+    <div class="col-md-12 ">
+        <div class="table-responsive">
+            <table class="table table-colored assignedInventorySec border border-info">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Product</th>
+                         <th>MOC</th>
+                        <th>Manufacture Type</th>
+                        <th>Class/Grade</th>
+                        <th>Material Specs</th>
+                        <th>Standard Type</th>
+                        <th>Ends</th>
+                        <th>Size</th>
+                        <th>Quantity</th>
+                        <th>Project</th>
+                        <th>Location</th>
+                        <th>Chanllan No</th>
+                        <th>Consignee</th>
+                        <th>Received Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  ${receivedInventory}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 </div>
 </div>
 </div>
