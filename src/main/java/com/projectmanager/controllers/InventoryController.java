@@ -205,8 +205,6 @@ public class InventoryController {
                     ex.printStackTrace();
                 }
             }
-            
-           
 
             String projectName = project[0];
             String temp = projectName;

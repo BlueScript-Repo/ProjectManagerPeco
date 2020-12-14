@@ -178,13 +178,15 @@ public class PODetails {
 
 	@Override
 	public String toString() {
-		return "PODetails [poNumber=" + poNumber + ", vendorName=" + vendorName
-				+ ", location=" + location + ", contactName=" + contactName
-				+ ", contactNumber=" + contactNumber + ", contactEmail="
-				+ contactEmail + ", vendorGst=" + vendorGst + ", vendorPan="
-				+ vendorPan + ", comment=" + comment + ", term="
-				+ Arrays.toString(term) + ", lineItem=" + lineItem
-				+ ", lineItemNoHtml=" + lineItemNoHtml + ", poDate=" + poDate
-				+ ", projectId=" + projectId + "]";
+
+        //The PODetails should always be separated by ":"
+		return "PODetails [poNumber=" + poNumber + ": vendorName=" + vendorName
+				+ ": location=" + location + ": contactName=" + contactName
+				+ ": contactNumber=" + contactNumber + ": contactEmail="
+				+ contactEmail + ": vendorGst=" + vendorGst + ": vendorPan="
+				+ vendorPan + ": comment=" + comment + ": term="
+				+ Arrays.toString(term) + ": lineItem=" + lineItem
+				+ ": lineItemNoHtml=" + lineItemNoHtml + ": poDate=" + poDate
+				+ ": projectId=" + projectId + "]";
 	}
 }

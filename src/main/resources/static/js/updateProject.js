@@ -1187,117 +1187,107 @@ function cleanArray(actual)
     }));
     $(document.body).append(newForm);
     newForm.submit();
-  }
+}
 
-
-  $(function() {
+$(function() {
 	  
-	  $('button[name=createBOQButton]').click(function(e) {
-	      e.preventDefault();
+  $('button[name=createBOQButton]').click(function(e) {
+      e.preventDefault();
 
-	      if($('[name="sheetDetails"]').length===0)
-	      {
-	        alert('Please add atleast 1 sheet with Inventory Details and try again..!!');
-	        return;
-	      }
+      if($('[name="sheetDetails"]').length===0)
+      {
+        alert('Please add atleast 1 sheet with Inventory Details and try again..!!');
+        return;
+      }
 
-	      var ele1 = $('[name="quantity"]');
-	      var length = $('#tableContentDetails').find(ele1).length;
-	      var stopNow = false;
+      var ele1 = $('[name="quantity"]');
+      var length = $('#tableContentDetails').find(ele1).length;
+      var stopNow = false;
 
-	      var sheetCount = $('[name="sheetDetails"]');
-	      
-	      try
-	      {
-	        for(var i=0;i<sheetCount.length;i++)
-	        {
-	          var eleLength = 0;
+      var sheetCount = $('[name="sheetDetails"]');
 
+      try
+      {
+        for(var i=0;i<sheetCount.length;i++)
+        {
+          var eleLength = 0;
+          eleLength = $('#'+sheetCount[i].value).find('tbody#tableContentDetails').find('input[name="product"]').length;
 
-	          eleLength = $('#'+sheetCount[i].value).find('tbody#tableContentDetails').find('input[name="product"]').length;
+          if(eleLength===0)
+          {
+            alert('Please remove the blank sheet and try again..!!');
+            return;
+          }
 
-	          if(eleLength===0)
-	          {
-	            alert('Please remove the blank sheet and try again..!!');
-	            return;
-	          }
+          $('#'+sheetCount[i].value).find('tbody#tableContentDetails').find('input[name="sheetDetails"]').attr('value',sheetCount[i].value.split(',')[0]+','+eleLength);
+        }
+      }
+      catch(e)
+      {
+        console.log(e);
+      }
 
-	          $('#'+sheetCount[i].value).find('tbody#tableContentDetails').find('input[name="sheetDetails"]').attr('value',sheetCount[i].value.split(',')[0]+','+eleLength);
-	        }
-	      }
-	      catch(e)
-	      {
-	        console.log(e);
-	      }
+      for(var i=0; i < length; i++)
+      {
+        if($('#tableContentDetails').find(ele1)[i].value === "")
+        {
+          alert('Please enter Quantity for each element in BOQ');
+          stopNow = true;
+          break;
+        }
+      }
+      try{
+        if(!stopNow)
+        {
+          $('[name="generateBOQ"]').validate();
+          $('[name="generateBOQ"]').submit();
+        }
+      }
+      catch(err)
+      {
+        console.log('Error occured while generating BOQ : '+err);
+      }
 
-	      for(var i=0; i < length; i++)
-	      {
-	        if($('#tableContentDetails').find(ele1)[i].value === "")
-	        {
-	          alert('Please enter Quantity for each element in BOQ');
-	          stopNow = true; 
-	          break;
-	        }
-	      }
-	      try{
-	        if(!stopNow)
-	        {
-	          $('[name="generateBOQ"]').validate();
-	          $('[name="generateBOQ"]').submit();
-	        }
-	      }
-	      catch(err)
-	      {
-	        console.log('Error occured while generating BOQ : '+err);
-	      }
-	      
-	      var formElement = $('[name="generateBOQ"]').clone();
-			
-			formElement.append(jQuery('<input>', {
-		      'name': 'isBoq',
-		      'value': true,
-		      'type': 'hidden'
-		    })).append(jQuery('<input>', {
-		      'name': 'isOffer',
-		      'value': false,
-		      'type': 'hidden'
-		    }));
-			 $(document.body).append(formElement);
-			formElement.submit();
+      var formElement = $('[name="generateBOQ"]').clone();
 
-	      var boqList = $('.revisionSection')[0].options; 
+        formElement.append(jQuery('<input>', {
+          'name': 'isBoq',
+          'value': true,
+          'type': 'hidden'
+        })).append(jQuery('<input>', {
+          'name': 'isOffer',
+          'value': false,
+          'type': 'hidden'
+        }));
+         $(document.body).append(formElement);
+        formElement.submit();
 
-	      var revisionNo = 0;
-	      for(var k = 0; k < boqList.length; k++)
-	      {
-	        if(boqList[k].value.startsWith($('[name="dNo"]').val()))
-	        {
-	          revisionNo ++;
-	          var optionVal = boqList[k].value;
-	          console.log(optionVal);        
-	        }
+      var boqList = $('.revisionSection')[0].options;
 
-	      }
+      var revisionNo = 0;
+      for(var k = 0; k < boqList.length; k++)
+      {
+        if(boqList[k].value.startsWith($('[name="dNo"]').val()))
+        {
+          revisionNo ++;
+          var optionVal = boqList[k].value;
+          console.log(optionVal);
+        }
 
-	      console.log('revisionNo is : '+revisionNo);
+      }
 
-	      var dNoToAppend = '<option value="'+ $('[name="dNo"]').val() +'_R'+revisionNo+'">'+$('[name="dNo"]').val()+'_R'+revisionNo+'</option>';
+      console.log('revisionNo is : '+revisionNo);
 
-	      console.log("dNoToAppend is : "+dNoToAppend);
+      var dNoToAppend = '<option value="'+ $('[name="dNo"]').val() +'_R'+revisionNo+'">'+$('[name="dNo"]').val()+'_R'+revisionNo+'</option>';
 
-	      $('.revisionSection').append(dNoToAppend);
+      console.log("dNoToAppend is : "+dNoToAppend);
 
-	    });
-	
+      $('.revisionSection').append(dNoToAppend);
 
-	  
-	
-  });
+    });
+ });
 
-
-
-
-  function deleteRevision(docType)
+function deleteRevision(docType)
   {
     var fileToDownloadName = '';
     if(docType==='inquiry')
@@ -1339,77 +1329,66 @@ function cleanArray(actual)
 
   function generateInvoice() 
   {
-        var formData = $(this).serializeArray();
+    var formData = $(this).serializeArray();
 
-        var checkedRows = $('#generateInvoiceTable').find('input:checkbox:checked');
+    var checkedRows = $('#generateInvoiceTable').find('input:checkbox:checked');
 
-        var rows = [];
-          for(var i=0; i< checkedRows.length;i++)
-          {
-        	  rows[i]= $('#generateInvoiceTable').find('input:checkbox:checked').parent().parent()[i];
-          }
+    var rows = [];
+      for(var i=0; i< checkedRows.length;i++)
+      {
+          rows[i]= $('#generateInvoiceTable').find('input:checkbox:checked').parent().parent()[i];
+      }
 
-          for(var l=0;l<$(rows).length;l++)
-          {
-        	var inputes = $(rows[l]).find('input');
-        	for(var k=0;k<$(inputes).length;k++)
-        	{
-        	  formData.push({name: $(inputes)[k].name, value: $(inputes)[k].value});
-        	}
-          }
-
-        var contactName          = $('[name="contactName"]')[0].value;
-        var mobileNo           = $('[name="mobileNo"]')[0].value;
-        var addressedto1         = $('[name="addressedto1"]')[0].value;
-        var orderDate          = $('[name="orderDate"]')[0].value;
-        var emailAddress       = $('[name="emailAddress"]')[0].value;
-        var invoiceType        = $('[name="invoiceType"]')[0].value;
-        var hsnOrSac         = $('[name="hsnOrSac"]')[0].value;
-
-        formData.push({name: 'contactName', value: contactName});
-        formData.push({name: 'mobileNo', value: mobileNo});
-        formData.push({name: 'addressedto1', value: addressedto1});
-        formData.push({name: 'orderDate', value: orderDate});
-        formData.push({name: 'emailAddress', value: emailAddress});
-        formData.push({name: 'invoiceType', value: invoiceType});
-        formData.push({name: 'hsnOrSac', value: hsnOrSac});
-        formData.push({name: 'projectId', value:$('[name="projectId"]')[0].value})
-
-        $.ajax({
-         url: "generateInvoice",
-         data: formData,
-         type: 'post',
-         success: function(data)
-         {
-          var CheckeleCount1 = $('#generateInvoiceTable input.checkbox').length;
-          var selectedElements1 = [];
-          var j;
-
-          for(j=0; j < CheckeleCount1; j++)
-          {
-            if($('#generateInvoiceTable input.checkbox')[j].checked)
-            {
-                $('#generateInvoiceTable input.checkbox')[j].remove();
-            }
-          }
-
-         /*var deleted = 0;
-         for(var d=0;d<selectedElements1.length;d++)
-         {
-           if(selectedElements1[d] != undefined)
-           {
-            $('#generateInvoiceTable tr')[d-deleted].remove();
-            deleted++;
-          }
-        }*/
-         alert('Invoice generated Successfully. Please check the Notification section to verify and send.');
-        },
-        error : function (error) {
-            alert('Error generating Invoice..!!');
+      for(var l=0;l<$(rows).length;l++)
+      {
+        var inputes = $(rows[l]).find('input');
+        for(var k=0;k<$(inputes).length;k++)
+        {
+          formData.push({name: $(inputes)[k].name, value: $(inputes)[k].value});
         }
-        });
+      }
 
-        hideLoading();
+    var contactName          = $('[name="contactName"]')[0].value;
+    var mobileNo           = $('[name="mobileNo"]')[0].value;
+    var addressedto1         = $('[name="addressedto1"]')[0].value;
+    var orderDate          = $('[name="orderDate"]')[0].value;
+    var emailAddress       = $('[name="emailAddress"]')[0].value;
+    var invoiceType        = $('[name="invoiceType"]')[0].value;
+    var hsnOrSac         = $('[name="hsnOrSac"]')[0].value;
+
+    formData.push({name: 'contactName', value: contactName});
+    formData.push({name: 'mobileNo', value: mobileNo});
+    formData.push({name: 'addressedto1', value: addressedto1});
+    formData.push({name: 'orderDate', value: orderDate});
+    formData.push({name: 'emailAddress', value: emailAddress});
+    formData.push({name: 'invoiceType', value: invoiceType});
+    formData.push({name: 'hsnOrSac', value: hsnOrSac});
+    formData.push({name: 'projectId', value:$('[name="projectId"]')[0].value})
+
+    $.ajax({
+     url: "generateInvoice",
+     data: formData,
+     type: 'post',
+     success: function(data)
+     {
+      var CheckeleCount1 = $('#generateInvoiceTable input.checkbox').length;
+      var selectedElements1 = [];
+      var j;
+
+      for(j=0; j < CheckeleCount1; j++)
+      {
+        if($('#generateInvoiceTable input.checkbox')[j].checked)
+        {
+            $('#generateInvoiceTable input.checkbox')[j].remove();
+        }
+      }
+     alert('Invoice generated Successfully. Please check the Notification section to verify and send.');
+    },
+    error : function (error) {
+        alert('Error generating Invoice..!!');
+    }
+  });
+  hideLoading();
 }
 
 function cleanArray(actual)
@@ -1425,9 +1404,7 @@ function cleanArray(actual)
   return newArray;
 }
 
-
-
-  $('#generateInvoiceFrNInv').on('click', function(){
+ $('#generateInvoiceFrNInv').on('click', function(){
 
     showLoading();
 
@@ -1442,9 +1419,9 @@ function cleanArray(actual)
     }
   });
 
-    hideLoading();
+  hideLoading();
 
-  });
+ });
 
   function addNewSheet()
   {
@@ -1453,6 +1430,7 @@ function cleanArray(actual)
       alert('Please enter a Sheet name..!!');
       return;
     }
+
     var sheetName = $('[name="newSheetName"]').val();
     var tab = '<li class="nav-item"><a class="nav-link '+sheetName+'" href="#'+sheetName+'" role="tab" data-toggle="tab" aria-selected="true">'+sheetName+'<i class="fa fa-times pr-2" onClick="removeSheet('+sheetName+');" style="margin-left:5px;"></i></a></li>';
 
@@ -1467,16 +1445,11 @@ function cleanArray(actual)
 			+'<tr>      <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>            <th></th>  <th><input type="text" style="width:45px;" name="supplyPrsnt" onChange="updateSupplyRate($(this));"/></th>            <th></th>            <th><input type="text" style="width:45px;" name="erectionPrsnt" onChange="updateErectionRate($(this));"/></th>            <th></th>            <th></th>            <th></th><th></th>          </tr>'
 			+'</thead>        <tbody id="tableContentDetails">        </tbody>      </table>    </div>  </div></div><div class="separator clearfix"></div><p class="text-right"><strong>SubTotal :</strong> <span id="'+sheetName+'SupSubTotal">0.00</span> <span id="'+sheetName+'EreSubTotal">0.00</span></p></div>';
 
-    $($('.tab-content')[1]).append(tabPane); 
-
+    $($('.tab-content')[1]).append(tabPane);
     $('#'+sheetName).find('tbody#tableContentDetails').append('<input type="hidden" name="sheetDetails" id="sd'+sheetName+'" value="'+sheetName+'">');
-
-
     $('.nav-link '+sheetName).trigger('click');
 
   }
-
-
 
   function removeSheet(sheetName)
   {
@@ -1487,9 +1460,8 @@ function cleanArray(actual)
 
  }
 
-
-
-  $(document).ready(function(){
+  $(document).ready(function()
+  {
 
     var vList = $('[name="venderList"]').val().split(',');
     for(var i = 0; i < vList.length ; i++)
@@ -1502,8 +1474,6 @@ function cleanArray(actual)
 
 });
 
-
-  
   $(function() {
 
     //BOQ Secsion  
@@ -1528,8 +1498,6 @@ function cleanArray(actual)
     });
   });
 
-
-
   function closeOther(modalToShow)
   {
     if(modalToShow!=="payDetails")
@@ -1542,16 +1510,10 @@ function cleanArray(actual)
       $('#generateInvoice').attr('class','collapse');
   }
 
-
-
-
   function removeItem(thisObj)
   {
     console.log(thisObj.parent().parent().remove());
   }
-
-
-
 
   $('[name="selectedVenderName"]').on('change', function(e){
 
@@ -1561,7 +1523,7 @@ function cleanArray(actual)
   });
 
 
-//Design Offer JS
+    //Design Offer JS
 
       var scopeCount = 9;
       function addScope()

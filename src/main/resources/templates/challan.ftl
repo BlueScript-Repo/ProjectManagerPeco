@@ -73,10 +73,10 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td class="font-weight-bold" style="width:30%;">Delivery Challan No:</td>
-                            <td style="width:5%;">${challanNo}</td>
-                            <td class="font-weight-bold" style="width:30%;">Purchase Order No:</td>
-                            <td style="width:5%;">${poNo}</td>
+                            <td class="font-weight-bold" style="width:20%;">Delivery Challan No:</td>
+                            <td style="width:15%;">${challanNo}</td>
+                            <td class="font-weight-bold" style="width:20%;">Purchase Order No:</td>
+                            <td style="width:15%;">${poNo}</td>
                         </tr>
                         <tr>
                             <td class="font-weight-bold" style="width:30%;">Date:</td>
