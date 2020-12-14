@@ -1306,7 +1306,7 @@ style="display: none;">
                     </div>
                     <div class="form-group col-md-3">
                         <label>Order Date</label>
-                        <input type="text" class="form-control" name="orderDate">
+                        <input type="text" class="form-control" name="orderDate"  value="${orderDate}" >
                     </div>
                 </div>
                 <div class="form-row">
@@ -1453,7 +1453,7 @@ style="display: none;">
                     <tr>
                         <th></th>
                         <th>Product</th>
-                         <th>MOC</th>
+                        <th>MOC</th>
                         <th>Manufacture Type</th>
                         <th>Class/Grade</th>
                         <th>Material Specs</th>
@@ -1463,7 +1463,7 @@ style="display: none;">
                         <th>Quantity</th>
                         <th>Project</th>
                         <th>Location</th>
-                        <th>Chanllan No</th>
+                        <th>Challan No</th>
                         <th>Consignee</th>
                         <th>Received Date</th>
                     </tr>

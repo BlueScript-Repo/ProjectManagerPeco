@@ -502,7 +502,7 @@ public class BOQController {
             out.close();
             fout.close();
 
-            notificationUtil.pushNotification(userName, vendorDetails.getContactEmail(), "PECO Projects : Inventory Inquiry", "Greeting of thr day from PECO Projects. Please find attached the Inventory requirment. PLeaase update the same and respond.", file.getName(), "INBOX", new Date());
+            notificationUtil.pushNotification(userName, vendorDetails.getContactEmail(), "PECO Projects : Inventory Inquiry", "Greeting of the day from PECO Projects. Please find attached the Inventory requirment. Please update the same and respond.", file.getName(), "INBOX", new Date());
 
         } else {
             response.setHeader("Content-disposition", "attachment; filename=" + boqNameRevisionStr + ".xls");

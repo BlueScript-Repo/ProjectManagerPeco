@@ -379,7 +379,7 @@ public class ProjectController {
 
 		mav.addObject("clientName", project.getCompanyName() == null ? "" : project.getCompanyName());
 		mav.addObject("utility", project.getProjectDesc() == null ? "" : project.getProjectDesc());
-
+		mav.addObject("orderDate", projectDetails.getPoDate() == null ? "" :projectDetails.getPoDate());
 		mav.addObject("emailAddress", projectDetails.getContactEmail() == null ? "" : projectDetails.getContactEmail());
 		mav.addObject("addressedTo", projectDetails.getAddress() == null ? "" : projectDetails.getAddress());
 		mav.addObject("mobileNo", projectDetails.getContactPhone() == null ? "" : projectDetails.getContactPhone());

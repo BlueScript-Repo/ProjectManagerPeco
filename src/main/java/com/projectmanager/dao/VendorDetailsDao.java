@@ -62,7 +62,8 @@ public class VendorDetailsDao {
 	try {
 	    String queryStr = "from VendorDetails vd where vd.vendorName='";
 	    
-	    vendorName = vendorName.replaceAll("\\s", ""); 
+	   // vendorName = vendorName.replaceAll("\\s", ""); 
+	    vendorName = vendorName.trim();
 
 	    Query query = session.createQuery(queryStr +vendorName+"'");
 
