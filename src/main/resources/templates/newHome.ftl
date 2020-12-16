@@ -170,11 +170,23 @@
             <label>Contact Email</label>
             <input type="text" class="form-control" name="vendorEmail" required>
           </div>
-          <div class="form-group col-md-4">
-            <br>
-            <button type="button" class="btn btn-default" onClick="addVendor();">Add</button>
-          </div>
-        </div>              
+           <div class="form-group col-md-4">
+                          <label>Vendor Gst No. </label>
+                          <input type="text" class="form-control" name="vendorGst">
+                        </div>
+
+        </div>
+        <div class="form-row">
+
+              <div class="form-group col-md-4">
+                <label>Vendor Pan No.</label>
+                <input type="text" class="form-control" name="vendorPan">
+              </div>
+               <div class="form-group col-md-4">
+                          <br>
+                          <button type="button" class="btn btn-default" onClick="addVendor();">Add</button>
+               </div>
+             </div>
       </div>
     </div>  
   </div>  
@@ -311,7 +323,6 @@ if(utility != null){
 
 var arrayOfString = utility.split(" ");
 console.log(arrayOfString[0].charAt(0).toUpperCase());
-console.log(arrayOfString[1].charAt(0).toUpperCase());
 var projN = (arrayOfString[0].charAt(0).toUpperCase()+arrayOfString[1].charAt(0).toUpperCase()+arrayOfString[2].charAt(0).toUpperCase());
 
 }
@@ -365,7 +376,7 @@ $('#ProjectNumber').val("PP-"+compN+"-"+projectId+"-"+projN);
     showLoading();
     $.ajax({
      type : 'POST',
-     data :  {'vendorName' : $('[name="vendorNameStr"]').val(), 'vendorAddress': $('[name="vendorAddress"]').val(), 'contactName': $('[name="vendorContactName"]').val(), 'contactNumber': $('[name="vendorNumber"]').val(), 'contactEmail': $('[name="vendorEmail"]').val()},
+     data :  {'vendorName' : $('[name="vendorNameStr"]').val(), 'vendorAddress': $('[name="vendorAddress"]').val(), 'contactName': $('[name="vendorContactName"]').val(), 'contactNumber': $('[name="vendorNumber"]').val(), 'contactEmail': $('[name="vendorEmail"]').val(),'vendorGst': $('[name="vendorGst"]').val(), 'vendorPan': $('[name="vendorPan"]').val()},
      url : 'saveVendor',
      success : function(data) 
      {

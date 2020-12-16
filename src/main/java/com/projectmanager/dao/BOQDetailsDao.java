@@ -38,9 +38,11 @@ public class BOQDetailsDao {
 		ArrayList<BOQDetails> boqDetailsList = new ArrayList<BOQDetails>();
 
 		Session session = sessionFactory.getCurrentSession();
-		String selectHql = " FROM BOQDetails boqD where boqD.boqName='";
+		String selectHql = " FROM BOQDetails boqD where boqD.boqName=:boqName and projectId=:projectId";
 
-		Query query = session.createQuery(selectHql + boqName + "' and projectId='" + projectId + "'");
+		Query query = session.createQuery(selectHql );
+		query.setParameter("boqName", boqName);
+		query.setParameter("projectId", projectId);
 		List results = query.getResultList();
 
 		Iterator itr = results.iterator();

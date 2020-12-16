@@ -93,15 +93,13 @@ public class ProjectController {
 
 		ArrayList<Project> existing = projectDao.getProject("projectName", project.getProjectName());
 		int proId = projectDao.getProjectId();
-		System.out.println(proId+1 +"=====================" +proId);
-
 		if (existing.size() > 0) {
 			ModelAndView projectDetails = new ModelAndView("redirect:/projectDetails");
 
 			redirectAttrs.addAttribute("projectId", String.valueOf(existing.get(0).getProjectId()));
 			redirectAttrs.addAttribute("projectName", existing.get(0).getProjectName());
 			redirectAttrs.addAttribute("projectDesc", existing.get(0).getProjectDesc());
-			//redirectAttrs.addAttribute("projectNumber", existing.get(0).getProjectNumber());
+			redirectAttrs.addAttribute("projectNumber", existing.get(0).getProjectNumber());
 			
 
 			return projectDetails;
@@ -239,7 +237,7 @@ public class ProjectController {
 		projectDetalsHTML = projectDetalsHTML.replace("projectIdVal", projectId);
 		projectDetalsHTML = projectDetalsHTML.replace("projectNameVal", project.getProjectName());
 		projectDetalsHTML = projectDetalsHTML.replace("projectDescVal", project.getProjectDesc());
-	//	projectDetalsHTML = projectDetalsHTML.replace("projectNumberVal", project.getProjectNumber());
+		//projectDetalsHTML = projectDetalsHTML.replace("projectNumberVal", project.getProjectNumber());
 
 		for (Inventory inv : assignedInventory) {
 			System.out.println(inv.toString());

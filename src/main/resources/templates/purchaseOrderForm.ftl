@@ -171,18 +171,19 @@
         <label>Vendor Pan No.</label>
         <input type="text" class="form-control" name="vendorPan">
       </div>
+       <div class="form-group col-md-4">
+              <label>Contact Number</label>
+              <input type="text" class="form-control" name="vendorNumber">
+            </div>
      </div>
     <div class="form-row">    
-      <div class="form-group col-md-4">
-        <label>Contact Number</label>
-        <input type="text" class="form-control" name="vendorNumber">
-      </div>
+
       <div class="form-group col-md-4">
         <label>Contact Email</label>
         <input type="text" class="form-control" name="vendorEmail">
       </div>
       <div class="form-group col-md-4">
-        <label></label>
+
         <button type="button" class="btn btn-default" onClick="addVendor();">Add</button>
       </div>
     </div>              
@@ -222,9 +223,12 @@
 <!-- Jquery and Bootstap core js files -->
 <script src="plugins/jquery.min.js"></script>
 <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- Magnific Popup javascript -->
+
+<script src="./plugins/rs-plugin-5/js/jquery.themepunch.tools.min.js"></script>
+<script src="./plugins/rs-plugin-5/js/jquery.themepunch.revolution.min.js"></script>
 <script src="plugins/magnific-popup/jquery.magnific-popup.min.js"></script>
-<!-- Appear javascript -->
+<script src="./plugins/isotope/imagesloaded.pkgd.min.js"></script>
+<script src="./plugins/isotope/isotope.pkgd.min.js"></script>
 <script src="plugins/waypoints/jquery.waypoints.min.js"></script>
 <script src="plugins/waypoints/sticky.min.js"></script>
 <!-- Count To javascript -->
@@ -235,6 +239,7 @@
 <script src="js/template.js"></script>
 <!-- Custom Scripts -->
 <script src="js/custom.js"></script>
+<script src="plugins/jquery.blockUI.js"></script>
 
 <script>
   function showLoading()
@@ -304,21 +309,30 @@
 <script>
   function addVendor()
   {
-
-    showLoading();
-    $.ajax({
-     type : 'POST',
-     data :  {'vendorName' : $('[name="vendorNameStr"]').val(), 'vendorAddress': $('[name="vendorAddress"]').val(), 'contactName': $('[name="vendorContactName"]').val(), 'contactNumber': $('[name="vendorNumber"]').val(), 'contactEmail': $('[name="vendorEmail"]').val(), 'vendorGst': $('[name="vendorGst"]').val(), 'vendorPan': $('[name="vendorPan"]').val()},
-     url : 'saveVendor',
-     success : function(data) 
-     {
-      var venderName = $('[name="vendorNameStr"]').val();
-      $("[name='vendorName']").append("<option value='" + venderName + "''>" + venderName + "</option>");
-
-      document.getElementById("textOverlaySearch").style.display = "none";     			       
-    }
-  });
-  }
+  if(
+        $('[name="vendorNameStr"]').val() === ''
+        || $('[name="vendorAddress"]').val() === ''
+        || $('[name="vendorContactName"]').val() === ''
+        || $('[name="vendorNumber"]').val() === ''
+        || $('[name="vendorEmail"]').val() === '')
+      {
+        alert('Please fill out all the fields and try again..!!');
+        return;
+      }
+      showLoading();
+       $.ajax({
+        type : 'POST',
+        data :  {'vendorName' : $('[name="vendorNameStr"]').val(), 'vendorAddress': $('[name="vendorAddress"]').val(), 'contactName': $('[name="vendorContactName"]').val(), 'contactNumber': $('[name="vendorNumber"]').val(), 'contactEmail': $('[name="vendorEmail"]').val(),'vendorGst': $('[name="vendorGst"]').val(), 'vendorPan': $('[name="vendorPan"]').val()},
+        url : 'saveVendor',
+        success : function(data)
+        {
+         var venderName = $('[name="vendorNameStr"]').val();
+         $("[name='vendorName']").append("<option value=" + venderName + ">" + venderName + "</option>");
+        alert('Vender has been added successfully');
+        document.getElementById("textOverlaySearch").style.display = "none";
+       }
+     });
+       }
 </script>
 <script>
   function getCompanyDetails(thisObj)

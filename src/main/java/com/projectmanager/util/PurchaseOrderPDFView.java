@@ -61,8 +61,11 @@ public class PurchaseOrderPDFView extends AbstractView {
 			System.out.println(poLine);
 			String[] details = poLine.split(",");
 			description[index] = details[1];
+			System.out.println(description.toString());
 			quantity[index] = details[2];
+            System.out.println(quantity.toString());
 			unitPrice[index] = details[3];
+            System.out.println(unitPrice.toString());
 			index++;
 
 		}
@@ -116,9 +119,15 @@ public class PurchaseOrderPDFView extends AbstractView {
 						System.out.println(description.length < 10 * i + 10);
 						end = description.length - 1;
 					}
-					String[] newArray = Arrays.copyOfRange(description, 1 * i, end);
-					System.out.println(newArray);
-					descriptionList.add(newArray);
+					//String[] newArray = Arrays.copyOfRange(description, 1 * i, end);
+                    //for(int j=0; j < description.length; j++) {
+                      //  String[] newArray = Arrays.copyOfRange(description,  j, end);
+                     //   System.out.println(newArray);
+                        descriptionList.add(description);
+                    //}
+
+
+
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -362,7 +371,7 @@ public class PurchaseOrderPDFView extends AbstractView {
             r6c1.setHorizontalAlignment(Element.ALIGN_CENTER);
             r6c1.setVerticalAlignment(Element.ALIGN_MIDDLE);
             r6c1.setFixedHeight(30);
-           
+
             PdfPCell r6c2 = createNewCell(new Paragraph(description[i].replace("~", ""), boldBlackCalibri10));
             r6c2.setHorizontalAlignment(Element.ALIGN_CENTER);
             r6c2.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -393,10 +402,11 @@ public class PurchaseOrderPDFView extends AbstractView {
             GstTotal = Double.parseDouble(total)+ Double.parseDouble(Gst);
 
 			subTotal += Double.parseDouble(total);
+                String Str = String.valueOf(subTotal);
 						
-			discountTotal = Double.parseDouble(total)+Double.parseDouble(Discount);
+			discountTotal = Double.parseDouble(Str)-Double.parseDouble(Discount);
 			
-			allTotal = Math.round(GstTotal + discountTotal);
+			allTotal = Math.round(Double.parseDouble(Gst) + discountTotal);
 			
 			
             }
@@ -459,7 +469,7 @@ public class PurchaseOrderPDFView extends AbstractView {
 
             r9c4.setFixedHeight(30);
            
-            PdfPCell r9c5 = createNewCell(new Paragraph(String.valueOf(GstTotal), blackCalibri10));
+            PdfPCell r9c5 = createNewCell(new Paragraph(String.valueOf(subTotal), blackCalibri10));
             r9c5.setHorizontalAlignment(Element.ALIGN_CENTER);
             r9c5.setVerticalAlignment(Element.ALIGN_MIDDLE);
 

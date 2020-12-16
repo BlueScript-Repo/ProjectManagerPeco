@@ -85,6 +85,8 @@ public class OrderController {
 			System.out.println("Simple line : " + line);
 			lineItemDataSiple.append(line);
 		}
+		System.out.println(lineItemDataSiple.length());
+     System.out.println(lineItemDataSiple.toString());
 
 		mav.addObject("lineItemData", lineItemData.toString());
 		mav.addObject("lineItemDataSimple", lineItemDataSiple.toString());
@@ -152,12 +154,14 @@ public class OrderController {
 
 		poDetails.setLineItemNoHtml(lineItemSimple);
 
+
 		System.out.println(poDetails.getLineItem());
 		System.out.println(poDetails.getLineItem().length());
 
 		poDetailsDao.savePO(poDetails);
 
 		String lineItemSimpleStr = poDetails.getLineItemNoHtml();
+		String[] lineItemSimpleStrArray = lineItemSimpleStr.split(";");
 
 		System.out.println("showPO : " + lineItemSimpleStr);
 
@@ -184,6 +188,7 @@ public class OrderController {
 
 		Map<String, Object> modelObject = new HashMap<>();
 		modelObject.put("poDetails", poDetails);
+		for(String s1:lineItemSimpleStrArray)
 		modelObject.put("poLineDetails", lineItemSimpleStr);
 		modelObject.put("userName", userName);
 
