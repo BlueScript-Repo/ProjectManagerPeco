@@ -1089,4 +1089,11 @@ public class BOQController {
         }
         return inventoryList;
     }
+
+    @RequestMapping(value = "/sheetName", method = RequestMethod.POST)
+    public @ResponseBody String sheetNameIsPresent(String sheetName){
+        String sheetIsPresent = boqDetailsDao.getSheetname(sheetName);
+
+      return sheetIsPresent;
+    }
 }

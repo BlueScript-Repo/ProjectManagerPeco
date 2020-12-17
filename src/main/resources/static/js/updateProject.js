@@ -1232,8 +1232,9 @@ $(function() {
         if($('#tableContentDetails').find(ele1)[i].value === "")
         {
           alert('Please enter Quantity for each element in BOQ');
-          stopNow = true;
-          break;
+          //stopNow = true;
+         // break;
+          return;
         }
       }
       try{
@@ -1422,20 +1423,13 @@ function cleanArray(actual)
   hideLoading();
 
  });
-
-  function addNewSheet()
-  {
-    if($('[name="newSheetName"]').val()==="")
-    {
-      alert('Please enter a Sheet name..!!');
-      return;
-    }
-
+function addSheet(){
     var sheetName = $('[name="newSheetName"]').val();
     var tab = '<li class="nav-item"><a class="nav-link '+sheetName+'" href="#'+sheetName+'" role="tab" data-toggle="tab" aria-selected="true">'+sheetName+'<i class="fa fa-times pr-2" onClick="removeSheet('+sheetName+');" style="margin-left:5px;"></i></a></li>';
 
+
     $('#sheetListtableContentDetails').append(tab);
-    
+
     var tabPane = '<div class="tab-pane fade" id="'+sheetName+'" role="tabpanel">'
 			+'<div class="row" style="margin-top:2%;">     <div class="col-md-12 ">'
 			+'<div class="table-responsive">'
@@ -1448,6 +1442,33 @@ function cleanArray(actual)
     $($('.tab-content')[1]).append(tabPane);
     $('#'+sheetName).find('tbody#tableContentDetails').append('<input type="hidden" name="sheetDetails" id="sd'+sheetName+'" value="'+sheetName+'">');
     $('.nav-link '+sheetName).trigger('click');
+ }
+
+  function addNewSheet()
+  {
+    var sheetName = $('[name="newSheetName"]').val();
+    if(sheetName ==="")
+    {
+      alert('Please enter a Sheet name..!!');
+      return;
+    }
+    else{
+      $.ajax({
+     url: "sheetName",
+     data: {'sheetName' : sheetName },
+     type: 'post',
+     success: function(sheetIsPresent) {
+
+      if(sheetIsPresent !== "true")
+      {
+      addSheet();
+      }else{alert('Please try another sheetName..!!');}
+        }
+        })
+
+    }
+
+
 
   }
 

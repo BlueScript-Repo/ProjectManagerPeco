@@ -31,21 +31,19 @@ public class ResetPassController {
 
 	@Autowired
 	ResetCodeDao resetCodeDao;
-	
-
-
+	final static String FrontResetPassword = "frontResetPassword";
 	final static String ResetPassword = "resetPassword";
 
 	@RequestMapping(value = "/reset", method = RequestMethod.GET)
 	public ModelAndView resetPassword() {
-		ModelAndView model = new ModelAndView(ResetPassword);
+		ModelAndView model = new ModelAndView(FrontResetPassword);
 		model.addObject("userNameInput", userNameInput);
-		model.addObject("resetCodeInput", "");
-		model.addObject("newPassword", "");
-		model.addObject("confirmPassword", "");
 		model.addObject("confirmButton", confirmButton);
-		model.addObject("confirmMessage", "");
-		model.addObject("errorMessage", "");
+//		model.addObject("resetCodeInput", "");
+//		model.addObject("newPassword", "");
+//		model.addObject("confirmPassword", "");
+//		model.addObject("confirmMessage", "");
+//		model.addObject("errorMessage", "");
 
 		return model;
 	}
@@ -101,7 +99,7 @@ public class ResetPassController {
 					model.addObject("newPassword", "");
 					model.addObject("confirmPassword", "");
 					model.addObject("confirmButton", "");
-					model.addObject("confirmMessage", "");					
+					model.addObject("confirmMessage", "");
 					model.addObject("errorMessage", errorMessage);
 				}
 

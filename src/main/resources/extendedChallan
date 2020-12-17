@@ -59,7 +59,7 @@
                 <tr>
                   <td class="font-weight-bold" style="width:30%;text-align:center;">Transport Mode</td>
                   <td class="font-weight-bold" style="width:40%;text-align:center;">LR# & Date</td>
-                  <td class="font-weight-bold" style="width:30%;text-align:center;" colspan="2">Vheicle Number</td>
+                  <td class="font-weight-bold" style="width:30%;text-align:center;" colspan="2">Vehical Number</td>
                 </tr>
                 <tr>
                   <td style="width:30%;text-align:center;">transportMode</td>

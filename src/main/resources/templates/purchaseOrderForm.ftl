@@ -332,6 +332,7 @@
         document.getElementById("textOverlaySearch").style.display = "none";
        }
      });
+     hideLoading();
        }
 </script>
 <script>

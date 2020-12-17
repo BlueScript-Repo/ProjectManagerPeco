@@ -103,23 +103,8 @@
                     <div class="form-group has-feedback row">
                      	${userNameInput}
                     </div>
-                    <div class="form-group has-feedback row">                    
-                   		${resetCodeInput}
-                    </div>
-                    <div class="form-group has-feedback row">
-                     	${newPassword}
-                    </div>
-                    <div class="form-group has-feedback row">                    
-                   		${confirmPassword}
-                    </div>
-                    <div class="form-group has-feedback row">
-                   		${confirmMessage}
-                    </div>
-                    <div class="form-group has-feedback row">
-                   		${errorMessage}
-                    </div>
-                                                           <div class="row">
-                      <div class="ml-md-auto col-md-9">  
+                    <div class="row">
+                      <div class="ml-md-auto col-md-9">
                        ${confirmButton}
                         </div>
                     </div>

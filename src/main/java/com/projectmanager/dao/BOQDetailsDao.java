@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.Query;
+import org.hibernate.query.Query;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -135,4 +135,17 @@ public class BOQDetailsDao {
 		return boqName;
 	}
 
+	@Transactional
+	public String getSheetname(String sheetName) {
+		Session session = sessionFactory.getCurrentSession();
+		String queryString = "select count(*) from BOQDetails where sheetName=:sheetName";
+		Query query = session.createQuery(queryString);
+		query.setParameter("sheetName",sheetName);
+
+        List sheetNameIsPresent = query.list();
+        System.out.println((long)sheetNameIsPresent.get(0)> 0);
+		String sheetNamePresent = Boolean.toString((long)sheetNameIsPresent.get(0)> 0);
+		return sheetNamePresent ;
+
+	}
 }

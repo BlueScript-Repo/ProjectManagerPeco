@@ -170,7 +170,7 @@
                                 <input type="text" class="form-control" name="transportMode">
                             </div>
                             <div class="form-group col-md-3">
-                                <label>Vheicle Number</label>
+                                <label>Vehical Number</label>
                                 <input type="text" class="form-control" name="vheicleNumber">
                             </div>
                             <div class="form-group col-md-3">

@@ -83,7 +83,7 @@ public class PurchaseOrderPDFView extends AbstractView {
 			FileOutputStream fOut = new FileOutputStream(fileToSave);
 
 			generatePO("-", "27AEBPH1001B1ZM", poDetails.getPoNumber(), poDetails.getPoDate(),
-					poDetails.getVendorName(), "", poDetails.getContactName(), poDetails.getContactNumber(),
+					poDetails.getVendorName(), poDetails.getLocation(), poDetails.getContactName(), poDetails.getContactNumber(),
 					poDetails.getContactEmail(),
 					poDetails.getVendorGst(), poDetails.getVendorPan(),make, description, quantity, unitPrice, terms, response, fOut);
 		} catch (Exception ex) {
@@ -252,10 +252,10 @@ public class PurchaseOrderPDFView extends AbstractView {
             PdfPCell shipToCell2 = createNewCell(120);
             shipToCell2.addElement(new Paragraph("Vendor", blackCalibri9));
             shipToCell2.addElement(new Paragraph(venderName, boldBlackCalibri10));
+            //shipToCell2.addElement(new Paragraph(venderLocation, blackCalibri9));
+            //shipToCell2.addElement(new Paragraph(venderLocation, blackCalibri9));
             shipToCell2.addElement(new Paragraph(venderLocation, blackCalibri9));
-            shipToCell2.addElement(new Paragraph(venderLocation, blackCalibri9));
-            shipToCell2.addElement(new Paragraph(venderLocation, blackCalibri9));
-            shipToCell2.addElement(new Paragraph("", blackCalibri9));
+            //shipToCell2.addElement(new Paragraph("", blackCalibri9));
             shipToCell2.addElement(new Paragraph(receiverEmail, blackCalibri9));
             shipToCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
             shipToCell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -265,7 +265,7 @@ public class PurchaseOrderPDFView extends AbstractView {
             PdfPCell shipToCell3 = createNewCell(120);
             shipToCell3.addElement(new Paragraph("Ship to", blackCalibri9));
             shipToCell3.addElement(new Paragraph(venderName, boldBlackCalibri10));
-            shipToCell3.addElement(new Paragraph("", blackCalibri11));
+            //shipToCell3.addElement(new Paragraph("", blackCalibri11));
             shipToCell3.addElement(new Paragraph(venderLocation, blackCalibri9));
             shipToCell3.addElement(new Paragraph("", blackCalibri9));
             shipToCell3.addElement(new Paragraph("", blackCalibri9));
@@ -363,9 +363,7 @@ public class PurchaseOrderPDFView extends AbstractView {
             	
             	total = String.valueOf(Double.parseDouble(unitPrice[i]) * Double.parseDouble(quantity[i]));
 
-				Gst = String.valueOf(Double.parseDouble(total) * 18 / 100);
-				
-				Discount = String.valueOf(Double.parseDouble(total) * 0 / 100);
+
 				
             PdfPCell r6c1 = createNewCell(new Paragraph(String.valueOf(i + 1), blackCalibri9));
             r6c1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -399,10 +397,14 @@ public class PurchaseOrderPDFView extends AbstractView {
             table4.addCell(r6c4);
             table4.addCell(r6c5);
             
-            GstTotal = Double.parseDouble(total)+ Double.parseDouble(Gst);
+           // GstTotal = Double.parseDouble(total)+ Double.parseDouble(Gst);
+            subTotal += Double.parseDouble(total);
+            String Str = String.valueOf(subTotal);
+            Gst = String.valueOf(Double.parseDouble(Str) * 18 / 100);
 
-			subTotal += Double.parseDouble(total);
-                String Str = String.valueOf(subTotal);
+            Discount = String.valueOf(Double.parseDouble(Str) * 0 / 100);
+
+
 						
 			discountTotal = Double.parseDouble(Str)-Double.parseDouble(Discount);
 			
@@ -562,9 +564,9 @@ public class PurchaseOrderPDFView extends AbstractView {
             String amountInWords = "";
 
 			if (gstNo.startsWith("27")) {
-				amountInWords = numberWordConverter.convert((int) Math.round(subTotal + GstTotal + discountTotal));
+				amountInWords = numberWordConverter.convert((int) Math.round(allTotal));
 			} else {
-				amountInWords = numberWordConverter.convert((int) Math.round(subTotal + GstTotal + discountTotal));
+				amountInWords = numberWordConverter.convert((int) Math.round(allTotal));
 			}
             // Row12
             Paragraph ph8 = new Paragraph("Total Amount (In Words) :-    "   + amountInWords, blackCalibri9);
