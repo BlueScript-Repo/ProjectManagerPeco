@@ -1423,6 +1423,16 @@ function cleanArray(actual)
   hideLoading();
 
  });
+ function codeCheck(){
+ var newPassword = $('[name = "newPassword"]').val();
+ console.log(newPassword);
+  var confirmPassword = $('[name = "confirmPassword"]').val();
+  console.log(confirmPassword);
+  if(newPassword===confirmPassword){alert("password same");
+  return;}
+  alert("password not same");
+ }
+
 function addSheet(){
     var sheetName = $('[name="newSheetName"]').val();
     var tab = '<li class="nav-item"><a class="nav-link '+sheetName+'" href="#'+sheetName+'" role="tab" data-toggle="tab" aria-selected="true">'+sheetName+'<i class="fa fa-times pr-2" onClick="removeSheet('+sheetName+');" style="margin-left:5px;"></i></a></li>';

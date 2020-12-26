@@ -234,22 +234,22 @@ public class Principal {
             stampCell.setRowspan(3);
 
             try {
-                /*File file = new File(System.getProperty("java.io.tmpdir") + "/stamp.png");
-
-                if(!(file.exists()))
-                {
-                    Resource resourceStamp = new ClassPathResource("stamp.png");
-                    InputStream inputStreamStamp = resource.getInputStream();
-
-                    FileUtils.copyInputStreamToFile(inputStreamStamp, file);
-                }
-                // init array with file length
-                byte[] bytesArray = new byte[(int) file.length()];
-
-                FileInputStream fis = new FileInputStream(file);
-                fis.read(bytesArray); // read file into bytes[]
-                fis.close();*/
-
+//                File file = new File(System.getProperty("java.io.tmpdir") + "/stamp.png");
+//
+//                if(!(file.exists()))
+//                {
+//                    Resource resourceStamp = new ClassPathResource("stamp.png");
+//                    InputStream inputStreamStamp = resource.getInputStream();
+//
+//                    FileUtils.copyInputStreamToFile(inputStreamStamp, file);
+//                }
+//                // init array with file length
+//                byte[] bytesArray = new byte[(int) file.length()];
+//
+//                FileInputStream fis = new FileInputStream(file);
+//                fis.read(bytesArray); // read file into bytes[]
+//                fis.close();
+//
                 Resource resourceStamp = new ClassPathResource("stamp.png");
 
                 Image img = Image.getInstance(resourceStamp.getURL());

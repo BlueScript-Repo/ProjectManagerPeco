@@ -9,7 +9,7 @@ public class ProductDefinition {
     @EmbeddedId
     private ProductId productId;
 
-    private String classOrGrade;
+    private String classOrSch;
     private String materialSpecs;
     private String standardType;
 
@@ -21,12 +21,12 @@ public class ProductDefinition {
         this.productId = productId;
     }
 
-    public String getClassOrGrade() {
-        return classOrGrade;
+    public String getClassOrSch() {
+        return classOrSch;
     }
 
-    public void setClassOrGrade(String classOrGrade) {
-        this.classOrGrade = classOrGrade;
+    public void setClassOrSch(String classOrSch) {
+        this.classOrSch = classOrSch;
     }
 
     public String getMaterialSpecs() {

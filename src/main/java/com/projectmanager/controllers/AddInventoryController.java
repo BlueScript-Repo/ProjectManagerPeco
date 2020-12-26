@@ -51,7 +51,7 @@ public class AddInventoryController {
 		ArrayList<ProductDefinition> products = productDefinitionDao.getAllProductDefinition();
 
 		StringBuffer mappingDetails = new StringBuffer();
-		int indexToDisplay = 0;
+		int indexToDisplay = 1;
 		for(ProductDefinition definition : products)
 		{
 			mappingDetails.append("<tr class='lazy' >");
@@ -60,10 +60,11 @@ public class AddInventoryController {
 			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getProductId().getProduct() 				 + "' name='product'  ></td>");
 			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getProductId().getMaterialOfConstruction() + "' name='materialOfConstruction' ></td>");
 			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getProductId().getManufactureMethod() 		 + "' name='manufactureMethod'  ></td>");
-			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getClassOrGrade() 							 + "' name='classOrGrade'  ></td>");
+			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getClassOrSch() 							 + "' name='classOrSch'  ></td>");
 			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getMaterialSpecs() 						 + "' name='materialSpecs'  ></td>");
 			mappingDetails.append("<td><input type='text'  class='form-control' value='" + definition.getStandardType() 						 + "' name='standardType'  ></td>");
 			mappingDetails.append("</tr>");
+			indexToDisplay++;
 
 		}
 
@@ -209,16 +210,42 @@ public class AddInventoryController {
 
 		for(ProductDetailsModel productDetails: userRolesGUIBeans)
 		{
-			ProductDefinition productDefinition = new ProductDefinition();
-			productDefinition.setClassOrGrade(productDetails.getClassOrSch());
-			productDefinition.setMaterialSpecs(productDetails.getMaterialSpec());
-			productDefinition.setStandardType(productDetails.getStandardType());
-			productDefinition.setProductId(new ProductId(productDetails.getProduct(), productDetails.getMaterialOfConstruct(), productDetails.getConstructType()));
 
-			productDefinitionDao.saveProductDefinition(productDefinition);
+			String product = productDetails.getProduct();
+			String moc= productDetails.getMaterialOfConstruct();
+			String constructType = productDetails.getConstructType();
+			String materialSpecs = productDetails.getMaterialSpec();
+			String classOrSch = productDetails.getClassOrSch();
+			String standardType = productDetails.getStandardType();
+
+			ArrayList<ProductDefinition> listOfProductDetails = productDefinitionDao.getProductDetails(product, moc,constructType);
+			if(listOfProductDetails.size()> 0){
+
+				for(ProductDefinition productDefinition :listOfProductDetails){
+					String standardTypes = productDefinition.getStandardType();
+					String classOrSchs = productDefinition.getClassOrSch();
+					String materialSpec = productDefinition.getMaterialSpecs();
+
+					String newForMaterialSpecs = materialSpec + "," + materialSpecs;
+					String newFroClassOrSch =  classOrSchs+ "," + classOrSch;
+					String newForStandardType = standardTypes+ ","+ standardType;
+
+					productDefinitionDao.updateProductDefination(product,moc,constructType,newForMaterialSpecs,newFroClassOrSch,newForStandardType);
+				}
+
+			}else {
+
+				ProductDefinition productDefinition = new ProductDefinition();
+				productDefinition.setClassOrSch(productDetails.getClassOrSch());
+				productDefinition.setMaterialSpecs(productDetails.getMaterialSpec());
+				productDefinition.setStandardType(productDetails.getStandardType());
+				productDefinition.setProductId(new ProductId(productDetails.getProduct(), productDetails.getMaterialOfConstruct(), productDetails.getConstructType()));
+
+				productDefinitionDao.saveProductDefinition(productDefinition);
+			}
 		}
 
-		return "";
+		return decodedJson;
 	}
 
 	@PostMapping("/updateMappingDetails")

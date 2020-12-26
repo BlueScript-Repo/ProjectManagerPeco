@@ -113,4 +113,30 @@ public class ProductDefinitionDao
         return associatedValues;
     }
 
+    @Transactional
+    public ArrayList<ProductDefinition> getProductDetails(String product, String materialOfConstruction, String manufactureMethod) {
+
+        Session session = sessionFactory.getCurrentSession();
+        String sql ="from ProductDefinition where product =: product and materialOfConstruction=: materialOfConstruction and manufactureMethod=:manufactureMethod";
+        Query query = session.createQuery(sql);
+        query.setParameter("product", product);
+        query.setParameter("materialOfConstruction",materialOfConstruction);
+        query.setParameter("manufactureMethod", manufactureMethod);
+        List productList = query.getResultList();
+        return (ArrayList<ProductDefinition>) productList;
+    }
+    @Transactional
+    public void updateProductDefination(String product, String materialOfConstruction, String manufactureMethod, String materialSpecs, String classOrSch, String standardType) {
+        Session session = sessionFactory.getCurrentSession();
+        String sql ="update ProductDefinition set materialSpecs =:materialSpecs , classOrSch =:classOrSch , standardType =:standardType where product =: product and materialOfConstruction=: materialOfConstruction and manufactureMethod=:manufactureMethod";
+        Query query = session.createQuery(sql);
+        query.setParameter("product", product);
+        query.setParameter("materialOfConstruction",materialOfConstruction);
+        query.setParameter("manufactureMethod", manufactureMethod);
+        query.setParameter("materialSpecs",materialSpecs);
+        query.setParameter("classOrSch",classOrSch);
+        query.setParameter("standardType",standardType);
+
+        query.executeUpdate();
+    }
 }

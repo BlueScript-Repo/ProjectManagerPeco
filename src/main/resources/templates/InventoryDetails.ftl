@@ -82,12 +82,12 @@
                   <th>Standard Type</th>
                 </tr>
               </thead>
-              <form id="updateMappingDetails" action="updateMappingDetails" method="POST">
+              <form id="updateMappingDetails" action="updateProductDetails" method="POST">
                 <tbody id="productDefinitionTab">
                  ${mappingDetails}
                </tbody> 
              </table> 
-             <input id="addMappingBtn" type="button" class="btn btn-primary mt-5" value="+" onclick="addRow('tblMappingDetails');change()">
+             <input id="addMappingBtn" type="button" class="btn btn-primary mt-5" value="+" onclick="addRow('tblMappingDetails');">
              <input id="updateMappingBtn" type="submit" class="btn btn-primary mt-5" value="Update">
            </form>
          </div>
@@ -117,7 +117,7 @@
              ${valvesDetails}
            </tbody> 
          </table> 
-         <input id="addValvesBtn" type="button" class="btn btn-primary mt-5" value="+" onclick="addRowInValve('tblValvesDetails');changeUpdateValvebtn()">
+         <input id="addValvesBtn" type="button" class="btn btn-primary mt-5" value="+" onclick="addRowInValve('tblValvesDetails');">
          <input id="updateValvesBtn" type="submit" class="btn btn-primary mt-5" value="Update">
        </form>
      </div>
@@ -247,79 +247,27 @@
   {
 
    var table = document.getElementById(tableID);
-
    var rowCount = table.rows.length;
+ row = $('#tblMappingDetails tbody tr')
+ console.log(row.length);
+ rowSize= row.length - 1;
+ console.log(rowSize);
+ console.log($(row[rowSize]).find("input[name=product]").val().length);
+ InventoryLength = $(row[rowSize]).find("input[name=product]").val().length;
+ MaterialLength = $(row[rowSize]).find("input[name=materialOfConstruction]").val().length;
+   if(InventoryLength == 0 && MaterialLength == 0 || InventoryLength == 0 || MaterialLength == 0 )
+       {
+        alert("Please check already blank row present");
+        return;
+
+      }
    var row = table.insertRow(rowCount);
 
-   /*var cell1 = row.insertCell(0);
-   var element1 = document.createElement("input");
-   element1.value = rowCount + 1;
-   element1.type = "text";
-   element1.class = "form-control";
-   element1.name = "ItemId";
-   element1.style = "width:50px";
-   element1.style.height = "40px";
-   cell1.appendChild(element1);
-
-   var cell2 = row.insertCell(1);
-   var element2 = document.createElement("input");
-   element2.type = "checkbox";
-   element2.class="chkView";
-   element2.checked="true";
-   cell2.appendChild(element2);
-
-
-   var cell3 = row.insertCell(2);
-   var element3 = document.createElement("input");
-   element3.style.width = "103px";
-   element3.style.height = "40px";
-   element3.type = "text";
-   element3.class = "form-control";
-   element3.name = "inventoryName";
-   cell3.appendChild(element3);
-
-   var cell4 = row.insertCell(3);
-   var element4 = document.createElement("input");
-   element4.style.width = "103px";
-   element4.style.height = "40px";
-   element4.type = "text";
-   element4.class = "form-control";
-   element4.name = "material";
-   cell4.appendChild(element4);
-
-   var cell5 = row.insertCell(4);
-   var element5 = document.createElement("input");
-   element5.style.width = "103px";
-   element5.style.height = "40px";
-   element5.type = "text";
-   element5.name = "type";
-   element5.class = "form-control";
-   cell5.appendChild(element5);
-
-   var cell6 = row.insertCell(5);
-   var element6 = document.createElement("input");
-   element6.style.width = "103px";
-   element6.style.height = "40px";
-   element6.type = "text";
-   element6.class = "form-control";
-   element6.name = "classOrGrade";
-   element6.value = "";
-   cell6.appendChild(element6);
-
-   var cell7 = row.insertCell(6);
-   var element7 = document.createElement("input");
-   element7.style.width = "103px";
-   element7.style.height = "40px";
-   element7.type = "text";
-   element7.class = "form-control";
-   element7.name = "catogory";
-   element7.value = "";
-   cell7.appendChild(element7);*/
 
    var productRow = 
    "<tr class='lazy' >" +
-   "<td><input type='hidden' class='form-control' value='' name='ItemId'>" + parseInt(rowCount) + 1 + "</td>" +
-   "<td><input type='checkbox' class='chkView' ></td>" +
+   "<td><input type='hidden' class='form-control' value='' name='ItemId'>" + parseInt(rowCount) + "</td>" +
+   "<td><input type='checkbox' class='chkView' checked='true'></td>" +
    "<td><input type='text'  class='form-control' value='' name='product'  ></td>" +
    "<td><input type='text'  class='form-control' value='' name='materialOfConstruction' ></td>" +
    "<td><input type='text'  class='form-control' value='' name='manufactureMethod'  ></td>" +
@@ -415,6 +363,16 @@
    var table = document.getElementById(tableID);
 
    var rowCount = table.rows.length;
+   row = $('#tblValvesDetails tbody tr')
+       rowSize= row.length - 1;
+       InventoryLength = $(row[rowSize]).find("input[name=model]").val().length;
+       MaterialLength = $(row[rowSize]).find("input[name=material]").val().length;
+         if(InventoryLength == 0 && MaterialLength == 0 || InventoryLength == 0 || MaterialLength == 0 )
+             {
+              alert("Please check already blank row present");
+              return;
+
+            }
    var row = table.insertRow(rowCount);
 
    var cell1 = row.insertCell(0);

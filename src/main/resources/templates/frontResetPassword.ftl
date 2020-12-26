@@ -97,8 +97,8 @@
           <div class="row justify-content-center">
             <div class="col-auto">
               <div class="main object-non-visible animated object-visible fadeInUpSmall" data-animation-effect="fadeInUpSmall" data-effect-delay="100">
-                <div class="form-block p-30 light-gray-bg border-clear">
-                  <h2 class="page-title">Reset Password</h2>
+                <div class="form-block p-30 light-gray-bg border-clear" width:500px>
+                  <h2 class="page-title" align="center">Reset Password</h2>
                   <form class="form-horizontal" action="confirm" method="POST">
                     <div class="form-group has-feedback row">
                      	${userNameInput}

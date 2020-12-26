@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "product",
         "materialOfConstruct",
         "constructType",
-        "classOrGrade",
+        "classOrSch",
         "materialSpec",
         "standardType"
 })
@@ -31,8 +31,8 @@ public class ProductDetailsModel
     private String materialOfConstruct;
     @JsonProperty("constructType")
     private String constructType;
-    @JsonProperty("classOrGrade")
-    private String classOrGrade;
+    @JsonProperty("classOrSch")
+    private String classOrSch;
     @JsonProperty("materialSpec")
     private String materialSpec;
     @JsonProperty("standardType")
@@ -62,9 +62,9 @@ public class ProductDetailsModel
     public void setConstructType(String constructType) {
         this.constructType = constructType;
     }
-    @JsonProperty("classOrGrade")
+    @JsonProperty("classOrSch")
     public void setClassOrSch(String classOrSch) {
-        this.classOrGrade = classOrSch;
+        this.classOrSch = classOrSch;
     }
     @JsonProperty("materialSpec")
     public void setMaterialSpec(String materialSpec) {
@@ -88,7 +88,7 @@ public class ProductDetailsModel
     }
 
     public String getClassOrSch() {
-        return classOrGrade;
+        return classOrSch;
     }
 
     public String getMaterialSpec() {

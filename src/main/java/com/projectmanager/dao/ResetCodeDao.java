@@ -64,5 +64,37 @@ public class ResetCodeDao {
 		query.executeUpdate();
 		return true;
 	}
+	@Transactional
+	public boolean deleteCode(String userName){
+		boolean codeDelete = true;
+		try{Session session = sessionFactory.getCurrentSession();
+		System.out.println(userName);
 
+		String selectSql = "delete from ResetCode where userName=:userName";
+		Query query = session.createQuery(selectSql);
+
+		query.setParameter("userName", userName);
+
+		query.executeUpdate();}
+		catch (Exception e){
+			codeDelete = false;
+			e.printStackTrace();
+		}
+		return  codeDelete;
+	}
+
+
+	public boolean userIsPresent(String userName) {
+			Session session = sessionFactory.getCurrentSession();
+			System.out.println(userName);
+
+			String selectSql = "select count(*) from ResetCode where userName=:userName";
+			Query query = session.createQuery(selectSql);
+
+			query.setParameter("userName", userName);
+
+			List user = query.list();
+System.out.println((long)user.get(0)>0);
+		return  (long)user.get(0)>0;
+	}
 }
