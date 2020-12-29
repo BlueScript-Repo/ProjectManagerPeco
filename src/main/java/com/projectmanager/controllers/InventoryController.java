@@ -676,14 +676,18 @@ public class InventoryController {
 
         BOQHeader header = boqHeaderDao.getBOQHeaderFromName(docNameToDownload, projectId);
 
+        ArrayList<BOQDetails> boqDetailsList = boqDetailsDao.getBOQFromName(docNameToDownload, projectId);
+
+        ArrayList<BOQLineData> existingBoqLineDataList = boqController.getBOQLineDataList(boqDetailsList);
+
         //Set correct sheetDetails here
         header.setSheetDetails("Details,"+productIn.length);
         
         boqlineData = boqController.getBOQLineDataList(mocIn, endsIn, classOrGradeIn, productIn, manufactureMethodIn, materialSpecsIn, standardTypeIn);
 
         try {
-            excelByts = writer.writeExcel(boqlineData, sizeIn, Arrays.stream(billedQty).mapToObj(String::valueOf).toArray(String[]::new), supplyRate, erectionRate, supplyAmount,
-                    erectionAmount, "", header, false, true, false);
+            excelByts = writer.writeExcel(existingBoqLineDataList,boqlineData, sizeIn, Arrays.stream(billedQty).mapToObj(String::valueOf).toArray(String[]::new), supplyRate, erectionRate, supplyAmount,
+                    erectionAmount, "", header, true, true, false);
 
 
             File fileToSave = new File(destination);
@@ -708,6 +712,6 @@ public class InventoryController {
             return String.valueOf(erectionAmountTotal + supplyAmountTotal);
         }
 
-        return "";
+        return "true";
     }
 }

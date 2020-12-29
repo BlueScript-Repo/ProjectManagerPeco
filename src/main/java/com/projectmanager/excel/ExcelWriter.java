@@ -39,7 +39,7 @@ import com.projectmanager.entity.BOQLineData;
 @ManagedBean
 public class ExcelWriter {
 
-    public byte[] writeExcel(ArrayList<BOQLineData> boqLineDataDetails, String[] size, String[] quantity,
+    public byte[] writeExcel(ArrayList<BOQLineData> boqDetailsList, ArrayList<BOQLineData> boqLineDataDetails, String[] size, String[] quantity,
                              String[] supplyRate, String[] erectionRate, String[] supplyAmount, String[] erectionAmount,
                              String boqNameRevisionStr, BOQHeader header, boolean isOffer, boolean isInvoiceAnnexture, boolean isBOQ) throws IOException {
 
@@ -218,18 +218,30 @@ public class ExcelWriter {
             double erectionAmountTotal = 0;
             double Total = 0;
 
+//below 3 line are commets before
+            boolean isAnnexure = false;
 
-//            boolean isAnnexure = false;
-//
-//            if(boqLineDataDetails!=null && boqLineDataDetails.size()>0)
-//            {
-//                isAnnexure = false;//true
-//            }
+            if(boqDetailsList!=null && boqDetailsList.size()>0)
+            {
+                isAnnexure = true;
+            }
 
 
             for (int invIndx = startIndex; invIndx < lastIndex; invIndx++) {
 
-                BOQLineData inventory = boqLineDataDetails.get(invIndx);
+               // BOQLineData inventory = boqLineDataDetails.get(invIndx);
+
+                //below line are added from humdule if condition
+                BOQLineData inventory = null;
+
+                if(boqDetailsList!=null && boqDetailsList.size()>0)
+                {
+                    inventory = boqDetailsList.get(invIndx);
+                }
+                else
+                {
+                    inventory = boqLineDataDetails.get(invIndx);
+                }
 
                 int presentIndex = processedInventory.indexOf(inventory);
                 // Reset pushBy to 0
@@ -257,8 +269,20 @@ public class ExcelWriter {
 
                     Cell cellToUpdate5 = sheet.getRow(row).getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 
+                    //below if condition from humdule
+                    if(isAnnexure) {
+                        if (boqDetailsList.get(index).equals(boqLineDataDetails.get(index))) {
+                            cellToUpdate5.setCellValue(quantity[index]);
+                        } else {
+                            cellToUpdate5.setCellValue(0);
+                        }
+                    }
+                    else
+                    {
+                        cellToUpdate5.setCellValue(quantity[index]);
+                    }
 
-                    cellToUpdate5.setCellValue(quantity[index]);
+                    //cellToUpdate5.setCellValue(quantity[index]);
 
                     cellToUpdate5.setCellStyle(whiteBackGroundTextCenter);
 
@@ -522,7 +546,7 @@ public class ExcelWriter {
          sheet.getRow(nextRow - 1).getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellStyle(whiteBackGroundBaseLineRight);
            
 
-            Sheet annexture = workBook.getSheetAt(0);
+            Sheet annexture = workBook.getSheetAt(1);
 
             annexture.getRow(4 + s).getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(s);
             annexture.getRow(4 + s).getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)

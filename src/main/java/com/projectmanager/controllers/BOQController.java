@@ -308,7 +308,7 @@ public class BOQController {
 
         try {
 
-            excelByts = writer.writeExcel(boqlineData, size, quantity, supplyRate, erectionRate, supplyAmount,
+            excelByts = writer.writeExcel(null,boqlineData, size, quantity, supplyRate, erectionRate, supplyAmount,
                     erectionAmount, "", header, isOffer, false, isBoq);
 
             response.setHeader("Content-disposition", "attachment; filename=" + docNameToDownload + ".xls");
@@ -410,7 +410,7 @@ public class BOQController {
                 erectionAmount = new String[]{};
             }
 
-            excelByts = writer.writeExcel(boqInventoryDetails, size, quantity, supplyRate, erectionRate, supplyAmount,
+            excelByts = writer.writeExcel(null,boqInventoryDetails, size, quantity, supplyRate, erectionRate, supplyAmount,
                     erectionAmount, boqNameRevisionStr, header, Boolean.valueOf(isOffer), false, Boolean.valueOf(isBoq));
 
             ArrayList<BOQDetails> boqInventoryDetailsList = new ArrayList<BOQDetails>();
