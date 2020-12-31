@@ -19,7 +19,7 @@ public class Notifications {
     String body;
     String attachmentNames;
     String status;
-    Date date;
+    String date;
 
     public Notifications()
     {
@@ -31,7 +31,7 @@ public class Notifications {
                          String body,
                          String attachmentNames,
                          String status,
-                         Date date)
+                         String date)
     {
         this.userName = userName;
         this.receiver = receiver;
@@ -98,11 +98,11 @@ public class Notifications {
         this.status = status;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -502,7 +503,7 @@ public class BOQController {
             out.close();
             fout.close();
 
-            notificationUtil.pushNotification(userName, vendorDetails.getContactEmail(), "PECO Projects : Inventory Inquiry", "Greeting of the day from PECO Projects. Please find attached the Inventory requirment. Please update the same and respond.", file.getName(), "INBOX", new Date());
+            notificationUtil.pushNotification(userName, vendorDetails.getContactEmail(), "PECO Projects : Inventory Inquiry", "Greeting of the day from PECO Projects. Please find attached the Inventory requirment. Please update the same and respond.", file.getName(), "INBOX", new SimpleDateFormat("dd/mm/yyyy").format(new Date()));
 
         } else {
             response.setHeader("Content-disposition", "attachment; filename=" + boqNameRevisionStr + ".xls");

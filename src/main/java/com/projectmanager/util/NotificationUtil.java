@@ -18,7 +18,7 @@ public class NotificationUtil {
                                     String body,
                                     String attachmentNames,
                                     String status,
-                                    Date date)
+                                    String date)
     {
 
         Notifications notification = new Notifications( userName,

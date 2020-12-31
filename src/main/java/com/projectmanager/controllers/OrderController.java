@@ -1,5 +1,6 @@
 package com.projectmanager.controllers;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -181,7 +182,7 @@ public class OrderController {
 				"Purchase Order :" + poDetails.getVendorName(),
 				"Enter body Text here",
 				poName+".pdf",
-				"INBOX",new Date());
+				"INBOX",new SimpleDateFormat("dd/mm/yyyy").format(new Date()));
 
 		//return "purchaseOrderView";
 

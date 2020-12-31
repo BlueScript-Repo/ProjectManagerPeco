@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+h<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -35,18 +35,75 @@
         <div class="content-wrapper">
           <div class="email-wrapper wrapper">
             <div class="row align-items-stretch">
-        <div class="mail-sidebar d-none d-lg-block col-md-2 pt-3 bg-white border">
-        <div class="menu-bar">
-                  <ul class="menu-items">                    
-                    <li class="font-weight-bold inboxItems" onclick="showItems('inboxItems');">Inbox</li>
-                    <li class="font-weight-bold sentItems" onclick="showItems('sentItems');">Sent</li>
-                </ul>
-        </div>
-        </div>
-        <div class="mail-list-container col-md-3 border-right bg-white border pt-3">
-        </div>
-        <div class="mail-view d-none d-md-block col-md-9 col-lg-7 bg-white border pt-3">
-        </div>
+       <div class="container bootstrap snippets bootdey">
+                   <div class="row">
+                       <div class="col-sm-3 col-md-2">
+                           <div class="btn-group">
+                               <span class="text-muted"><b>Notification</b></span>
+                           </div>
+                       </div>
+
+                   </div>
+                   <hr>
+                   <div class="row">
+                       <div class="col-sm-5 col-md-5">
+                         <ul class="nav nav-tabs nav-justified">
+                               <li class="nav-item">
+                                   <a class="nav-link active"  href="#outbox" data-toggle="tab"><i class="fa fa-envelope" aria-hidden="true"></i>&nbsp; OutBox</a>
+                               </li>
+
+                               <li class="nav-item">
+                                   <a class="nav-link"  href="#sent" data-toggle="tab"><i class="fa fa-paper-plane" aria-hidden="true"></i>&nbsp; Sent</a>
+                               </li>
+                         </ul>
+                           <!-- Tab panes -->
+                           <div class="tab-content">
+                               <div class="tab-pane in active" id="outbox">
+                                   <div class="list-group" style = "overflow-y: scroll; overflow-x: hidden; max-height: 600px;">
+                                       ${notificationListInboxVal}
+                                   </div>
+                               </div>
+                               <div class="tab-pane in fade" id="sent">
+                                   <div class="list-group" style = "overflow-y: scroll; overflow-x: hidden; max-height: 600px;">
+                                      ${notificationListSentVal}
+                                   </div>
+                               </div>
+
+                           </div>
+
+                       </div>
+                       <div class="col-sm-7 col-md-7">
+                                   <div class="card shadow-none mt-3 border border-light">
+                                      <div class="card-body">
+                                        <div class="media mb-3">
+                                           <div class="media-body">
+                                               <span id="datespan" class="media-meta float-right"></span>
+                                               <h4 id="ReciverHeading" class="text-primary m-0"></h4>
+                                               <small id="ReciverId" class="text-muted"></small>
+                                             </div>
+                                         </div> <!-- media -->
+
+                                        <span>
+                                        <textarea id="mailBody" name="body" class="form-control mailBody" rows="12"></textarea>
+                                        </span>
+                                         <hr>
+                                         <h4> <i class="fa fa-paperclip mr-2"></i> Attachments</h4>
+                                         <div class="row">
+                                             <div class="col-sm-4 col-md-4">
+                                                 <span id = "attachment">
+                                                 <ul id="attachDoc" style="display:inline;">
+                                                 </ul>
+                                                 </span>
+                                             </div>
+                                         </div>
+                                         <div class="text-right">
+                                             <button type="button"  id="sendEmail" onclick= sendNotify(); class="btn btn-primary waves-effect waves-light mt-3"><i class="fa fa-send mr-1"></i> Send</button>
+                                         </div>
+                                     </div>
+                                   </div> <!-- card -->
+                       </div>
+                   </div>
+               </div>
     </div>
 </div>
 </div>
@@ -69,153 +126,122 @@
 </footer>
 
 
-<input type="hidden" id="notificationListInbox" name="notificationListInbox" value="${notificationListInboxVal}">
-<input type="hidden" id="notificationListSent" name="notificationListSent" value="${notificationListSentVal}">
+
 
 <script src="bootstrap/js/bootstrap.min.js"></script>
 
 <script src="plugins/jquery.blockUI.js"></script>
 
+
 <script>
-$(document).ready(function(){
-    populateItems('notificationListInbox');
-    $('#item1').show();
-    $('.mail-list-container')[0].style.height = $('.mail-view')[0].clientHeight+"px";
-});
 
-function populateItems(notificationListCode)
-{
-    $(".mail-list-container").html('');
-    $(".mail-view").html('');
 
-    class Notification 
+ var emailObject = [recevier,subject,body,attachment,date,itemId];
+
+  function sendNotify() {
+                         var receiver = emailObject[0];
+                         var subject = emailObject[1];
+                         var body = emailObject[2];
+                         var attach1 = emailObject[3];
+                         var attach2 = "";
+                         if(emailObject[3] !== undefined)
+                         {
+                           attach2 = emailObject[3];
+                         }
+                         var sentDate = emailObject[4];
+                         var dbItemId = emailObject[5];
+
+                         console.log('subject is : ' + subject);
+                         console.log('attach1 is : '+attach1);
+                         console.log('attach2 is : '+attach2);
+                         console.log('body is : '+body);
+                         console.log('receiver is : '+receiver);
+
+                          showLoading();
+                          $.ajax({
+                               type : 'POST',
+                               data :  {  'receiver' : receiver,
+                                          'subject' : subject,
+                                          'body' : body,
+                                          'attachmentNames' : attach1 + "," +attach2,
+                                          'id' : dbItemId,
+                                          'dateValue': sentDate},
+                               url : 'sendNotification',
+                               success : function(data)
+                                {
+                                  alert("Notifcation sent success..!");
+                                },
+                                error : function(data)
+                                {
+                                  alert("Error sending Notifcation..!");
+                                }
+                          });
+                          hideLoading();
+                       }
+
+    function ShowMailContent(mailBody)
     {
-      constructor(userName, receiver, subject, body, attachmentNames, status, date) 
-      {
-        this.userName = userName;
-        this.receiver = receiver;
-        this.subject = subject;
-        this.body = body;
-        this.attachmentNames = attachmentNames;
-        this.status = status;
-        this.date = date;
-      }
+
+     document.getElementById("attachDoc").innerHTML = "";
+     document.getElementById("mailBody").innerHTML ="";
+    document.getElementById("ReciverId").innerHTML ="";
+    document.getElementById("datespan").innerHTML ="";
+    var notifList = mailBody.split('|');
+
+    if(notifList[5] === "SENT" )
+    {
+        document.getElementById("mailBody").disabled = true;
+        document.getElementById("sendEmail").disabled = true;
+        document.getElementById("sendEmail").style.visibility="hidden";
+    }
+    else
+    {
+        document.getElementById("mailBody").disabled = false;
+        document.getElementById("sendEmail").disabled = false;
+        document.getElementById("sendEmail").style.visibility="visible";
+        emailObject =[notifList[1], notifList[4], notifList[0],notifList[3],notifList[2],notifList[5]];
+     }
+    document.getElementById("attachDoc").innerHTML = "";
+    document.getElementById("mailBody").innerHTML =notifList[0];
+    document.getElementById("ReciverId").innerHTML =notifList[1];
+    document.getElementById("datespan").innerHTML =notifList[2];
+    document.getElementById("ReciverHeading").innerHTML =notifList[4];
+
+    var attachmentFile = notifList[3].split(';');
+    if(attachmentFile.length > 0)
+    {
+    var i;
+        for(i = 0; i < attachmentFile.length; i++)
+        {
+            var ul = document.getElementById("attachDoc");
+            var li = document.createElement("li");
+            var link = document.createElement("a");
+            link.setAttribute('href', 'downloadAttachment?fileName='+attachmentFile[i]);
+            li.appendChild(link);
+            var text = document.createTextNode(attachmentFile[i]);
+            link.appendChild(text);
+            ul.insertBefore(li, ul.childNodes[i]);
+        }
     }
 
-    var notifList = $('#'+notificationListCode)[0].value.split('[[[');
+  }
 
-    var mailEntry =  '<div class="mail-list border" onclick="show(\'ITEM_NO\')">              <div class="content">                   <p class="message_text">SUBJECT</p>                 </div>             </div>';
-
-    var mailBody = '<div class="message-body" id="ITEM_NO" style="display:none;">              <div class="sender-details bg-light">                <div class="details">                  <p class="msg-subject">                    <textarea name="subject" class="form-control mailSubject" rows="1" style="width:143%;"> SUBJECT </textarea>                </p> <p class="sender-email"> <span class="float-left">TO :  RECEIVER <input type="hidden" class="receiverAddr" name="receiverAddr" value="RECEIVER">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="mdi mdi-account-multiple-plus"></i></span> <span class="float-right"> DATEnTIME</span></p>           </div>        </div>        <div class="message-content"> <textarea name="body" class="form-control mailBody" rows="12">MAILBODY</textarea>                        <p><br><br>Regards,<br>SENDER</p>        </div>        <div class="attachments-sections">            <ul style="display:inline;">              <li>                  <a href="downloadAttachment?fileName=ATTACHMENT1" class="attach1">ATTACHMENT1 </a>              </li>              <li>                  <a href="downloadAttachment?fileName=ATTACHMENT2" class="attach2">ATTACHMENT2 </a>              </li>          </ul>      <input type="hidden" name="dbItemId" class="dbItemId" value="dbItemIdVal" > <input type="hidden" name="date" class="sentDate" value="DATEnTIME"><input type="button" class="btn btn-primary" onclick="sendNotify(\'ITEM_NO\')" value="Send"></div>  </div>';
-
-    var indexNo = 0;
-    $.each(notifList, function(index1, value) {
-  
-        if(value==="")
-        {
-            return;
-        }
-
-        indexNo = indexNo + 1;
-
-        var itemId = "";
-
-        var notifVal = value.split(",");
-
-        var bodyHTML = mailBody;
-        var mailEntryDummy = mailEntry
-
-        $.each(notifVal, function(index, value) {
-
-        console.log(index, value);
-
-        if(index===0)
-        {
-            bodyHTML = bodyHTML.replace(/dbItemIdVal/g,value);
-        }
-        else if(index===2)
-        {
-            bodyHTML = bodyHTML.replace(/RECEIVER/g,value);
-        }
-        else if(index===3)
-        {
-            mailEntryDummy = mailEntryDummy.replace("SUBJECT",value);
-
-
-            if(notificationListCode==="notificationListSent")
-            {
-                itemId = "sentItem"+indexNo;
-            }
-            else
-            {
-                itemId = "item"+indexNo;
-            }
-
-            mailEntryDummy = mailEntryDummy.replace("ITEM_NO", itemId);
-
-            $(".mail-list-container").append(mailEntryDummy);
-
-            bodyHTML = bodyHTML.replace("SUBJECT",value);
-        }
-        else if(index===4)
-        {
-            bodyHTML = bodyHTML.replace("MAILBODY",value);
-        }
-        else if(index===5)
-        {
-            var attachments = value.split(";")
-
-            bodyHTML = bodyHTML.replace(/ATTACHMENT1/g, attachments[0]);
-
-            if(attachments.length>1)
-            {
-                bodyHTML = bodyHTML.replace(/ATTACHMENT2/g, attachments[1]);
-            }
-            else
-            {
-                bodyHTML = bodyHTML.replace(/ATTACHMENT2/g,"");
-            }
-        }
-        else if(index===7)
-        {
-            bodyHTML = bodyHTML.replace(/DATEnTIME/g, value);
-        }
-
-      });
-
-        bodyHTML = bodyHTML.replace(/ITEM_NO/g, itemId);
-        $(".mail-view").append(bodyHTML);
-
-    });
-}
 </script>
 
-<script type="text/javascript">
-    function show(idVal)
-    {
-        var mailBodies = $(".mail-view").find(".message-body");
-        
-        for(var i=0;i<mailBodies.length;i++)
-        {
-            $(mailBodies[i]).hide();
-        }
-        
-        $("#"+idVal).show();
-    }
-</script>
+
 <script>
   function showLoading()
   {
-    $.blockUI({ css: { 
-      border: 'none', 
-      padding: '15px', 
-      backgroundColor: '#fff', 
-      '-webkit-border-radius': '10px', 
-      '-moz-border-radius': '10px', 
-      opacity: .5, 
+    $.blockUI({ css: {
+      border: 'none',
+      padding: '15px',
+      backgroundColor: '#fff',
+      '-webkit-border-radius': '10px',
+      '-moz-border-radius': '10px',
+      opacity: .5,
       color: '#000',
       images : 'images/img/loading-blue.gif'
-    } }); 
+    } });
 
   }
 
@@ -226,74 +252,6 @@ function populateItems(notificationListCode)
 
   }
 </script>
-<script type="text/javascript">
-    function sendNotify(itemNo)
-    {
-        var body = $('#'+itemNo).find('.mailBody')[0].value;
-        var subject = $('#'+itemNo).find('.mailSubject')[0].value;
 
-        var dbItemId = $('#'+itemNo).find('.dbItemId')[0].value;
-        var sentDate = $('#'+itemNo).find('.sentDate')[0].value;
-        var attach1 = $('#'+itemNo).find('.attach1')[0].text;
-
-        var attach2 = "";
-        
-        if($('#'+itemNo).find('.attach2')[0] !== undefined)
-        {
-          attach2 = $('#'+itemNo).find('.attach2')[0].text;    
-        }        
-
-        var receiver = $('#'+itemNo).find('.receiverAddr')[0].value;
-
-        console.log('subject is : ' + subject);
-        console.log('attach1 is : '+attach1);
-
-        console.log('attach2 is : '+attach2);
-        console.log('body is : '+body);
-
-        console.log('receiver is : '+receiver);
-
-
-    showLoading();
-
-    $.ajax({
-     type : 'POST',
-     data :  {  'receiver' : receiver, 
-                'subject' : subject,
-                'body' : body,
-                'attachmentNames' : attach1 + "," +attach2,
-                'id' : dbItemId,
-                'dateValue': sentDate},
-     url : 'sendNotification',
-     success : function(data) 
-      {
-        alert("Notifcation sent success..!");  
-      },
-      error : function(data) 
-      {
-        alert("Error sending Notifcation..!");  
-      }
-    });
-
-    hideLoading();
-
-    }
-</script>
-<script type="text/javascript">
-    function showItems(areaId)
-    {
-        if(areaId==='inboxItems')
-        {
-             populateItems('notificationListInbox');
-    
-        }
-        else
-        {
-            populateItems('notificationListSent');
-
-            $('#sentItem1').show();
-        }
-    }
-</script>   
 </body>
 </html>

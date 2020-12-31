@@ -55,16 +55,31 @@ public class NotificationController
 
         for(Notifications notification : notificationListInbox)
         {
-            builderInbox.append(notification.toString());
-            builderInbox.append("[[[");
+            String msg = notification.getBody() + "|" + notification.getReceiver() + "|" + notification.getDate() + "|" + notification.getAttachmentNames() + "|" + notification.getSubject() + "|" + notification.getId();
+
+            builderInbox.append(" <a style=\" color: black;\n" +
+                    "\" href=\"#\" class=\"list-group-item \" onclick=\"ShowMailContent('" + msg + "');\"> " +
+                    "                            <span class=\"name label label-info\" style=\"min-width: 120px;\n" +
+                    "                             display: inline-block;\"><i class=\"fa fa-share\" aria-hidden=\"true\"></i>&nbsp;&nbsp;" + notification.getReceiver() + "</span> <span class=\"\">" + notification.getSubject() + "</span>\n" +
+                    "                            <span class=\"text-muted\" style=\"font-size: 11px;\"></span> <span class=\"badge\">" + notification.getDate() + "</span> <span class=\"pull-right\">\n" +
+                    "                            </span></a>");
+
         }
 
         StringBuilder builderSent = new StringBuilder();
 
         for(Notifications notification : notificationListSent)
         {
-            builderSent.append(notification.toString());
-            builderSent.append("[[[");
+            String msg = notification.getBody() + "|" + notification.getReceiver() + "|" + notification.getDate() + "|" + notification.getAttachmentNames() + "|" + notification.getSubject() + "|" + notification.getStatus() + "|" + notification.getId();
+            builderSent.append(" <a style=\"\n" +
+                    "    color: black;\n" +
+                    "\"href=\"#\" class=\"list-group-item\" onclick=\"ShowMailContent('" + msg + "');\"> <i class=\"fa fa-check\" aria-hidden=\"true\"></i>" +
+
+                    "                        &nbsp;&nbsp;<span class=\"name label label-info\" style=\"min-width: 120px;\n" +
+                    "                                display: inline-block;\">" + notification.getReceiver() + "</span> <span class=\"\">" + notification.getSubject() + "</span>\n" +
+                    "                            <span class=\"text-muted\" style=\"font-size: 11px;\"></span> <span class=\"badge\">" + notification.getDate() + "</span> <span class=\"pull-right\">\n" +
+                    "                            </span></a>");
+
         }
 
         modelAndView.addObject("notificationListInboxVal", builderInbox.toString());
@@ -115,15 +130,15 @@ public class NotificationController
 
             emailUtils.sendMessageWithAttachment(sender, notification.getReceiver(), notification.getSubject(), notification.getBody(), notification.getAttachmentNames(), userName);
 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = format.parse(dateValue.substring(0, dateValue.length() - 2));
-
-            notification.setDate(date);
-            notification.setId(id);
-            notification.setUserName(userName);
-            notification.setStatus("SENT");
-
-            notificationDao.saveOrUpdate(notification);
+//            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            Date date = format.parse(dateValue.substring(0, dateValue.length() - 2));
+//
+//            notification.setDate(date);
+//            notification.setId(id);
+//            notification.setUserName(userName);
+//            notification.setStatus("SENT");
+            String status = "SENT";
+            notificationDao.saveOrUpdate(id, status);
         }
         catch (Exception ex)
         {

@@ -53,7 +53,7 @@ public class NotificationDao {
 
             if(tag2!=null && tagValue2!=null)
             {
-                selectSQL = selectSQL + " and "+tag2+"='"+tagValue2+"'";
+                selectSQL = selectSQL + " and "+tag2+"='"+tagValue2+"' ORDER BY date DESC";
             }
 
             Query query = session.createQuery(selectSQL);
@@ -68,14 +68,19 @@ public class NotificationDao {
     }
 
     @Transactional
-    public boolean saveOrUpdate(Notifications notification)
+    public boolean saveOrUpdate(int id, String status)
     {
         boolean success = true;
 
         try
         {
             Session session = sessionFactory.getCurrentSession();
-            session.saveOrUpdate(notification);
+            String sql = "update Notifications set status =: status where id=:id  ";
+            Query query = session.createQuery(sql);
+            query.setParameter("id",id);
+            query.setParameter("status",status);
+
+            query.executeUpdate();
         }
         catch (Exception ex)
         {
