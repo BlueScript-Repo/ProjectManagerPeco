@@ -182,7 +182,7 @@ public class OrderController {
 				"Purchase Order :" + poDetails.getVendorName(),
 				"Enter body Text here",
 				poName+".pdf",
-				"INBOX",new SimpleDateFormat("dd/mm/yyyy").format(new Date()));
+				"INBOX",new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 
 		//return "purchaseOrderView";
 

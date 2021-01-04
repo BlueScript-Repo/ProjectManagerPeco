@@ -171,9 +171,9 @@
             <input type="text" class="form-control" name="vendorEmail" required>
           </div>
            <div class="form-group col-md-4">
-                          <label>Vendor Gst No. </label>
-                          <input type="text" class="form-control" name="vendorGst">
-                        </div>
+             <label>Vendor Gst No. </label>
+             <input type="text" class="form-control" name="vendorGst">
+           </div>
 
         </div>
         <div class="form-row">

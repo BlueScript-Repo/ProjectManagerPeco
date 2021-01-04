@@ -74,7 +74,11 @@ h<!DOCTYPE html>
                        </div>
                        <div class="col-sm-7 col-md-7">
                                    <div class="card shadow-none mt-3 border border-light">
-                                      <div class="card-body">
+
+                                      <div id="viewOnLoad" style="visibility: visible;" class="card-body">
+                                            <span  class="media-meta float-left">Please click on email for view.</span>
+                                      </div>
+                                      <div id="viewOnClick"  style="visibility: hidden;" class="card-body">
                                         <div class="media mb-3">
                                            <div class="media-body">
                                                <span id="datespan" class="media-meta float-right"></span>
@@ -181,6 +185,16 @@ h<!DOCTYPE html>
 
     function ShowMailContent(mailBody)
     {
+
+     var divMailBody = document.getElementById("viewOnClick");
+     var divMailBodyOnLoad = document.getElementById("viewOnLoad");
+
+     if(divMailBody.style.visibility === "hidden"){
+
+        divMailBody.style.visibility = "visible";
+        divMailBodyOnLoad.style.visibility = "hidden";
+     }
+
 
      document.getElementById("attachDoc").innerHTML = "";
      document.getElementById("mailBody").innerHTML ="";
